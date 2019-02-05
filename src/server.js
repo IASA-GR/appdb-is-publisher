@@ -117,12 +117,13 @@ function _initServer(conf) {
 
   const graphQLServer = new ApolloServer({
     schema: graphQLConfig.getSchema(),
+    uploads: false,
     context: ({ req }) => ({
       api: conf.getApi,
       request: req,
       loaders: createDataLoaders(conf.getApi)
     }),
-    introspection: (process.env.NODE_ENV !== 'production'),
+    introspection: true,//(process.env.NODE_ENV !== 'production'),
     playground: (process.env.NODE_ENV === 'production') ? false : {
         endpoint: GRAPHQL_ENTPOINT_PATH,
         theme: 'dark'
@@ -148,7 +149,7 @@ function _initServer(conf) {
 
   //Setup Graphiql tool endpoint to perform graphql queries in the browser
   //app.use('/tools/graphiql',graphiqlExpress({endpointURL: '/graphql', pretty: true }));
-  app.get('/tools/graphiql', graphiqlExpress({ endpointURL: GRAPHQL_ENTPOINT_PATH, rewriteURL: true }));
+  app.get('/tools/graphiql', graphiqlExpress({ endpointURL: GRAPHQL_ENTPOINT_PATH, rewriteURL: true}));
 
   //Setup voyager tool endpoint to graphicaly display graphql schema in the browser
   app.use('/tools/voyager', voyagerExpress({ endpointUrl: GRAPHQL_ENTPOINT_PATH, displayOptions: {sortByAlphabet: true} }));
