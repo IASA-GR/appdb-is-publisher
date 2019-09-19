@@ -167,7 +167,9 @@ function _initServer(conf) {
   app.use('/rest', restRouter(express.Router(), Configuration.getModuleConfiguration('infosystem.rest'), {schema: configuration.get('schema')}));
 
   // Setup a proxy to the CouchDB backend instance
+  console.log('\x1b[32m[ISPublisher:CouchDBProxy]\x1b[0m: Initializing couchdb proxy' );
   app.use('/couchdb', proxyRouter(express.Router(), Configuration.getModuleConfiguration('couchDBProxy'), 'couchdb'));
+  console.log('\x1b[32m[ISPublisher:CouchDBProxy]\x1b[0m: Couchdb proxy served in path "/couchdb"' );
 
   // Handle any other route
   app.use('*', miscRoutes(express.Router()));
@@ -175,7 +177,7 @@ function _initServer(conf) {
   //Start server. Listening to configured port.
   return new Promise((resolve, reject) => {
     app.listen(PORT, function() {
-      console.log('\x1b[32m[ISPublisher::infosystem:HTTP]\x1b[0m: HTTP server listening to port: ' + PORT);
+      console.log('\x1b[32m[ISPublisher:HTTP]\x1b[0m: HTTP server listening to port: ' + PORT);
       resolve(app);
     });
   });

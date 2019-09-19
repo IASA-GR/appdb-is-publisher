@@ -23,7 +23,7 @@ function _initEntities(context) {
   const _entities = getSchemaEntities(_schemaName);
   const _entityInstances = _entities.init(context);
 
-  console.log('\x1b[32m[ISPublisher::infosystem:API]\x1b[0m: Inited for schema ' + _schemaName);
+  console.log('\x1b[32m[ISPublisher:infosystem:API]\x1b[0m: Inited for schema ' + _schemaName);
 
   return {
     get: (name) => _entityInstances[name]
