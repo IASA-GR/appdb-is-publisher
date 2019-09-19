@@ -31,7 +31,7 @@ function miscRoutes(router) {
   //#######################################
   //################ MISC #################
   //#######################################
-
+  let restServiceDescriptionData = restServiceDescription({schema: configuration.get('schema')});
   router.get('/version', handleNoImlementation);
 
   router.get('/',  (req, res) => {
@@ -40,7 +40,7 @@ function miscRoutes(router) {
         description: 'A proxy service to the couch db used by the information system backend.'
       }
     };
-    services = Object.assign({}, services, graphqlServiceDescription, restServiceDescription({schema: configuration.get('schema')}));
+    services = Object.assign({}, services, graphqlServiceDescription, restServiceDescriptionData);
     services = {"services": services};
 
     res.setHeader('Content-Type', 'application/json');

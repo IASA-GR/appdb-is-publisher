@@ -65,8 +65,12 @@ export const expressRouter = function (router, config, {schema}) {
     _router = require('./' + schema).expressRouter(router, config);
     console.log('\x1b[32m[ISPublisher:infosystem:RestAPI]\x1b[0m: Inited for schema ' + schema);
   } catch(e) {
+    if (e instanceof Error && e.code === "MODULE_NOT_FOUND") {
+      console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load rest api router. Reason: Module not found for schema "' + schema + '"');
+    } else {
+      console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load rest api router. Reason: ', e);
+    }
     _router = function(req, res, next) { next(); };
-    console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load rest api router. Reason: ', e);
   }
 
   return _router;
@@ -79,7 +83,12 @@ export const serviceDescription = function getServiceDescription({schema}) {
   try {
     return require('./' + schema).serviceDescription;
   } catch(e) {
-    console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load service description for schema "' + schema + '". Reason: ' , e);
+    if (e instanceof Error && e.code === "MODULE_NOT_FOUND") {
+      console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load service description. Reason: Module not found for schema "' + schema + '"');
+    } else {
+      console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load service description. Reason: ' , e);
+    }
+
     return {};
   }
 };
