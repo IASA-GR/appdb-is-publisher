@@ -174,7 +174,7 @@ function _initServer(conf) {
   //Start server. Listening to configured port.
   return new Promise((resolve, reject) => {
     app.listen(PORT, function() {
-      console.log('HTTP server listening to port: ' + PORT);
+      console.log('\x1b[32m[ISPublisher::infosystem:HTTP]\x1b[0m: HTTP server listening to port: ' + PORT);
       resolve(app);
     });
   });

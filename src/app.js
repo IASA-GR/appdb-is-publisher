@@ -22,9 +22,9 @@ async function _initApplication() {
       getApi: infoSystem.getApi
     });
 
-    console.log('Started');
+    console.log('\x1b[32m[ISPublisher]\x1b[0m: Started');
   } catch(e) {
-    console.log(e);
+    console.log('\x1b[31m[ISPublisher][ERROR]\x1b[0m: ', e);
     process.exit(1);
   }
 }
