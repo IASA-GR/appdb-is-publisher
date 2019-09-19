@@ -18,6 +18,7 @@ var config = {
   },
   "modules": {
     "infosystem": {
+      "schema" : "glue20",
       "storage": {
         "_default": {
           "dialect": "couchdb",

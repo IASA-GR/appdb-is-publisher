@@ -2,6 +2,8 @@ import {merge} from 'lodash';
 import { makeExecutableSchema } from 'graphql-tools';
 import {getDirectoryFiles} from './../../../lib/isql/utils/fs';
 
+const DEFAULT_SCHEMA = 'glue20';
+
 /**
  * Initialize and generate GraphQL executable schema
  * based on the type definitions in ./schema/*.graphql files
@@ -9,11 +11,14 @@ import {getDirectoryFiles} from './../../../lib/isql/utils/fs';
  *
  * @returns {object}  GraphQL module API.
  */
-async function _init() {
-  let typeDefs = await getDirectoryFiles(__dirname + '/schema/*.graphql', 'text/plain');
-  let resolveDefs = await getDirectoryFiles(__dirname + '/resolvers/*.js', 'application/javascript');
+async function _init(config) {
+  let schemaName = config.get('schema', DEFAULT_SCHEMA);
+  let typeDefs = await getDirectoryFiles(__dirname + '/' + schemaName + '/schema/*.graphql', 'text/plain');
+  let resolveDefs = await getDirectoryFiles(__dirname + '/' + schemaName + '/resolvers/*.js', 'application/javascript');
   let resolvers = resolveDefs.reduce((sum, def) => merge(sum, def), {});
   let executableSchema = null;
+
+  console.log('\x1b[32m[ISPublisher::infosystem:GraphQL]\x1b[0m: Loaded schema ' + schemaName);
 
   return {
     getSchema: () => {

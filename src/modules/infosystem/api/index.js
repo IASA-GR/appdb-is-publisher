@@ -1,6 +1,8 @@
 import Entities from './entities';
 import Storage from './storage';
 
+const DEFAULT_SCHEMA = 'glue20';
+
 /**
  * Initialize the Imformation System API, along with the entities and storage sub modules.
  * The api is responsible for accessing the backend couchdb instance and appling rules and constraints.
@@ -12,6 +14,7 @@ async function _initApi(config) {
   let _api = (name) => _api.entities.get(name);
   _api.storage = await Storage.init(config.get('storage._default.options'));
   _api.get = (name) => _api.entities.get(name);
+  _api.getSchema = () => config.get('schema', DEFAULT_SCHEMA);
   _api.entities = await Entities(_api);
 
   return _api;
