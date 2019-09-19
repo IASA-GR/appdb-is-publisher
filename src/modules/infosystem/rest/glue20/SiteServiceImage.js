@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import {query, TEMPLATE_COLLECTION_HEADER} from './restModel';
-import {asyncFilterToGraphQL, resultHandlerByPath} from './utils';
+import {query, TEMPLATE_COLLECTION_HEADER} from '../restModel';
+import {asyncFilterToGraphQL, resultHandlerByPath} from '../utils';
 import {TEMPLATE_SITE_DETAILS_FIELDS} from './Site';
 import {TEMPLATE_SITE_SERVICE_DETAILS_FIELDS} from './SiteService';
 import {TEMPLATE_SITE_SERVICE_TEMPLATE_COLLECTION_FIELDS, TEMPLATE_SITE_SERVICE_TEMPLATE_DETAILS_FIELDS} from './SiteServiceTemplate';

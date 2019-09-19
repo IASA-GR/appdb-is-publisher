@@ -1,50 +1,48 @@
 import _ from 'lodash';
-import {query, TEMPLATE_COLLECTION_HEADER} from './restModel';
-import {asyncFilterToGraphQL, resultHandlerByPath} from './utils';
+import {query, TEMPLATE_COLLECTION_HEADER} from '../restModel';
+import {asyncFilterToGraphQL, resultHandlerByPath} from '../utils';
 import {TEMPLATE_SITE_SERVICE_DETAILS_FIELDS}  from './SiteService';
 import {TEMPLATE_SITE_DETAILS_FIELDS} from './Site';
 
-export const TEMPLATE_SITE_SERVICE_DOWNTIME_ITEM_FIELDS = `
+export const TEMPLATE_SITE_SERVICE_STATUS_ITEM_FIELDS = `
   id
-  downtimePKey
-  classification
-  severity
-  startDate
-  endDate
-  formatedStartDate
-  formatedEndDate
-  serviceType
-  gocPortalUrl
-  outcome
-`;
-
-export const TEMPLATE_SITE_SERVICE_DOWNTIME_DETAILS_FIELDS =`
-  id
-  downtimePKey
-  classification
-  severity
-  startDate
-  endDate
-  formatedStartDate
-  formatedEndDate
-  serviceType
-  gocPortalUrl
-  outcome
+  type
+  endpointGroup
+  value
+  timestamp
   site {
     id
     pkey
     name
   }
-  service {
+  siteService {
     id
     endpointPKey
     endpointURL
   }
 `;
 
-export const TEMPLATE_SITE_SERVICE_DOWNTIME_COLLECTION_FIELDS = `
+export const TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS =`
+id
+type
+endpointGroup
+value
+timestamp
+site {
+  id
+  pkey
+  name
+}
+siteService {
+  id
+  endpointPKey
+  endpointURL
+}
+`;
+
+export const TEMPLATE_SITE_SERVICE_STATUS_COLLECTION_FIELDS = `
   items {
-    ${TEMPLATE_SITE_SERVICE_DOWNTIME_ITEM_FIELDS}
+    ${TEMPLATE_SITE_SERVICE_STATUS_ITEM_FIELDS}
   }
 `;
 
@@ -52,7 +50,7 @@ export const getCallerByIdentifier = (id, onlyQuery = false) => {
   if (onlyQuery) {
     return `id: {eq: "${id}"}`;
   }else {
-    return `SiteServiceDowntimeById(id: "${id}")`;
+    return `siteServiceStatusById(id: "${id}")`;
   }
 };
 
@@ -61,7 +59,7 @@ export const getByIdentifier = (id) => {
 
   return query(`{
     data: ${caller} {
-      ${TEMPLATE_SITE_SERVICE_DOWNTIME_DETAILS_FIELDS}
+      ${TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS}
     }
   }`);
 };
@@ -84,7 +82,7 @@ export const getSiteService = (id, imageId) => {
   return query(`{
     data: ${caller} {
       id
-      service {
+      siteService{
         ${TEMPLATE_SITE_SERVICE_DETAILS_FIELDS}
       }
     }
@@ -95,9 +93,9 @@ export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0
   return asyncFilterToGraphQL(filter).then(flt => {
     return query(`
       {
-        data: SiteServiceDowntimes(filter: ${flt}, limit: ${limit}, skip: ${skip}) {
+        data: siteServiceStatuses(filter: ${flt}, limit: ${limit}, skip: ${skip}) {
           ${TEMPLATE_COLLECTION_HEADER}
-          ${TEMPLATE_SITE_SERVICE_DOWNTIME_COLLECTION_FIELDS}
+          ${TEMPLATE_SITE_SERVICE_STATUS_COLLECTION_FIELDS}
         }
       }
     `);

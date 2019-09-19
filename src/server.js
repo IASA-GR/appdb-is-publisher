@@ -11,6 +11,7 @@ import {expressRouter as restRouter, handleNoImlementation, handleUnknown, servi
 import {expressRouter as proxyRouter} from './modules/couchDBProxy';
 import http from 'http';
 import https from 'https';
+import configuration from './modules/infosystem/configuration';
 
 http.globalAgent.maxSockets = 2000;
 https.globalAgent.maxSockets = 2000;
@@ -39,7 +40,7 @@ function miscRoutes(router) {
         description: 'A proxy service to the couch db used by the information system backend.'
       }
     };
-    services = Object.assign({}, services, graphqlServiceDescription, restServiceDescription);
+    services = Object.assign({}, services, graphqlServiceDescription, restServiceDescription({schema: configuration.get('schema')}));
     services = {"services": services};
 
     res.setHeader('Content-Type', 'application/json');
@@ -163,7 +164,7 @@ function _initServer(conf) {
   ));
 
   // Setup a REST api interface on top of graphql
-  app.use('/rest', restRouter(express.Router(), Configuration.getModuleConfiguration('infosystem.rest')));
+  app.use('/rest', restRouter(express.Router(), Configuration.getModuleConfiguration('infosystem.rest'), {schema: configuration.get('schema')}));
 
   // Setup a proxy to the CouchDB backend instance
   app.use('/couchdb', proxyRouter(express.Router(), Configuration.getModuleConfiguration('couchDBProxy'), 'couchdb'));
