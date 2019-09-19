@@ -441,7 +441,8 @@ function _createMapper(modelName, {baseFilter = {}, baseFields = [], propertyMap
   const _fieldMapper              = _compileFieldMap(propertyMap);
   const _mangoSelectorTranspiler  = _createMangoSelectorTranspiler({properties: _propertyMapper, operators: _operatorMapper, arrayOperators: _arrayOperatorMapper});
   const _mangoSortTranspiler      = _createMangoSortTranspiler({properties: _propertyMapper});
-  const _mangoFieldsTranspiler    = _createMangoFieldsTranspiler({properties: _propertyMapper, includeDBFields: baseFields, excludeFields: Object.keys(relationMap)});
+  const _excludedFields            = Object.keys(relationMap).filter(k => (relationMap[k] || {}).alwaysInclude !== true);
+  const _mangoFieldsTranspiler    = _createMangoFieldsTranspiler({properties: _propertyMapper, includeDBFields: baseFields, excludeFields: _excludedFields});
   const _documentFieldsTranspiler = _createDocumentFieldsTranspiler({fields: _fieldMapper});
   const _relationKeys             = Object.keys(relationMap);
 
