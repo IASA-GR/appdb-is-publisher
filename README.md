@@ -28,6 +28,7 @@ module.exports = {
   },
   "modules": {
     "infosystem": {
+      "schema": "glue20" //can be glue21
       "storage": {
         "_default": {
           "dialect": "couchdb",
