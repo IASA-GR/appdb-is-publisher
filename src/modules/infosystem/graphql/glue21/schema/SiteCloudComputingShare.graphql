@@ -1,0 +1,152 @@
+
+type SiteCloudComputingShare {
+  # Local Information System identifier
+  id: ID
+  # GLUE2EntityName
+  entityName: String
+  # GLUE2EntityCreationTime
+  entityCreationTime: String
+  # GLUE2EntityValidity
+  entityValidity: Int
+  # A global unique ID (GLUE2ShareID)
+  shareID: String
+  # Description of this share (GLUE2ShareDescription)
+  description: String
+  # Related service (GLUE2ShareServiceForeignKey)
+  serviceForeignKey: String
+  # Related endpoint (GLUE2ShareEndpointForeignKey)
+  endpointForeignKey: String
+  # Related cloud computing service (GLUE2CloudComputingShareCloudComputingServiceForeignKey)
+  cloudComputingServiceForeignKey: String
+  # Related cloud computing endpoint (GLUE2CloudComputingShareCloudComputingEndpointForeignKey)
+  cloudComputingendpointForeignKey: String
+  # The maximum number of Virtual CPU who can be assigned to a single VM for the VM in this share. With virtual CPU it is intended the CPU seen by the VM OS, not the physical host CPU assigned to the VM. (GLUE2CloudComputingShareInstanceMaxCPU)
+  instanceMaxCPU: Int
+  # The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM for the VM in this share. With virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the physical RAM dedicated to the VM (GLUE2CloudComputingShareInstanceMaxRAM)
+  instanceMaxRAM: Int
+  # Service Level Agreement for the VMs under this share. This can be an URL to the SLA document or a keyword representing the SLA itself (eg. 99.99%availability, best effort, etc…) (GLUE2CloudComputingShareSLA)
+  SLA: String
+  # Total number of VM known to this computing share (the sum of RunningVM, PendingVM, SuspendedVM, HaltedVM) (GLUE2CloudComputingShareTotalVM)
+  totalVM: Int
+  # The number of VM running into this computing share (GLUE2CloudComputingShareRunningVM)
+  runningVM: Int
+  # The number of VM in Pending state (VM in preparation to be running on the system) (GLUE2CloudComputingSharePendingVM)
+  pendingVM: Int
+  # The number of VM in suspended state (VMs not running but with reserved resources on this computing share) (GLUE2CloudComputingShareSuspendedVM)
+  suspendedVM: Int
+  # The number of VM in Halted state (VMs not running on the system with no resources reserved on this computing share) (GLUE2CloudComputingShareHaltedVM)
+  haltedVM: Int
+  # The maximum number of VM instances that can run on this share (GLUE2CloudComputingShareMaxVM)
+  maxVM: Int
+  # The type of internal network connection available among the managed Hosts. If many values are published then the various types of network MAY be available only within subsets of the Hosts; the Hosts properties SHOULD publish this information (GLUE2CloudComputingShareNetworkInfo)
+  networkInfo: String
+  # The default network type that will be setup for an instance (e.g. public, private, private_only…) (GLUE2CloudComputingShareDefaultNetworkType)
+  defaultNetworkType: String
+  # The name of the public network if any (GLUE2CloudComputingSharePublicNetworkName)
+  publicNetworkName: String
+  # The native identifier of the corresponding local project to be used for this share (e.g. used by API users to know what is the project_id for OpenStack) (GLUE2CloudComputingShareProjectID)
+  projectID: String
+  # The VO this share reflects
+  VO: String
+  # SharePolicy
+  policy: String
+  # Information system data hash value
+  hash: String
+  # The site this share belongs to
+  site: Site
+  # The cloud computing service this share belongs to
+  service: SiteCloudComputingService
+  # A collection of cloud computing endpoints the current share is provided from
+  endpoint: SiteCloudComputingEndpoint
+  # A collection of images the current share has
+  images(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
+  # A collection of templates the current share has
+  templates(filter: SiteCloudComputingTemplate_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingTemplate_Sort]): SiteCloudComputingTemplate_Collection
+}
+
+input SiteCloudComputingShare_Filter {
+  # Local Information System identifier
+  id: FilterStringOperators
+  # GLUE2EntityName
+  entityName: FilterStringOperators
+  # GLUE2EntityCreationTime
+  entityCreationTime: FilterStringOperators
+  # GLUE2EntityValidity
+  entityValidity: FilterIntegerOperators
+  # A global unique ID (GLUE2ShareID)
+  shareID: FilterStringOperators
+  # Description of this share (GLUE2ShareDescription)
+  description: FilterStringOperators
+  # Related service (GLUE2ShareServiceForeignKey)
+  serviceForeignKey: FilterStringOperators
+  # Related endpoint (GLUE2ShareEndpointForeignKey)
+  endpointForeignKey: FilterStringOperators
+  # Related cloud computing service (GLUE2CloudComputingShareCloudComputingServiceForeignKey)
+  cloudComputingServiceForeignKey: FilterStringOperators
+  # Related cloud computing endpoint (GLUE2CloudComputingShareCloudComputingEndpointForeignKey)
+  cloudComputingendpointForeignKey: FilterStringOperators
+  # The maximum number of Virtual CPU who can be assigned to a single VM for the VM in this share. With virtual CPU it is intended the CPU seen by the VM OS, not the physical host CPU assigned to the VM. (GLUE2CloudComputingShareInstanceMaxCPU)
+  instanceMaxCPU: FilterIntegerOperators
+  # The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM for the VM in this share. With virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the physical RAM dedicated to the VM (GLUE2CloudComputingShareInstanceMaxRAM)
+  instanceMaxRAM: FilterIntegerOperators
+  # Service Level Agreement for the VMs under this share. This can be an URL to the SLA document or a keyword representing the SLA itself (eg. 99.99%availability, best effort, etc…) (GLUE2CloudComputingShareSLA)
+  SLA: FilterStringOperators
+  # Total number of VM known to this computing share (the sum of RunningVM, PendingVM, SuspendedVM, HaltedVM) (GLUE2CloudComputingShareTotalVM)
+  totalVM: FilterIntegerOperators
+  # The number of VM running into this computing share (GLUE2CloudComputingShareRunningVM)
+  runningVM: FilterIntegerOperators
+  # The number of VM in Pending state (VM in preparation to be running on the system) (GLUE2CloudComputingSharePendingVM)
+  pendingVM: FilterIntegerOperators
+  # The number of VM in suspended state (VMs not running but with reserved resources on this computing share) (GLUE2CloudComputingShareSuspendedVM)
+  suspendedVM: FilterIntegerOperators
+  # The number of VM in Halted state (VMs not running on the system with no resources reserved on this computing share) (GLUE2CloudComputingShareHaltedVM)
+  haltedVM: FilterIntegerOperators
+  # The maximum number of VM instances that can run on this share (GLUE2CloudComputingShareMaxVM)
+  maxVM: FilterIntegerOperators
+  # The type of internal network connection available among the managed Hosts. If many values are published then the various types of network MAY be available only within subsets of the Hosts; the Hosts properties SHOULD publish this information (GLUE2CloudComputingShareNetworkInfo)
+  networkInfo: FilterStringOperators
+  # The default network type that will be setup for an instance (e.g. public, private, private_only…) (GLUE2CloudComputingShareDefaultNetworkType)
+  defaultNetworkType: FilterStringOperators
+  # The name of the public network if any (GLUE2CloudComputingSharePublicNetworkName)
+  publicNetworkName: FilterStringOperators
+  # The native identifier of the corresponding local project to be used for this share (e.g. used by API users to know what is the project_id for OpenStack) (GLUE2CloudComputingShareProjectID)
+  projectID: FilterStringOperators
+  # The VO this share reflects
+  VO: FilterStringOperators
+  # SharePolicy
+  policy: FilterStringOperators
+  # Information system data hash value
+  hash: FilterStringOperators
+  # The site this share belongs to
+  site: Site_Filter
+  # The cloud computing service this share belongs to
+  service: SiteCloudComputingService_Filter
+  # A collection of cloud computing endpoints the current share is provided from
+  endpoint: SiteCloudComputingEndpoint_Filter
+  # A collection of images the current share has
+  images: SiteCloudComputingImage_Filter
+  # A collection of templates the current share has
+  templates: SiteCloudComputingTemplate_Filter
+}
+
+enum SiteCloudComputingShare_Sort {
+  # Ascenting order by Local Information System Identifier
+  id_asc
+
+  # Descenting order by Local Information System Identifier
+  id_desc
+}
+
+type SiteCloudComputingShare_Collection {
+  totalCount: Int
+  count: Int
+  limit: Int
+  skip: Int
+  sort: [SiteCloudComputingShare_Sort]
+  items: [SiteCloudComputingShare]
+}
+
+extend type Query {
+  siteCloudComputingShareById(id: ID): SiteCloudComputingShare
+  siteCloudComputingShares(filter: SiteCloudComputingShare_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingShare_Sort]): SiteCloudComputingShare_Collection
+}

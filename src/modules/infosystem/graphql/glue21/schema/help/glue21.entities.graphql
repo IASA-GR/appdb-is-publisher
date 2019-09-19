@@ -1,0 +1,1896 @@
+
+scalar URL
+
+scalar URI
+
+scalar Glue2DataTypeAccessLatency
+
+scalar Glue2DataTypeAccType
+
+scalar Glue2DataTypeAppEnvState
+
+scalar Glue2DataTypeApplicationHandle
+
+scalar Glue2DataTypeBenchmark
+
+# List of values initially drafted from [OMII-DJRA2.1, OGF-GFD80]
+scalar Glue2DataTypeCapability
+
+scalar Glue2DataTypeCloudComputingInstanceState
+
+scalar Glue2DataTypeCloudComputingInstanceType
+
+scalar Glue2DataTypeCloudComputingManagerType
+
+scalar Glue2DataTypeCloudResourceName
+
+scalar Glue2DataTypeComputingActivityState
+
+scalar Glue2DataTypeComputingActivityType
+
+scalar Glue2DataTypeComputingManagerType
+
+scalar Glue2DataTypeContactType
+
+scalar Glue2DataTypeContextualizationName
+
+scalar Glue2DataTypeCPUMultiplicity
+
+scalar Glue2DataTypeCPUVirtualizationT
+
+scalar Glue2DataTypeDataStoreType
+
+scalar Glue2DataTypeDateTime
+
+scalar Glue2DataTypeDiskVirtualizationT
+
+scalar Glue2DataTypeDN
+
+scalar Glue2DataTypeEndpointAuthentication
+
+scalar Glue2DataTypeEndpointHealthState
+
+scalar Glue2DataTypeEndpointTechnology
+
+scalar Glue2DataTypeExpirationMode
+
+scalar Glue2DataTypeExtendedBoolean
+
+scalar Glue2DataTypeHostAccessInfo
+
+scalar Glue2DataTypeInterfaceName
+
+scalar Glue2DataTypeJobDescription
+
+scalar Glue2DataTypeLicense
+
+scalar Glue2DataTypeLocalID
+
+scalar Glue2DataTypeNetworkInfo
+
+scalar Glue2DataTypeNetworkConfigurationProtocol
+
+scalar Glue2DataTypeNetworkConfigurationDirection
+
+scalar Glue2DataTypeNetworkConfigurationAddressRange
+
+scalar Glue2DataTypeNetworkConfigurationPort
+
+scalar Glue2DataTypeNetworkType
+
+scalar Glue2DataTypeNetVirtualizationT
+
+scalar Glue2DataTypeOSFamily
+
+scalar Glue2DataTypeOSName
+
+scalar Glue2DataTypePeriod
+
+scalar Glue2DataTypePlatform
+
+scalar Glue2DataTypePolicyScheme
+
+scalar Glue2DataTypeQualityLevel
+
+scalar Glue2DataTypeReservationPolicy
+
+scalar Glue2DataTypeResourceScope
+
+scalar Glue2DataTypeRetentionPolicy
+
+scalar Glue2DataTypeSchedulingPolicy
+
+scalar Glue2DataTypeServiceType
+
+scalar Glue2DataTypeServingState
+
+scalar Glue2DataTypeStaging
+
+scalar Glue2DataTypeStorageAccessProtocol
+
+scalar Glue2DataTypeStorageCapacity
+
+scalar Glue2DataTypeStorageManagerType
+
+scalar Glue2DataTypeVirtType
+
+
+# The Entity class is the root entity from which all the GLUE classes inherit (an exception is made
+# for the Extension class). The specialized classes will inherit both the associations and the
+# attributes of Extension class. The attributes CreationTime and Validity are metadata related to
+# the generation and life of the information. The Name attribute allows a human-readable name to
+# be provided for any object, usable for e.g. monitoring or diagnostic displays. The Name SHOULD
+# NOT have any semantic interpretation.
+interface IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+}
+
+# An entity providing a capability or capacity, managed by a
+# local software component (Manager), part of a logical
+# Service, reachable via one or more Endpoints and having
+# one or more Shares defined on it. A Resource MAY refer
+# to a specified category of hardware, with summary
+# information on the available resources in that category.
+interface IGlue2Resource implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+}
+
+interface IGlue2Activity implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  UserDomainID: String
+  EndpointID: String
+  ShareID: String
+  ResourceID: String
+  ActivityIDs: [String]
+  # An activity is managed by a user domain.
+  UserDomain: [Glue2UserDomain]
+  # An activity is submitted to an endpoint.
+  Endpoint: [Glue2EndpointType]
+  # An activity is mapped into a share.
+  Share: Glue2ServiceType
+  # An activity is executed in a resource.
+  Resource: Glue2ResourceType
+  # An activity is related to zero or more activities.
+  Activities: [Glue2ActivityType]
+}
+
+# Statements, rules or assertions that specify the correct or expected behavior of an entity.
+# The Policy class is an abstract entity that MUST NOT be instantiated; it SHOULD be used in
+# order to derive specialized entities. This class is introduced to model statements, rules or assertions
+# that define the correct or expected behavior of entities. Two specializations are introduced:
+# AccessPolicy related to Endpoints and MappingPolicy related to Shares.
+interface IGlue2Policy implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The scheme used to define the syntax and semantics of the policy Rules.
+  Scheme: Glue2DataTypePolicyScheme
+  # A policy rule (for the basic policy scheme, the syntax is provided in the Appendix).
+  Rule: [String]
+
+  UserDomainIDs: [String]
+  # A policy is related to a user domain.
+  UserDomains: [Glue2UserDomain]
+}
+
+# TODO: Create union of all types implementing IGlue2Resource
+union Glue2ResourceType = Glue2CloudComputingInstanceType;
+
+# TODO: Create union of all types implementing IGlue2Domain
+union Glue2DomainType = Glue2AdminDomain | Glue2UserDomain
+
+# TODO: Create union of all types implementing IGlue2Service
+union Glue2ServiceType = Glue2CloudComputingService;
+
+# TODO: Create union of all types implementing IGlue2Endpoint
+union Glue2EndpointType = Glue2CloudComputingEndpoint
+
+# TODO: Create union of all types implementing IGlue2Share
+union Glue2ShareType = Glue2CloudComputingShare;
+
+# TODO: Create union of all types implementing IGlue2Manager
+union Glue2ManagerType = Glue2CloudComputingManager;
+
+# TODO: Create union of all types implementing IGlue2Activity
+union Glue2ActivityType = Glue2CloudComputingInstance;
+
+# TODO: Create union of all types implementing IGlue2Entity
+union Glue2EntityType = CloudComputingShareAccelerator | Glue2CloudComputingManagerAccelerator | Glue2CloudComputingVirtualAccelerator | Glue2CloudComputingImage | Glue2CloudComputingImageNetworkConfiguration | CloudComputingInstanceAccelerator | CloudServicePrice | CloudToStorageService | Glue2CloudComputingService | Glue2CloudComputingEndpoint | Glue2CloudComputingShare | Glue2CloudComputingManager | Glue2CloudComputingInstanceType;
+
+
+# Statements, rules or assertions that provide coarse-granularity information about the
+# authorization of access by groups of actors to an Endpoint
+# The AccessPolicy class is a specialization of the Policy class. This entity MAY be used to
+# express authorization rules, e.g. which UserDomains MAY access a certain service Endpoint.
+# The granularity of these policies SHOULD be coarse-grained and suitable for pre-selection of
+# services. The actual decision on the service side is performed by an authorization component that
+# MAY contain a finer-grained set of policy rules that in some case MAY contradict the published
+# coarse-grained policy rules. The default policy is assumed to be to deny access, hence Endpoints
+# for which there are no matching Rules SHOULD NOT be selected for possible use.
+type Glue2AccessPolicy implements IGlue2Policy {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The scheme used to define the syntax and semantics of the policy Rules.
+  Scheme: Glue2DataTypePolicyScheme
+  # A policy rule (for the basic policy scheme, the syntax is provided in the Appendix).
+  Rule: [String]
+  # An access policy is related to a user domain.
+  UserDomainIDs: [String]
+  # An access policy is related to a user domain.
+  UserDomains: [Glue2UserDomain]
+
+  # An access policy is related to an endpoint.
+  EndpointID: String
+  # An access policy is related to an endpoint.
+  Endpoint: Glue2EndpointType
+}
+
+# Statements, rules or assertions that provide coarse-granularity information about the mapping of User Domain requests to a Share.
+# The MappingPolicy class is a specialization of the Policy class. This entity MAY be used to
+# express which UserDomains MAY consume a certain share of resources. The granularity of these
+# policies SHOULD be coarse-grained and suitable for pre-selection of services. The actual decision
+# on the service side is performed by an authorization component that MAY contain a finer-grained
+# set of policy rules that in some case MAY contradict the published coarse-grained policy rules.
+type Glue2MappingPolicy implements IGlue2Policy {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The scheme used to define the syntax and semantics of the policy Rules.
+  Scheme: Glue2DataTypePolicyScheme
+  # A policy rule (for the basic policy scheme, the syntax is provided in the Appendix).
+  Rule: [String]
+  # An access policy is related to a user domain.
+  UserDomainIDs: [String]
+  # An access policy is related to a user domain.
+  UserDomains: [Glue2UserDomain]
+
+  # A mapping policy is related to a share.
+  ShareID: Glue2ShareType
+  # A mapping policy is related to a share.
+  Share: Glue2ShareType
+}
+
+# A key/value pair enabling the association of extra information
+type GLue2Extension {
+  # An identifier unique within the class instance to which it is associated
+  LocalID: Glue2DataTypeLocalID
+  # An identifier local to the container class instance; typically
+  # an attribute name not present in the model. This identifier
+  # is not required to be unique; several instances of this class
+  # MAY hold the same value for this attribute.
+  Key: String
+  # A value for the attribute named by the Key
+  Value: String
+  # The key/value pair is associated to an Entity instance.
+  Entity: Glue2EntityType
+}
+
+# The Location class is introduced to model geographical locations where a certain Domain or
+# Service are placed. The aim is to provide a simple way to express geographical information, and
+# it is not intended to be used in complex geographical information systems. Due to different
+# requirements, the granularity is not strictly defined and is left to the information producers
+# depending on their needs. Hence the extent of a geographical location can vary from an exact
+# position to a region spanning several different countries, not necessarily adjacent. The accuracy of
+# the latitude and longitude attributes should be defined in an interoperability profile defined by
+# projects adopting this specification.
+type Glue2Location implements  IGlue2Entity{
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # Street address (free format).
+  Address: String
+  # Name of town/city.
+  Place: Strin
+  # Name of country.
+  Country: String
+  # Postal code.
+  PostCode: String
+  # The position of a place north or south of the equator measured from -90° to +90° with positive values going north and negative values going south.
+  Latitude: Float
+  #  The position of a place east or west of the primary meridian (located in Greenwich, UK) measured from -180° to +180° with positive values going east and negative values going west (the value -180° is excluded from the range).
+  Longitude: Float
+
+  # The location is related to zero or more services.
+  Services: [Glue2ServiceType]
+  # The location is related to zero or more domains.
+  Domains: [Glue2DomainType]
+
+  # The entity MAY be associated to zero or more key-value pairs.
+  Extensions: [Glue2Extension]
+  # The location is related to zero or more computing services.
+  ComputingService: [Glue2ComputingService]
+  # The location is related to zero or more cloud computing services
+  CloudComputingService: [Glue2CloudComputingService]
+  # The location is related to zero or more storage services.
+  StorageService: [Glue2StorageService]
+  # The location is related to zero or more admin domains.
+  AdminDomain: [Glue2AdminDomain]
+  # The location is related to zero or more user domains.
+  UserDomain: [Glue2UserDomain]
+}
+
+# Information enabling the establishment of
+# communication with a person or group of persons
+# related to a Domain.
+type Glue2Contact implements IGlue2Entity {
+# Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # URI embedding the contact information. The
+  # syntax of the URI depends on the nature of the
+  # communication channel.
+  Detail: URI
+  # Type of contact.
+  Type: Glue2DataTypeContactType
+
+  # The contact is related to zero or more services
+  Services: [Glue2ServiceType]
+  # The contact is related to zero or more domains
+  Domains:  [Glue2DomainType]
+}
+
+# A collection of actors that MAY be assigned with roles and
+# privileges associated with Entities via Policies. A Domain MAY
+# have relationships to other domains.
+interface IGlue2Domain implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # A description of the domain (free format).
+  Description: String
+  # A URL identifying a web page with more information about the domain.
+  WWW: [URL]
+  # A domain is primarily located at one location.
+  Location: Glue2Location
+
+}
+
+# One of the main goals of the GLUE information model is to enable the discovery of the Grid
+# capabilities available in a certain infrastructure. Based on the use cases and modeling experience,
+# a number of concepts were identified as general building blocks: Endpoint, Share, Manager,
+# Resource. The Service class enables the unique identification of instances of these concepts
+# participating in the provision of some unified capability. The Service class SHOULD be also
+# used to characterize this overall capability.
+interface IGlue2Service implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The provided capabilities according to the
+  # Open Grid Service Architecture (OGSA)
+  # architecture [OGF-GFD80] (this is the union
+  # of all values assigned to the Capability
+  # attribute of the Endpoints which form part of
+  # this service).
+  Capability: [String]
+  # The type of service according to a
+  # namespace-based classification (the
+  # namespace MAY be related to a middleware
+  # name, an organization or other concepts;
+  # org.ogf.glue.* is reserved for Types defined
+  # by the OGF GLUE Working Group).
+  Type: String
+  # The maturity of the Service in terms of the
+  # quality of the underlying software
+  # components; the value corresponds to the
+  # highest QualityLevel among the available
+  # Endpoints.
+  QualityLevel: String
+  # A URL specifying a web page providing
+  # additional information, for example
+  # monitoring of the underlying services.
+  StatusInfo: [String]
+  # A human-readable summary description of
+  # the complexity in terms of the number of
+  # endpoint types, shares and resources. The
+  # syntax should be: endpointType=X, share=Y, resource=Z.
+  Complexity: String
+
+  EndpointIDs: [String]
+  ShareIDs: [String]
+  ManagerIDs: [String]
+  ContactIDs: [String]
+  LocationID: String
+  ServiceIDs: [String]
+
+  # A service exposes zero or more endpoints.
+  Endpoints: [Glue2EndpointType]
+  # A service offers zero or more shares.
+  Shares: [Glue2ShareType]
+  # A service offers zero or more managers.
+  Manager: [Glue2ManagerType]
+  # A service has zero or more contacts.
+  Contact: [Glue2Contact]
+  # A service is primary located at a location.
+  Location: Glue2Location
+  # A service is related to zero or more services.
+  Services: [Glue2ServiceType]
+}
+
+# The Endpoint class models a network location that can be contacted to access certain
+# functionalities based on a well-defined interface. The defined attributes refer to aspects such as
+# the network location, the exposed interface name and version, the details of the implementation,
+# the functional state and the scheduled downtime.
+interface IGlue2Endpoint implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # Network location of an endpoint,which
+  # enables a specific component of the
+  # Service to be contacted.
+  URL: String
+  # The provided capability according to the
+  # OGSA architecture classification.
+  Capability: [String]
+  # The technology used to implement the endpoint interface.
+  Technology: String
+  # The identification name of the primary protocol supported by the endpoint interface.
+  InterfaceName: String
+  # The version of the primary interface protocol (free format).
+  InterfaceVersion: [String]
+  # The identification of an extension to the
+  # interface protocol supported by the
+  # Endpoint.
+  InterfaceExtension: [String]
+  # The URL of a WSDL document
+  # describing the offered interface (this
+  # applies only to Web Services endpoints).
+  WSDL: [String]
+  # A URI identifying a supported profile for the Endpoint interface.
+  SupportedProfile: [String]
+  # The URl of a document providing a
+  # human-readable description of the
+  # semantics of the Endpoint functionalities (e.g. a software manual).
+  Semantics: [String]
+  # The name of the main organization
+  # implementing this software component
+  # (free format, but the chosen names
+  # SHOULD be clearly identifiable with the
+  # organisation).
+  Implementor: String
+  # The name of the implementation (as defined by the Implementor).
+  ImplementationName: String
+  # The version of the implementation (the syntax is defined by the Implementor, but MAY be: major.minor.patch).
+  ImplementationVersion: String
+  # The maturity of the endpoint in terms of
+  # the quality of the software components
+  # which implement it.
+  QualityLevel: String
+  # A state representing the current health of
+  # the Endpoint in terms of its ability to
+  # properly deliver the expected
+  # functionality.
+  HealthState: String
+  # A human-readable explanation of the
+  # HealthState of the Endpoint (free format).
+  HealthStateInfo: String
+  # A state specifying whether the Endpoint
+  # is currently accepting new requests, and
+  # whether it is currently servicing requests
+  # which have already been accepted.
+  ServingState: String
+  # The timestamp of the start time of the service underlying the Endpoint.
+  StartTime: String
+  # Name of the authentication method supported by the endpoint
+  Authentication: String.
+  # The Distinguished Name of the
+  # Certification Authority issuing the
+  # host/service certificate presented by the Endpoint.
+  IssuerCA: String
+  # The Distinguished Name of a trusted
+  # Certification Authority (CA); i.e.,
+  # certificates issued by the CA are
+  # accepted by the authentication process.
+  # Alternatively this may identify a standard
+  # bundle of accepted CAs, e.g. those
+  # accredited by the IGTF. Note that this
+  # does not imply that such certificates will
+  # be authorized to use the Endpoint.
+  TrustedCA: String
+  # The timestamp for an announcement of the next scheduled downtime.
+  DowntimeAnnounce: String
+  # A timestamp describing when the next downtime is scheduled to start.
+  DowntimfeStart: String
+  # A timestamp describing when the next downtime is scheduled to end.
+  DowntimeEnd: String
+  # A human-readable description of the next scheduled downtime (free format).
+  DowntimeInfo: String
+
+  ServiceID: String
+  ShareIDs: [String]
+  AccessPolicyIDs: [String]
+  ActivityIDs: [String]
+
+  # An endpoint is part of a Service.
+  Service: Glue2ServiceType
+  # An endpoint MAY pass activities to zero or more Shares.
+  ShareIDs: [Glue2ShareType]
+  # An endpoint has associated zero or more AccessPolicies.
+  AccessPolicies: [Glue2AccessPolicy]
+  # An endpoint has accepted and is managing zero or more Activities.
+  Activities: [Glue2ActivityType]
+}
+
+# The Share class is an abstract entity that MUST NOT be instantiated; it SHOULD be used in order
+# to derive specialized entities. At this level, it is introduced to capture the concept of a utilization
+# target, that is a constrained usage of service functionalities or resources that MAY be created based
+# on aspects such as identify or UserDomain membership, usage information or resource
+# characteristics
+interface IGlue2Share implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # A human-readable description of this share (free format).
+  Description: String
+
+  EndpointIDs: [String]
+  ResourceIDs: [String]
+  ServiceID: String
+  ActivityIDs: [String]
+  MappingPolicyIDs: [String]
+
+  # A share is consumed via one or more endpoints.
+  Endpoints: [Glue2EndpointType]
+  # A share is defined on one or more resources.
+  Resources: [Glue2ResourceType]
+  # A share participates in a service.
+  Service: [Glue2ServiceType]
+  # A share is consumed by zero or more activities.
+  Activities: [Glue2ActivityType]
+  # A share has zero or more mapping policies.
+  MappingPolicies: [Glue2MappingPolicy]
+}
+
+
+# The Manager class is an abstract entity that MUST NOT be instantiated; it SHOULD be used in
+# order to derive specialized entities. At this level, it is introduced to capture the characteristics of a
+# local software layer (not directly exposed via an Endpoint) which has control of the underlying
+# resources. The functionalities of a manager layer that need to be accessible by remote users are
+# typically abstracted by a middleware component via a standard interface, and are modeled by the
+# concept of Endpoint. Examples of managers are: for computing resources, batch systems such
+# as OpenPBS or LSF; for storage resources, GPFS or HPSS.
+interface IGlue2Manager implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  #  The name of the software product which implements the
+  # Manager functionality. The attribute is free format, but
+  # SHOULD correspond to the standard name by which the
+  # product is generally known.
+  ProductName: String
+  # The version of the software product which implements the
+  # Manager functionality. The attribute is free format, but
+  # SHOULD correspond to the primary version as defined by
+  # the software provider
+  ProductVersion: String
+
+  ServiceID: String
+  ResourceIDs: [String]
+  # A manager participates in a service.
+  Service: Glue2ServiceType
+  # A manager manages zero or more resources.
+  Resources: [Glue2ResourceType]
+}
+
+type Glue2Benchmark implements IGlue2Entity {
+    # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The type of benchmark.
+  Type:  Glue2DataTypeBenchmark
+  # The benchmark value.
+  Value: Float
+
+  # A benchmark MAY be related to an execution environment.
+  # ExecutionEnvironmentID: String
+  # A benchmark MAY be related to a computing resource.
+  # ComputingManagerID: String
+
+  # A benchmark MAY be related to a cloud computing instance type.
+  CloudComputingInstanceTypeID: String
+  # A benchmark MAY be related to a cloud computing resource.
+  CloudComputingManagerID: String
+
+  # A benchmark MAY be related to an execution environment.
+  # ExecutionEnvironment:  0..1
+  # A benchmark MAY be related to a computing resource.
+  # ComputingManager. ID 0..1
+
+  # A benchmark MAY be related to a cloud computing instance type.
+  CloudComputingInstanceType: CloudComputeInstanceType
+  # A benchmark MAY be related to a cloud computing resource.
+  CloudComputingManager: Glue2CloudComputingManager
+}
+
+# A collection of actors that MAY be assigned administrative roles and privileges over services
+# via policies. An AdminDomain manages services that MAY be geographically distributed, but
+# nevertheless a primary location should be identified.
+# The AdminDomain class is introduced to model a collection of actors that manage a number of
+# services. An AdminDomain MAY be associated to both Contact and Location class instances
+# in order to provide contact information and geographical location respectively. An AdminDomain
+# MAY be composed by other AdminDomains in a hierarchical structure. This structure MAY
+# represent a “participates in” association.
+type Glue2AdminDomain implements IGlue2Domain {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # A description of the domain (free format).
+  Description: String
+  # A URL identifying a web page with more information about the domain.
+  WWW: [URL]
+  # A domain is primarily located at one location.
+  Location: Glue2Location
+
+  # True if the services managed by the AdminDomain are considered geographically distributed by the administrators themselves.
+  Distributed: Glue2DataTypeExtendedBoolean
+  # Identification of a person or legal entity which pays for the services and resources (no particular format is defined).
+  Owner: [String]
+}
+
+# A collection of actors that MAY be assigned with user roles and privileges to services or shares via policies
+# The UserDomain class SHOULD be used to capture the concept of a Virtual Organization (VO).
+# By VO, we mean a set of individuals and/or institutions having direct access to computers, software,
+# data, and other resources for collaborative problem-solving or other purposes. Resources utilized
+# by a VO are expected to be accessible via network endpoints and constrained by defined utilization
+# targets called shares. The VO MAY exhibit its internal structure in terms of groups of individuals,
+# each of them constituting a UserDomain. UserDomains MAY be hierarchically structured. The
+# “participates in” association MAY represent this structure.
+type Glue2UserDomain implements IGlue2Domain {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # A description of the domain (free format).
+  Description: String
+  # A URL identifying a web page with more information about the domain.
+  WWW: [URL]
+  # A domain is primarily located at one location.
+  Location: Glue2Location
+  # The number of hops to reach the root for hierarchically organized domains described by the “composed by” association (0 is for the root).
+  Level: Int
+  # An Endpoint ID for the endpoint of a service   managing the association of users with the   domain, and related attributes such as groups or roles.
+  UserManager: [URI]
+  # An identifier for a user in this user domain
+  Member: [String]
+}
+
+# The CloudComputingService class is a specialization of the Service class for a service
+# offering Cloud Infrastructure as a Service computational capacity. The CloudComputingService
+# entity is the main logical unit, and aggregation point for several entities together modeling a
+# computing infrastructure capability in a Cloud system. A CloudComputingService is capable of
+# executing CloudComputingInstance on its associated resources. The resources behind the
+# CloudComputingService are described via the CloudComputingManager,
+# CloudComputingInstanceType, CloudComputingImage and Benchmark entities. The
+# governing policies and status of the resources are given by the CloudComputingShare elements.
+# The CloudComputingInstance of a CloudComputingService are submitted and controlled
+# via a CloudComputingEndpoint.
+type Glue2CloudComputingService implements IGlue2Service {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The provided capabilities according to the
+  # Open Grid Service Architecture (OGSA)
+  # architecture [OGF-GFD80] (this is the union
+  # of all values assigned to the Capability
+  # attribute of the Endpoints which form part of
+  # this service).
+  Capability: [String]
+  # The type of service according to a
+  # namespace-based classification (the
+  # namespace MAY be related to a middleware
+  # name, an organization or other concepts;
+  # org.ogf.glue.* is reserved for Types defined
+  # by the OGF GLUE Working Group).
+  Type: String
+  # The maturity of the Service in terms of the
+  # quality of the underlying software
+  # components; the value corresponds to the
+  # highest QualityLevel among the available
+  # Endpoints.
+  QualityLevel: String
+  # A URL specifying a web page providing
+  # additional information, for example
+  # monitoring of the underlying services.
+  StatusInfo: [String]
+  # A human-readable summary description of
+  # the complexity in terms of the number of
+  # endpoint types, shares and resources. The
+  # syntax should be: endpointType=X, share=Y, resource=Z.
+  Complexity: String
+  # A Cloud computing service has zero or more contacts.
+  ContactIDs: [String]
+  # A Cloud computing service is primarily located at a location.
+  LocationID: String
+  # A Cloud computing service is related to zero or more services
+  ServiceIDs: [String]
+  # A Cloud computing service has zero or more contacts.
+  Contacts: [Glue2Contact]
+  # A Cloud computing service is primarily located at a location.
+  Location: Glue2Location
+  # A Cloud computing service is related to zero or more services
+  Services: [Glue2ServiceType]
+
+  # Total number of VM known to the system (the sum of RunningVM, PendingVM, SuspendedVM and HaltedVM)
+  TotalVM: Int
+  # The number of VM in Running state (VMs actively consuming the system resources)
+  RunningVM: Int
+  # The number of VM in Pending state (VM in preparation to be running on the system)
+  PendingVM: Int
+  # The number of VM in Suspended state (VMs not running but with reserved resources on the system)
+  SuspendedVM: Int
+  # The number of VM in Halted state (VMs not running on the system with no resources reserved)
+  HaltedVM: Int
+  # Link to the service Acceptable User Policy (AUP) or Terms and Conditions for the usage of the service. This shall be in URL format
+  AUP: String
+
+  # A CloudComputingService is associated with zero or more cloud computing endpoints (interfaces)
+  EndpointIDs: [String]
+  # A CloudComputingService offers zero or more cloud computing shares.
+  ShareIDs: [String]
+  # A CloudComputingService offers zero or more cloud computing manager
+  ManagerIDs: [String]
+  # A CloudComputingService is associated with zero or more cloud computing endpoints (interfaces)
+  Endpoints: [Glue2CloudComputingEndpoint]
+  # A CloudComputingService offers zero or more cloud computing shares.
+  Shares: [Glue2CloudComputingShare]
+  # A CloudComputingService offers zero or more cloud computing manager
+  Managers: [Glue2CloudComputingManager]
+
+
+}
+
+# The CloudComputingEndpoint is a specialization of the Endpoint class for a service
+# possessing cloud Infrastructure-as-a-Service capability. The class represents an endpoint which is
+# used to create, control and monitor Cloud computing activities. The specific information concerns
+# service status and interface capabilities. This class provides attributes that MAY be used to publish
+# summary information about VM instantiated via a particular Endpoint. Such attributes are optional
+# and may not always be measurable (e.g., in the case of a stateless Endpoint which does not keep
+# information about the VM instantiated through it).
+type Glue2CloudComputingEndpoint implements IGlue2Endpoint {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # Network location of an endpoint,which
+  # enables a specific component of the
+  # Service to be contacted.
+  URL: String
+  # The provided capability according to the
+  # OGSA architecture classification.
+  Capabilities: [String]
+  # The technology used to implement the endpoint interface.
+  Technology: String
+  # The identification name of the primary protocol supported by the endpoint interface.
+  InterfaceName: String
+  # The version of the primary interface protocol (free format).
+  InterfaceVersions: [String]
+  # The identification of an extension to the
+  # interface protocol supported by the
+  # Endpoint.
+  InterfaceExtensions: [String]
+  # The URL of a WSDL document
+  # describing the offered interface (this
+  # applies only to Web Services endpoints).
+  WSDL: [String]
+  # A URI identifying a supported profile for the Endpoint interface.
+  SupportedProfiles: [String]
+  # The URl of a document providing a
+  # human-readable description of the
+  # semantics of the Endpoint functionalities (e.g. a software manual).
+  Semantics: [String]
+  # The name of the main organization
+  # implementing this software component
+  # (free format, but the chosen names
+  # SHOULD be clearly identifiable with the
+  # organisation).
+  Implementor: String
+  # The name of the implementation (as defined by the Implementor).
+  ImplementationName: String
+  # The version of the implementation (the syntax is defined by the Implementor, but MAY be: major.minor.patch).
+  ImplementationVersion: String
+  # The maturity of the endpoint in terms of
+  # the quality of the software components
+  # which implement it.
+  QualityLevel: String
+  # A state representing the current health of
+  # the Endpoint in terms of its ability to
+  # properly deliver the expected
+  # functionality.
+  HealthState: String
+  # A human-readable explanation of the
+  # HealthState of the Endpoint (free format).
+  HealthStateInfo: String
+  # A state specifying whether the Endpoint
+  # is currently accepting new requests, and
+  # whether it is currently servicing requests
+  # which have already been accepted.
+  ServingState: String
+  # The timestamp of the start time of the service underlying the Endpoint.
+  StartTime: String
+  # Name of the authentication method supported by the endpoint
+  Authentication: String.
+  # The Distinguished Name of the
+  # Certification Authority issuing the
+  # host/service certificate presented by the Endpoint.
+  IssuerCA: String
+  # The Distinguished Name of a trusted
+  # Certification Authority (CA); i.e.,
+  # certificates issued by the CA are
+  # accepted by the authentication process.
+  # Alternatively this may identify a standard
+  # bundle of accepted CAs, e.g. those
+  # accredited by the IGTF. Note that this
+  # does not imply that such certificates will
+  # be authorized to use the Endpoint.
+  TrustedCA: String
+  # The timestamp for an announcement of the next scheduled downtime.
+  DowntimeAnnounce: String
+  # A timestamp describing when the next downtime is scheduled to start.
+  DowntimfeStart: String
+  # A timestamp describing when the next downtime is scheduled to end.
+  DowntimeEnd: String
+  # A human-readable description of the next scheduled downtime (free format).
+  DowntimeInfo: String
+
+  # An endpoint is part of a Service.
+  ServiceID: String
+  # An endpoint MAY pass activities to zero or more Shares.
+  ShareIDs: [String]
+  # An endpoint has associated zero or more AccessPolicies.
+  AccessPolicyIDs: [String]
+  # An Cloud endpoint has accepted and is managing zero or more Cloud Activities.
+  ActivityIDs: [String]
+
+  # An endpoint is part of a Service.
+  Service: Glue2CloudComputingService
+  # An endpoint MAY pass activities to zero or more Shares.
+  Shares: [Glue2CloudComputingShare]
+  # An endpoint has associated zero or more AccessPolicies.
+  AccessPolicies: [Glue2AccessPolicy]
+  # An Cloud endpoint has accepted and is managing zero or more Cloud Activities.
+  Activities: [Glue2CloudComputingInstance]
+}
+
+# The CloudComputingShare class is the specialization of the main Share class for cloud
+# Infrastructure-as-a-Service. A CloudComputingShare is a high-level concept introduced to
+# model a utilization target for a pool of resources, sometimes referred as Zones or Sites, defined by
+# a homogeneous set of configuration parameters and characterized by single status information. A
+# CloudComputingShare carries information about "policies" (limits) defined over all or a subset
+# of resources and describes their dynamic status (load).
+# The CloudComputingShare stores also a set of CloudComputingImage and
+# CloudComputingInstanceType, which are used to define respectively the virtual OS and the
+# virtual hardware resources of the CloudComputingInstance running on the share. Such virtual
+# OS and hardware resources are provided by the Share with a given Service Level Agreement
+# (SLA). In case of the same CloudComputingInstanceType and CloudComputingImage are
+# offered under different SLAs, multiple CloudComputingShares shall be created, one for each SLA.
+type Glue2CloudComputingShare implements IGlue2Share {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # A human-readable description of this share (free format).
+  Description: String
+  # Total number of VM known to this computing share (the sum of RunningVM, PendingVM, SuspendedVM, HaltedVM)
+  TotalVM: Int
+  # The number of VM running into this computing share
+  RunningVM: Int
+  # The number of VM in Pending state (VM in preparation to be running on the system)
+  PendingVM: Int
+  # The number of VM in suspended state (VMs not running but with reserved resources on this computing share)
+  SuspendedVM: Int
+  # The number of VM in Halted state (VMs not running on the system with no resources reserved on this computing share)
+  HaltedVM: Int
+  # The maximum number of VM instances that can run on this share InstanceMaxCPU: Int The maximum number of Virtual CPU who can be assigned to a single VM for the VM in this share. With virtual CPU it is intended the CPU seen by the VM OS, not the physical host CPU assigned to the VM.
+  MaxVM: Int
+  # The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM for the VM in this share. With virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the physical RAM dedicated to the VM
+  InstanceMaxRAM: Int
+  # The type of internal network connection available
+  # among the managed Hosts. If many values are
+  # published then the various types of network MAY be
+  # available only within subsets of the Hosts; the Hosts
+  # properties SHOULD publish this information.
+  NetworkInfo: [String]
+  # The default network type that will be setup for an instance (e.g. public, private, private_only…)
+  DefaultNetworkType: String
+  # The name of the public network if any.
+  # SLA String 0..1 Service Level Agreement for the VMs under this share
+  # This can be an URL to the SLA document or a keyword representing
+  # the SLA itself (eg. 99.99% availability, best effort, etc…)
+  PublicNetworkName: String
+  # The native identifier of the corresponding local
+  # project to be used for this share (e.g. used by API
+  # users to know what is the project_id for OpenStack)
+  ProjectID: String
+
+  # A Cloud computing share MAY be consumed via one or more cloud computing endpoints.
+  EndpointIDs: [String]
+  # A Cloud computing share is defined on one or more cloud computing resources (cloud computing instance types).
+  ResourceIDs: [String]
+  # A Cloud computing share participates in a cloud computing service
+  ServiceID: String
+  # A Cloud computing share is being consumed by zero or more cloud computing activities (cloud computing instances).
+  ActivityIDs: [String]
+  # A share has zero or more mapping policies.
+  MappingPolicyIDs: [String]
+  # A Cloud computing share MAY be consumed via one or more cloud computing endpoints.
+  Endpoints: [Glue2CloudComputingEndpoint]
+  # A Cloud computing share is defined on one or more cloud computing resources (cloud computing instance types).
+  Resources: [Glue2CloudComputingInstanceType]
+  # A Cloud computing share participates in a cloud computing service
+  Service: [Glue2CloudComputingService]
+  # A Cloud computing share is being consumed by zero or more cloud computing activities (cloud computing instances).
+  Activities: [Glue2CloudComputingInstance]
+  # A share has zero or more mapping policies.
+  MappingPolicies: [Glue2MappingPolicy]
+}
+
+# The CloudComputingShareAccelerator contains all the information about the usage level of the
+# virtual accelerator device bound to the cloud computing share.
+type CloudComputingShareAccelerator implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The virtual accelerator architecture type.
+  Type: Glue2DataTypeAccType
+  # The maximum number of virtual accelerators that can be assigned to a single VM for any VM in this share.
+  MaxNumber: Int
+
+  # A set of virtual accelerator information is related to a cloud computing share.
+  CloudComputingShareID: String
+  # A set of virtual accelerator information is related to a cloud computing share.
+  CloudComputingShare: Glue2CloudComputingShare
+}
+
+# The CloudComputingManager class is a specialization of the Manager class for the
+# computational capability (Virtual Machines) manager. The CloudComputingManager is
+# responsible for the local control of resources. The CloudComputingManager layer may be not
+# exposed directly to external clients or to the Virtual Machines themselves.
+# The Virtual Machine manager, also known as Cloud Middleware, normally uses a hypervisor, a
+# piece of software, firmware or hardware which creates, runs and manages Virtual Machines or
+# possibly containers. A Cloud Computing Service will usually have only one Cloud Computing
+# Manager, but MAY have more. The class provides aggregated information on controlled resources,
+# limits and also describes local storage extents accessible to the Virtual Machines.
+type Glue2CloudComputingManager implements IGlue2Manager {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  #  The name of the software product which implements the
+  # Manager functionality. The attribute is free format, but
+  # SHOULD correspond to the standard name by which the
+  # product is generally known.
+  ProductName: String
+  # The version of the software product which implements the
+  # Manager functionality. The attribute is free format, but
+  # SHOULD correspond to the primary version as defined by
+  # the software provider
+  ProductVersion: String
+
+  # Name of the underlying hypervisor that creates, runs and manages Virtual Machines.
+  HypervisorName: String
+  # Version of the hypervisor.
+  HypervisorVersion: String
+  # Ph.CPU The total number of physical CPUs cores accessible via any of the
+  # available Endpoints and managed by this Cloud Compute Manager. This
+  # value SHOULD represent the total installed capacity, i.e. including
+  # resources which are temporarily unavailable.
+  TotalCPUs: Int
+  # The total amount of RAM accessible (MB) via any of the available Endpoints and
+  # managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity,
+  # i.e. including resources which are temporarily unavailable.
+  TotalRAM: Int
+  # The maximum number of Virtual CPU who can be assigned to a single VM.
+  # (with virtual CPU it is intended the CPU cores as seen by the VM OS)
+  InstanceMaxCPU: Int
+  # The minimum number of Virtual CPU who can be assigned to a single VM
+  # (with virtual CPU it is intended the CPU cores as seen by the VM OS)
+  InstanceMinCPU: Int
+  #  The maximum value (in MB) of virtual RAM memory who can be assigned to
+  # a single VM (with virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the phisical RAM
+  # dedicated to the VM)
+  InstanceMaxRAM: Int
+  #  The minimum value (in MB) of virtual RAM memory who can be assigned to
+  # a single VM (with virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM)
+  InstanceMinRAM: Int
+  # The maximum value (in MB) of virtual RAM memory who can be dedicated to
+  # a VM (i.e. physical host memory, not shared of swapped)
+  InstanceMaxDedicatedRAM: Int
+  # The minimum value (in MB) of virtual RAM memory who can is dedicated to
+  # a VM (i.e. physical host memory, not shared of swapped)
+  InstanceMinDedicatedRAM: Int
+  # The type of network virtualization performed by the Cloud Computing Manager to segregate VMs VLANs (ex. none, vSwitch, ebtables, etc…).
+  NetworkVirtualizationType: [String]
+  # The type of CPU virtualization (ex.full/paravirtualization/hardware assisted)
+  CPUVirtualizationType: [String]
+  # The format of virtual disk images supported (ex. qcow2, raw, vmdk)
+  VirtualDiskFormat: [String]
+  # Failover is the automatic transition of the VM to a secondary machine or server upon failure of the primary component.
+  Failover: String
+  # If true the Cloud Computing Manager allows to move the virtual machine from one physical host to another without powering down the system
+  LiveMigration: String
+  # If true the Cloud Computing Manager allows to backup and restore the virtual
+  # machines. This is a static value and does not ensure the availability of the storage for the backup
+  VMBackupRestore: String
+
+  # A cloud computing manager participates in a computing service.
+  ServiceID: String
+  # A cloud computing manager manages one or more cloud computing instance type..
+  resourceIDs: [String]
+  # A cloud computing manager manages one or more cloud computing image
+  ImageIDs: [String]
+  # A cloud computing manager has zero or more associated benchmarks. This benchmarks are referred to the virtual resources (RAM, CPU, disk, network) provided to the VMs
+  BenchmarkIDs: [String]
+  # A cloud computing manager controls zero or more virtual accelerator devices.
+  ManagerAcceleratorIDs: [String]
+  # A cloud computing manager participates in a computing service.
+  Service: Glue2CloudComputingService
+  # A cloud computing manager manages one or more cloud computing instance types.
+  Resources: [Glue2CloudComputingInstanceType]
+  # A cloud computing manager manages one or more cloud computing images
+  Images: [Glue2CloudComputingImage]
+  # A cloud computing manager has zero or more associated benchmarks. This benchmarks are referred to the virtual resources (RAM, CPU, disk, network) provided to the VMs
+  Benchmarks: [Glue2Benchmark]
+  # A cloud computing manager controls zero or more virtual accelerator devices.
+  CloudComputingManagerAccelerators: [Glue2CloudComputingManagerAccelerator]
+}
+
+# The CloudComputingManagerAccelerator contains all the information about the virtual
+# accelerator device available for a given cloud computing manager.
+type Glue2CloudComputingManagerAccelerator implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The virtual accelerator architecture type.
+  Type: String
+  # The total number of physical Accelerator cards accessible through any of the available Endpoints and managed by
+  # this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including
+  # resources which are temporarily unavailable.
+  TotalNumber: Int
+  # The maximum number of virtual accelerators that can be assigned to a single VM
+  MaxNumber: Int
+  # The minimum number of virtual accelerators that can be assigned to a single VM
+  MinNumber: Int
+
+  # A set of virtual accelerator information is related to a cloud computing share.
+  CloudComputingManagerID: String
+  # A set of virtual accelerator information is related to a cloud computing share.
+  CloudComputingManager: Glue2CloudComputingManager
+
+}
+
+# The CloudComputingInstanceType class describes the hardware environment of the VM, i.e.
+# the amount of RAM, CPU, disk and network resources the VM OS will see and manage. The
+# resources provided to the VM are virtual resources, usually shared with other VMs running in the
+# same infrastructure. The performances of the provided resources are specified via the Benchmarks
+# associated to the Instance Type.
+type Glue2CloudComputingInstanceType implements IGlue2Resource {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # Reference to this particular template to be used during instantiation of a VM via the Endpoint.
+  TemplateID: String
+  # Reference to one or more marketplaces which stores the metadata of this resource template. Reference is the URL of the resource in the marketplace.
+  MarketplaceURL: [String]
+  # The platform architecture provided to the virtual machine (ex. i386, x86_64)
+  Platform: String
+  # Number of virtual cores provided to the virtual machine (this is the number of core the machine OS will see)
+  CPU: Int
+  # Virtual RAM memory provided to the virtual machine (this is the total wuantity of RAM the machine OS will see)
+  RAM: Int
+  # Size of the disk associated to the OS image (GB). If this attribute is omitted, the OS disk size will be the one
+  # specified by the CloudComputingImage entity, otherwise the CloudComputingImage OS disk will be extended to this value.
+  Disk: Int
+  # Amount of Ephemeral storage associated to the VM. This is temporary storage which is deleted after the
+  # VM closure and is represented as a new resource.
+  EphemeralStorage: Int
+  # if direct inbound network connectivity is available to the OS, even if limited, e.g. by firewall rules.
+  NetworkIn: Glue2DataTypeExtendedBoolean
+  # True if direct outbound network connectivity is available to the OS, even if limited, e.g. by firewall rules.
+  NetworkOut: Glue2DataTypeExtendedBoolean
+  # The allowed inbound external connectivity ports (if not specified, all ports are allowed)
+  NetworkPortsIn: [Glue2DataTypeNetworkConfigurationPort]
+  # The allowed outbound external connectivity ports (if not specified, all ports are allowed)
+  NetworkPortsOut: [Glue2DataTypeNetworkConfigurationPort]
+  # The type of internal network connection available to the OS.
+  NetworkInfo: [Glue2DataTypeNetworkInfo]
+
+  ManagerID: String
+  ShareIDs: [String]
+  ActivityIDs: [String]
+
+  # A resource is managed by a manager.
+  Manager: [Glue2CloudComputingManager]
+  # A resource provides capacity in terms of shares.
+  Shares: [Glue2CloudComputingShare]
+  # A resource runs zero or more activities.
+  Activities: [Glue2CloudComputingInstance]
+
+  # A Cloud Computing Instance Type is available on a set of Cloud Computing Endpoints.
+  CloudComputingEndpointIDs: [String]
+  # A cloud computing instance type provides zero or more virtual accelerator devices.
+  CloudComputingVirtualAcceleratorIDs: [String]
+  # The price metric associated to the resources provided by this template. It contains a different metric for each resource (Computing, Memory, Network IN/OUT)
+  CloudServicePriceIDs: [String]
+
+  # A Cloud Computing Instance Type is available on a set of Cloud Computing Endpoints.
+  CloudComputingEndpoints: [Glue2CloudComputingEndpoint]
+  # A cloud computing instance type provides zero or more virtual accelerator devices.
+  CloudComputingVirtualAccelerators: [Glue2CloudComputingVirtualAccelerator]
+  # The price metric associated to the resources provided by this template. It contains a different metric for each resource (Computing, Memory, Network IN/OUT)
+  CloudServicePrices:  [Glue2CloudServicePrice]
+}
+
+# Description of the accelerator device
+# The CloudComputingVirtualAccelerator is an entity used to describe a set of
+# homogeneous virtual accelerator devices. Generally a virtual accelerator device corresponds to
+# physical one installed on the host. A cloud computing instance may be associated with one or
+# more virtual accelerators.
+type Glue2CloudComputingVirtualAccelerator implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The type of virtual accelerator device.
+  Type: Glue2DataTypeAccType
+  # The number of virtual accelerators provided to the virtual machine (usually this is the number of cards the machine OS will see)
+  Number: Int
+  # The name of the virtual accelerator vendor provided to the virtual machine. Free format, but it SHOULD correspond to the name by which the vendor is generally known.
+  Vendor: String
+  # The name of the virtual accelerator model, as defined by the vendor, provided to the virtual machine
+  Model: String
+  # The specific version of the virtual accelerator model, as defined by the vendor, provided to the virtual machine.
+  Version: String
+  # The nominal clock speed (MHz) of the virtual accelerator, provided to the virtual machine.
+  ClockSpeed: Int
+  # The nominal memory size(MB) of the virtual accelerator, provided to the virtual machine.
+  Memory: Int
+  # The reference, an ID or tag, representing the set of features supported by a virtual accelerator, as declared by the vendor VirtualizationType VirtType_t 0..1 The virtualization mode adopted for creating the virtual accelerator device
+  ComputeCapability: [String]
+
+  # A virtual accelerator is associated with one CloudComputingInstanceType.
+  CloudComputingInstanceTypeID: String
+  # A virtual accelerator is associated with one CloudComputingInstanceType.
+  CloudComputingInstanceType: Glue2CloudComputingInstanceType
+}
+
+# A description of installed OS and applications or OS environment characteristics and configuration available for VM instantiation.
+# The CloudComputingImage class describes the software environment of the VM, i.e. which OS
+# is booting at VM startup and which pre-installed software is available on it. Each application
+# installed on the OS is identified by a name (the InstalledSoftware attribute); these names are not
+# defined within the schema, but SHOULD be assigned in a way which allows applications to be
+# uniquely identified. In some deployment scenarios, the definition of namespace-based
+# InstalledSoftware or guidelines for the generation of unique application names MAY be specified,
+# and application repository services relying on those application names MAY be provided. This
+# aspect is considered out of scope for the GLUE schema specification, but MAY be included in a
+# profile document for a specific production Clouds.
+type Glue2CloudComputingImage implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # Reference to this particular template to be
+  # used during instantiation of a VM via the Endpoint.
+  TemplateID: String
+  # Reference to one or more marketplaces which stores the metadata of this instance.
+  # Reference is the URL of the resource in the marketplace.
+  MarketplaceURLs: [URI]
+  # The platform architecture to which the OS belongs (ex. i386, x86_64)
+  OSPlatform:  Glue2DataTypePlatform
+  # The general family to which the OS belongs.
+  OSFamily: Glue2DataTypeOSFamily
+  # The specific name of the OS.
+  OSName: Glue2DataTypeOSName
+  # The version of the OS, as defined by the vendor.
+  OSVersion: String
+  # Size(GB) of the OS disk image in GB.
+  DiskSize: Int
+  # Number of virtual CPU cores recommended to run the image (this is a recommended value,
+  # actual number of cores will depend on the selected CloudComputeInstanceType)
+  RecommendedCPU: Int
+  # Virtual RAM memory(MB) recommended to run the image (this is a recommended value,
+  # the actual RAM value will depend on the selected CloudComputeInstanceType)
+  RecommendedRAM: Int
+  # Minimum number of virtual CPU cores required to run the image (the actual number of cores
+  # will depend on the selected CloudComputeInstanceType)
+  MinCPU: Int
+  # Minimum virtual RAM memory(MB) required to run the image (the actual RAM value
+  # will depend on the selected CloudComputeInstanceType)
+  MinRAM: Int
+  # Information about user access to the VM.
+  # Can be: credentials injected during contextualization, pre-defined
+  # username/password, pre-defined RSA key
+  AccessInfo: Glue2DataTypeHostAccessInfo
+  # Supported contextualization mechanism (if any)
+  ContextualizationName: Glue2DataTypeContextualizationName
+  # Supported contextualization mechanism versions
+  ContextualizationVersions: [String]
+  # Pre-defined username to access the VM (if AccessInfo specify pre-defined credentials)
+  DefaultUsername: String
+  # Pre-defined password (or RSA private key) to access the CM (if AccessInfo specify pre-defined credentials)
+  DefaultPassword: String
+  # Custom software installed on the instance.
+  InstalledSoftware: [String]
+  # Description of the image.
+  Description: String
+  # Version of the image.
+  Version: String
+
+  # Cloud Computing Image is managed by a Cloud computing manager.
+  ManagerID: String
+  # An OS template is available to one or more computing shares
+  CloudComputingShareIDs: [String]
+  # An OS template is used by one or more computing activities
+  CloudComputingInstanceIDs: [String]
+  # An OS template is available on a set of Cloud Computing Endpoints.
+  CloudComputingEndpointIDs: [String]
+  # The price metric associated to the resources provided by this template. It contains a different metric for each resource (OS License, Application license, etc…)
+  CloudServicePriceIDs: [String]
+  # Link to the OS disk location in the storage service.
+  CloudToStorageServiceID: String
+  # An image may contain information about multiple NetworkTraffic objects
+  CloudComputingImageNetworkTrafficID: [String]
+
+  # Cloud Computing Image is managed by a Cloud computing manager.
+  Manager: Glue2CloudComputingManager
+  # An OS template is available to one or more computing shares
+  CloudComputingShares: [Glue2CloudComputingShare]
+  # An OS template is used by one or more computing activities
+  CloudComputingInstances: [Glue2CloudComputingInstance]
+  # An OS template is available on a set of Cloud Computing Endpoints.
+  CloudComputingEndpoints: [Glue2CloudComputingEndpoint]
+  # The price metric associated to the resources provided by this template. It contains a different metric for each resource (OS License, Application license, etc…)
+  CloudServicePrices: [Glue2CloudServicePrice]
+  # Link to the OS disk location in the storage service.
+  CloudToStorageService: String
+  # An image may contain information about multiple NetworkTraffic objects
+  CloudComputingImageNetworkTraffics: [String]
+}
+
+# The set of information about the network configuration of a cloud computing image.
+# The CloudComputingImageNetworkConfiguration contains information about expected
+# network usage, related to a single or a set of ports and a network address in CIDR notation of a
+# cloud computing image. There might be zero, one or more objects for each computing image.
+# Entity Inherits from Description
+type Glue2CloudComputingImageNetworkConfiguration implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # Information about traffic direction
+  Direction: Glue2DataTypeNetworkConfigurationDirection
+  # Information about network protocol
+  Protocol: Glue2DataTypeNetworkConfigurationProtocol
+  # Information about network port(s)
+  Port: Glue2DataTypeNetworkConfigurationPort
+  # Information about network address range
+  AddressRange:  Glue2DataTypeNetworkConfigurationAddressRange
+
+  # A NetworkConfiguration object is related to a cloud computing image.
+  CloudComputingImageID: String
+
+  # A NetworkConfiguration object is related to a cloud computing image.
+  CloudComputingImage: Glue2CloudComputingImage
+
+}
+
+# An Activity managed by the Cloud Manager execution capability (the Computing Activity is traditionally called VM).
+# The CloudComputingInstance class represents a single VM (but possibly multi-VM) instance.
+# The attributes give the instance properties and state as seen by the Cloud Computing Manager.
+type Glue2CloudComputingInstance implements  IGlue2Activity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The type of this Computing Activity.
+  Type:  Glue2DataTypeCloudComputingInstanceType
+  # The VM ID as assigned by the Computing Endpoint.
+  VMID: URI
+  # The local ID of the VM as assigned by the Cloud Computing Manager.
+  LocalID: String
+  # The state of the VM; different state models are allowed; a state for each model is allowed
+  # provided that it has a different namespace prefix (see data type definition)
+  States: [Glue2DataTypeCloudComputingInstanceState]
+  # Error messages as provided by the software components involved in the management of the job.
+  Errors: [String]
+  # The identity of the VM’s owner;.
+  Owner: String
+  # The local user name to which the VM’s owner is mapped for the execution of this job.
+  LocalOwner: String
+  # A hostname associated to the  Execution Environment
+  # instance (i.e., host) running the VM; multi-node VMs are
+  # described by several instances of this attribute.
+  ExecutionNodes: [String]
+  # The total CPU time(secs) consumed so far by the VM. In case of multi-VM,
+  # this value refers to the sum of the CPU time consumed in each slot.
+  UsedTotalCPUTime: Int
+  # The amount of RAM(MB) currently used by the VM.
+  UsedMainMemory: Int
+  # The amount of inbound network connectivity consumed(Kb) so far by the VM.
+  # The value is measured in terms of Kb in input to the VM virtual interfaces.
+  UsedNetworkIn: Int
+  # The amount of outbound network connectivity consumed(Kb) so far by the VM.
+  # The value is measured in terms of Kb in output to the VM virtual interfaces.
+  UsedNetworkOut: Int
+  # The time when the VM instantiation was submitted to the Cloud Middelware by the user.
+  ComputingManagerSubmissionTime: Glue2DataTypeDateTime
+  # The time when the VM entered Running state.
+  StartTime: Glue2DataTypeDateTime
+  # The time when the VM destroy request was submitted to the Cloud Middelware by the user.
+  ComputingManagerEndTime:  Glue2DataTypeDateTime
+  # The time when the VM entered Halted state.
+  EndTime: Glue2DataTypeDateTime
+  # The name of the host from which the VM was submitted.
+  SubmissionHost: String
+  # The name of the software  client which was used to submit the VM.
+  SubmissionClientName: String
+  # Optional job messages provided by either the Cloud Middelware or the Compute Manager.
+  OtherMessages: [String]
+
+  # An activity is related to zero or more activities.
+  ActivityIDs: [String]
+  # An activity is managed by a user domain.
+  UserDomainID: String
+  # A Cloud computing activity is submitted to a computing endpoint.
+  EndpointID: String
+  # A Cloud computing activity is mapped into a computing share.
+  ShareID: String
+  # A Cloud computing activity is executed in an execution environment.
+  ResourceID: String
+  # A cloud computing instance shows zero or more information about the usage level of installed virtual accelerator devices.
+  CloudComputingInstanceAcceleratorIDs: [String]
+  # Link to the attached disks location in the storage service. The OS disk is included in this list.
+  CloudToStorageServiceIDs: [String]
+
+  # An activity is related to zero or more activities.
+  Activities: [Glue2ActivityType]
+  # An activity is managed by a user domain.
+  UserDomain: [Glue2UserDomain]
+  # A Cloud computing activity is submitted to a computing endpoint.
+  Endpoint: Glue2CloudComputingEndpoint
+  # A Cloud computing activity is mapped into a computing share.
+  Share: Glue2CloudComputingShare
+  # A Cloud computing activity is executed in an execution environment.
+  Resource: Glue2CloudComputingInstanceType
+  # A cloud computing instance shows zero or more information about the usage level of installed virtual accelerator devices.
+  CloudComputingInstanceAccelerators: [Glue2CloudComputingInstanceAccelerator]
+  # Link to the attached disks location in the storage service. The OS disk is included in this list.
+  CloudToStorageServices: [Glue2CloudToStorageService]
+}
+
+# The usage level of the virtual accelerator device
+# handled by the cloud computing instance.
+# The CloudComputingInstanceAccelerator contains information about the usage level of the
+# virtual accelerator device handled by the cloud computing instance.
+type Glue2CloudComputingInstanceAccelerator  implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # The virtual accelerator architecture type.
+  Type: Glue2DataTypeAccType
+  # The total Accelerator time(secs) consumed so far by the  VM. In case of multi-VM, this value refers to the sum of the Accelerator time consumed in each slot.
+  TotalProcessingTime: Int
+
+  # A set of virtual accelerator information is related to a cloud computing instance.
+  CloudComputingInstanceID: String
+  # A set of virtual accelerator information is related to a cloud computing instance.
+  CloudComputingInstance: Glue2CloudComputingInstance
+}
+
+# Price information for a given Cloud service resource.
+# The CloudServicePrice entity models the resources price in the cloud environment. This entity
+# represents a single price voice of the final price for the activity. This voice is related to a given
+# consumed resource which is specified in the attributes of the entity
+type Glue2CloudServicePrice implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # Name of the resource this price entity refers to. Can be any resource billed   (CPU, Memory, Disk, Software   Licenses, etc…).
+  Resource: Glue2DataTypeCloudResourceName
+  # Usage scope required for the price to apply (eg. commercial, no-profit, research, training)
+  Scopes:  [Glue2DataTypeResourceScope]
+  # Fixed fee to be paid(Euro) for the service usage (this price is not dependent from the resource usage)
+  FixFee: Float
+  # Billing period for the fixed price (ex. once, monthly, yearly, etc.)
+  FixFeePeriod: GLue2DataTypePeriod
+  # Consumption fee to be paid(Euro/period/x) for the service (this price shall be specified in the same unit as per the accounted resource x)
+  ConsumptionFee: Float
+  # Billing period for the per usage price (ex. monthly, yearly, etc.)
+  ConsumptionFeePeriod: Glue2DataTypePeriod
+
+  # It MAY be associated to a Computing Instance Type.
+  CloudComputingInstanceTypeIDs: [String]
+  # It MAY be associated to a OS template.
+  CloudComputingImageIDs: [String]
+  # It MAY be associated to a Storage service.
+  StorageServiceIDs: [String]
+
+  # It MAY be associated to a Computing Instance Type.
+  CloudComputingInstanceTypes: [Glue2CloudComputingInstanceType]
+  # It MAY be associated to a OS template.
+  CloudComputingImages: [Glue2CloudComputingImage]
+
+  # It MAY be associated to a Storage service.
+  # TODO: StorageServices: [???]
+}
+
+# The description of a device access to a Virtual Disk attached to a VM, thus available in the VM as a virtual hardware device.
+# The CloudToStorageService class represents the case where a virtual disk is created into the
+# Storage Service for VM usage. The disk may be attached to the VM (visible as a disk device by the
+# VM OS) or available via other export protocols (NFS share, iSCSI, etc…).
+# The attributes of this entity refer to the link of the storage resource into the Storage System and the VM environment.
+type Glue2CloudToStorageService  implements IGlue2Entity {
+  # Timestamp describing when the entity instance was generated.
+  CreationTime: String
+  # The duration after CreationTime that the information
+  # presented in the Entity SHOULD be considered
+  # relevant. After that period has elapsed,
+  # the information SHOULD NOT be considered relevant.
+  Validity: Int
+  # A global unique ID
+  EntityID: String
+  # A human-readable name.
+  Name: String
+  # The entity MAY be extended via key-value pairs.
+  Extensions: [Glue2Extension]
+
+  # Placeholder to publish information that does not fit
+  # in any other attribute. Free-form string, commaseparated tags, (name, value) pairs are all
+  # examples of valid syntax.
+  OtherInfo: String
+  # Reference to this disk to be used for attaching/detaching it to a VM.
+  LocationID: String
+  # The link to the local storage into the VM environment (this is typically a link to a local virtual disk device)
+  LocalPath: String
+  # The link to the storage into the remote Storage Service (this is typically a link to a virtual disk image).
+  RemotePath: String
+
+  # It MAY be associated to a cloud computing instance.
+  CloudComputingInstanceIDs: [String]
+  # It MAY be associated to a OS template.
+  CloudComputingImageIDs: String
+  # Is associated to a cloud computing service.
+  CloudComputingServiceID: String
+  # Is associated to a storage service.
+  StorageServiceID: String
+
+  # It MAY be associated to a cloud computing instance.
+  CloudComputingInstances: [Glue2CloudComputingInstance]
+  # It MAY be associated to a OS template.
+  CloudComputingImage: Glue2CloudComputingImage
+  # Is associated to a cloud computing service.
+  CloudComputingService: Glue2CloudComputingService
+
+  # Is associated to a storage service.
+  # TODO: StorageService: ???
+}

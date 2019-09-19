@@ -1,0 +1,157 @@
+
+enum EGlueAccessLatency {
+  # A file MAY have its only copies in a "nearly online" component of the storage
+  # system, typically a fully automated tape robot, but also a remote storage
+  # system could fit this qualification. Such a facility will need an unspecified
+  # amount of time to make a copy of the file available on the disk component of
+  # the container under consideration. When a file is not in use, its disk copies
+  # MAY be removed. Hence the system cannot guarantee that a file will be
+  # immediately available on disk
+  nearline
+  # A file MAY have its only copies in an offline component of the storage system,
+  # for example a tape library that is not connected to an automated tape robot.
+  # Hence an operator intervention MAY be needed to make a copy of a file
+  # available that has a lower latency
+  offline
+  # Files are always stored on a medium with an  with an access time less than a minute (e.g., a disk)
+  online
+}
+
+enum EGlueAccType {
+  # GPU architecture
+  GPU
+  # Intel MIC architecture
+  MIC
+  # Generic FPGA accelerator
+  FPGA
+}
+
+enum EGlueAppEnvState {
+  # The application environment is not installed, but MAY be dynamically installed
+  installable
+  # The application environment was being installed, but the installation process failed
+  installationfailed
+  # The application environment is installed, but the verification failed
+  installedbroken
+  # The application environment is installed, but not yet verified
+  installednotverified
+  # The application environment is installed and successfully verified
+  installedverified
+  # The application environment is not installed, but is being installed automatically
+  installingautomatically
+  # The application environment is not installed, but is being installed manually
+  installingmanually
+  # The application environment is not installed and not installable
+  notinstallable
+  # The application environment is installed, but is due to be removedwill be removed as soon as possible
+  pendingremoval
+  # The application environment is installed, but it is being removed
+  Removing
+}
+
+enum EGlueApplicationHandle {
+  # Access based on running directly the main executable of the application (this MAY require set-up of the environment)
+  executable
+  # Access based on loading modules via Environment Modules (http://modules.sourceforge.net/)
+  module
+  # Access based on using an explicit path where the software is installed on the file system
+  path
+  # Access based on loading SoftEnv keys (http://www.mcs.anl.gov/systems/software/softenv/softenv-intro.html)
+  softenv
+}
+
+enum EGlueBenchmark {
+  # BogoMips
+  bogomips
+  # SPEC CFP 2006 floating point benchmark
+  cfp2006
+  # SPEC CINT 2006 integer benchmark
+  cint2006
+  # LINPACK benchmark
+  linpack
+  # SPECfp2000 floating point benchmark
+  specfp2000
+  # SPECint2000 integer benchmark
+  specint2000
+}
+
+#List of values initially drafted from [OMII-DJRA2.1, OGF-GFD80]. Open enumeration
+enum EGlueCapability {
+  # capacity of providing access to a flat file
+  data.access.flatfiles
+  # capacity of providing access to a relational data source
+  data.access.rel
+  # capacity of providing access to an XML data sourceational
+  data.access.xml
+  # capacity of managing the creation of mountable disk images objects
+  data.management.disk
+  # capacity of managing the creation of filesimage
+  data.management.file
+  # capacity of managing the creation of generic storage objects
+  data.management.generic
+  # capacity of managing the creation of file replicas upon requestobject
+  data.management.replica
+  # capacity of managing a storage resource, from simple systems like diskservers to complex hierarchical systems
+  data.management.storage
+  # capacity of managing a transfer of files from the start to the completion
+  data.management.transfer
+  # capacity of resolving one name to another (for example, search the associated abstract name to a certain human-oriented name)
+  data.naming.resolver
+  # capacity of attaching names to data resources. (To evaluate if it should moved to the main category infrastructure instead of data). In OGSA, a three-level naming scheme is defined: (1) human-oriented name, (2) abstract name and (3) address
+  data.naming.scheme
+  # capacity of moving a file from one network location to another. It refers to the actual transfer (e.g., as performed by protocols like FTP, GridFTP, or HTTP)
+  data.transfer
+  # capacity of determining the set of resources in which a unit of work MAY execute
+  executionmanagement.candidatesetgenerator
+  # capacity of dynamically deploying a virtual machine image in a worker node
+  executionmanagement.dynamicvmdeploy
+  # capacity of building schedules for jobs, that is, the capability of defining mappings between services and resources, possibly with time constraints
+  executionmanagement.executionandplanning
+  # capacity of letting users be able to describe a job submission request based on a machine-processable language
+  executionmanagement.jobdescription
+  # capacity of executing a job or set of jobs.
+  executionmanagement.jobexecution
+  # capacity of managing the execution of a job or set of jobs from start to finish
+  executionmanagement.jobmanager
+  # capacity of managing reservation of resources for future usage
+  executionmanagement.reservation
+  # capacity of locating unknown resources or services, possibly satisfying a set of requirements
+  information.discovery
+  # capacity of recording data, often chronologically
+  information.logging
+  # capacity of modelling resources based on a community accepted definition
+  information.model
+  # capacity of periodically observing measurements, transform them and make available to users or other applications
+  information.monitoring
+  # capacity of providing long-term storage of information related to Grid activity and to let this information be accessed by users or other applications.
+  information.provenance
+  # capacity of systematically recording, reporting, and analyzing the usage of resources
+  security.accounting
+  # capacity of associating a user with a set of attributes in a trusted manner to a relying party, by way of digitally signed assertions
+  security.attributeauthority
+  # capacity of providing authentication mechanisms for Grid users machine and services
+  security.authentication
+  # capacity of handling authorization aspects, making authorization decisions about the subject and the requested mode of access based upon combining information from a number of distinct sources
+  security.authorization
+  # capacity of providing an online credential repository that allows users to securely obtain credentials when and where needed
+  security.credentialstorage
+  # capacity for a user to give a service the authority to undertake specific activities or decisions on its behalf
+  security.delegation
+  # capacity of mapping Grid-level credentials to local level credentials (e.g., mapping a user X.509 certificate into a UNIX account).
+  security.identymapping
+}
+
+type EGlueCloudComputingInstanceState {
+  # (a terminal state): the activity has failed due to some system error/failure event,
+  # such as failure of a computational resource that the activity was running on
+  bes.error
+  # (a terminal state): the activity has terminated successfully. Successful
+  # termination implies that the activity exited of its own accord rather than due to
+  # some failure in the BES or of the computational resources on which the activity
+  # was running. Note that a successfully terminating activity MAY nevertheless
+  # return an error code as its return value
+  bes.finished
+  # the service has created a record for an activity but not yet instantiated it on a
+  # suitable computational resource or enabled it to start execution on such a resource
+  bes.pending
+}

@@ -1,0 +1,217 @@
+type SiteCloudComputingEndpointLocation {
+  # GLUE2LocationID/GLUE2LocationID
+  id: String
+  # GLUE2LocationID/GLUE2LocationLongitude
+  longitude: Float,
+  # GLUE2LocationID/GLUE2LocationLatitude
+  latitude: Float
+  # GLUE2LocationID/GLUE2LocationCountry
+  country: String
+  # GLUE2LocationID/GLUE2LocationCountryCode
+  countryCode: String
+  # GLUE2LocationID/GLUE2LocationDomainForeignKey
+  domainForeignKey: String
+}
+
+input SiteCloudComputingEndpointLocation_Filter {
+  # GLUE2LocationID/GLUE2LocationID
+  id: String
+  # GLUE2LocationID/GLUE2LocationLongitude
+  longitude: FilterFloatOperators
+  # GLUE2LocationID/GLUE2LocationLatitude
+  latitude: FilterFloatOperators
+  # GLUE2LocationID/GLUE2LocationCountry
+  country: FilterStringOperators
+  # GLUE2LocationID/GLUE2LocationCountryCode
+  countrCode: FilterStringOperators
+  # GLUE2LocationID/GLUE2LocationDomainForeignKey
+  domainForeignKey: FilterStringOperators
+}
+
+# Represents a service provided by a Site in the information system
+# Services may contain one or more VM image references and execution templates.
+type SiteCloudComputingEndpoint {
+  # Local Information System Identifier
+  id: ID
+  # SiteEndpointPKey@gocdb
+  endpointPKey: String
+  # SiteEndpointInProduction@gocdb
+  isInProduction: Boolean
+  # SiteEndpointBeta@gocdb
+  beta: Boolean
+  # SiteEndpointGocPortalUrl@gocdb
+  gocPortalUrl: String
+  # Site service endpoint url as provided by gocdb  (SiteEndpointUrl@goc)
+  gocEndpointUrl: String
+  # Indicates the type of site service. Eg cloud computing etc (SiteEndpointServiceType@local)
+  endpointServiceType: String
+  # Network location of an endpoint,which enables a specific component of the Service to be contacted. (GLUE2EndpointURL@topBDII or SiteEndpointUrl@gocdb)
+  endpointURL: String
+  # A global unique ID (GLUE2EndpointID@topBDII)
+  endpointID: String
+  # The identification name of the primary protocol supported by the endpoint interface. (GLUE2EndpointInterfaceName@topBDII)
+  endpointInterfaceName: String
+  # The version of the primary interface protocol (free format). [0..*] (GLUE2EndpointInterfaceVersion@topBDII)
+  endpointInterfaceVersion: String
+  # The technology used to implement the endpoint interface. [0..1] (GLUE2EndpointTechnology@topBDII)
+  endpointTechnology: String
+  # The maturity of the endpoint in terms of the quality of the software components which implement it. (GLUE2EndpointQualityLevel@topBDII)
+  endpointQualityLevel: String
+  # The provided capability according to the OGSA architecture classification. [*] (GLUE2EndpointCapability@topBDII)
+  endpointCapabilities: [String]
+  # A state specifying whether the Endpoint is currently accepting new requests, and whether it is currently servicing requests which have already been accepted.(GLUE2EndpointServingState@topBDII)
+  endpointServingState: String
+  # A state representing the current health of the Endpoint in terms of its ability to properly deliver the expected functionality. (GLUE2EndpointHealthState@topBDII)
+  endpointHealthState: String
+  # The name of the main organization implementing this software component (free format, but the chosen names SHOULD be clearly identifiable with the organisation). [0..1] (GLUE2EndpointImplementor@topBDII)
+  endpointImplementor: String
+  # The name of the implementation (as defined by the Implementor). [0..1] (GLUE2EndpointImplementationName@topBDII)
+  endpointImplementationName: String
+  # The version of the implementation (the syntax is defined by the Implementor, but MAY be: major.minor.patch). [0..1] (GLUE2EndpointImplementationVersion@topBDII)
+  endpointImplementationVersion: String
+  # (GLUE2LocationID@topBDII)
+  location: SiteCloudComputingEndpointLocation
+  # (GLUE2ComputingEndpointComputingServiceForeignKey@topBDII)
+  computingEndpointComputingServiceForeignKey: String
+  # (GLUE2EndpointServiceForeignKey@topBDII)
+  endpointServiceForeignKey: String
+  # (GLUE2ManagerID@topBDII)
+  managerID: String
+  # Name of the software product adopted as manager (GLUE2ManagerProductName@topBDII)
+  managerProductName: String
+  # Name of the software product adopted as manager [0..1]  (GLUE2ManagerProductVersion@topBDII)
+  managerProductVersion: String
+  # The total number of physical CPUs accessible via any of the available Endpoints and managed by this Computing Manager (there is onephysical CPU per socket). This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable.(GLUE2ComputingManagerTotalLogicalCPUs@topBDII)
+  computingManagerTotalLogicalCPUs: Int
+  # Total size of the working area available to all single-slot Grid jobs, either as a shared area across all the Execution Environments (WorkingAreaShared is true) or local to each Execution Environment (WorkingAreaShared is false). If the Computing Manager supports individual quotas per job/user, this is not advertised. In the case of a non-shared working area with a different local space  allocation on each node, the advertised total size <b>SHOULD</b> be the minimum available across all the Execution Environment instances. [0..1] [GB] (GLUE2ComputingManagerWorkingAreaTotal@topBDII)
+  computingManagerWorkingAreaTotal: Int
+  # (GLUE2EntityOtherInfo@topBDII)
+  entityOtherInfo: String
+  # Raw list of all images the  service provides (no filtering or paging)
+  imageList: [SiteCloudComputingImage]
+  # Total count of images this service provides (@local)
+  numberOfImages: Int
+  # Raw list of all templates the service provides (no filtering or paging)
+  templateList: [SiteCloudComputingTemplate]
+  # Total count of templates this service provides (@local)
+  numberOfTemplates: Int
+  # Site that the current service endpoint belongs to
+  site: Site
+  service: SiteCloudComputingService
+  # Registered downtimes in GocDB system regarding the current service endpoint
+  serviceDowntimes: [SiteServiceDowntime]
+  # Operational status regarding the current service endpoint as reported by the argo.egi.eu service
+  serviceStatus: SiteServiceStatus
+  # A collection of references to VM images the the current service endpoint provides
+  images(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
+  # A collection of templates the current service endpoint provides to be used for VM initialization
+  templates(filter: SiteCloudComputingTemplate_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingTemplate_Sort]): SiteCloudComputingTemplate_Collection
+  # A collection of shares the current service has
+  shares(filter: SiteCloudComputingShare_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingShare_Sort]): SiteCloudComputingShare_Collection
+}
+
+# Filtering by Site Service
+input SiteCloudComputingEndpoint_Filter {
+  # Local Information System Identifier
+  id: FilterStringOperators
+  # SiteEndpointPKey@gocdb
+  endpointPKey: FilterStringOperators
+  # SiteEndpointInProduction@gocdb
+  isInProduction: Boolean
+  # SiteEndpointBeta@gocdb
+  beta: Boolean
+  # SiteEndpointGocPortalUrl@gocdb
+  gocPortalUrl: FilterStringOperators
+  # SiteEndpointServiceType@local
+  endpointServiceType: FilterStringOperators
+  # SiteEndpointUrl@goc
+  gocEndpointUrl: FilterStringOperators
+  # GLUE2EndpointURL
+  endpointURL: FilterStringOperators
+  # GLUE2EndpointID
+  endpointID: FilterStringOperators
+  #GLUE2EndpointInterfaceName
+  endpointInterfaceName: FilterStringOperators
+  # GLUE2EndpointInterfaceVersion
+  endpointInterfaceVersion: FilterStringOperators
+  # GLUE2EndpointTechnology
+  endpointTechnology: FilterStringOperators
+  # GLUE2EndpointQualityLevel
+  endpointQualityLevel: FilterStringOperators
+  # GLUE2EndpointCapability
+  endpointCapabilities: FilterStringArrayOperators
+  # GLUE2EndpointServingState
+  endpointServingState: FilterStringOperators
+  # GLUE2EndpointHealthState
+  endpointHealthState: FilterStringOperators
+  # GLUE2EndpointImplementor
+  endpointImplementor: FilterStringOperators
+  # GLUE2EndpointImplementationName
+  endpointImplementationName: FilterStringOperators
+  # GLUE2EndpointImplementationVersion
+  endpointImplementationVersion: FilterStringOperators
+  # GLUE2LocationID
+  location: SiteCloudComputingEndpointLocation_Filter
+  # GLUE2ComputingEndpointComputingServiceForeignKey
+  computingEndpointComputingServiceForeignKey: FilterStringOperators
+  # GLUE2EndpointServiceForeignKey
+  endpointServiceForeignKey: FilterStringOperators
+  # GLUE2ManagerID
+  managerID: FilterStringOperators
+  # GLUE2ManagerProductName
+  managerProductName: FilterStringOperators
+  # GLUE2ManagerProductVersion
+  managerProductVersion: FilterStringOperators
+  # GLUE2ComputingManagerTotalLogicalCPUs
+  computingManagerTotalLogicalCPUs: FilterIntegerOperators
+  # GLUE2ComputingManagerWorkingAreaTotal
+  computingManagerWorkingAreaTotal: FilterIntegerOperators
+  # GLUE2EntityOtherInfo
+  entityOtherInfo: FilterStringOperators
+  # Filter by the service endpoint's images values
+  images: SiteCloudComputingImage_Filter
+  # Filter by service's total image count
+  numberOfImages: FilterIntegerOperators
+  # Filter by the service's templates values
+  templates: SiteCloudComputingTemplate_Filter
+  # Filter by service's total template count
+  numberOfTemplates: FilterIntegerOperators
+  # Filter by the hosting site's values
+  site: Site_Filter
+  # FIlter by the hosting site service's values
+  service: SiteCloudComputingService_Filter
+  # Filter by site service statuses (SiteServiceStatus@argo)
+  serviceStatuses: SiteServiceStatus_Filter
+  # Filter by site service downtimes (SiteServiceStatus@gocdb)
+  serviceDowntimes: SiteServiceDowntime_Filter
+  # Filter by site service endpoint shares
+  shares: SiteCloudComputingShare_Filter
+  #withDowntimeCount: FilterIntegerOperators
+  #withImageCount: FilterIntegerOperators
+  #withTemplateCount: FilterIntegerOperators
+  #or: [SiteCloudComputingEndpoint_Filter]
+  #and: [SiteCloudComputingEndpoint_Filter]
+}
+
+enum SiteCloudComputingEndpoint_Sort {
+  # Ascenting order by Local Information System Identifier
+  id_asc
+
+  # Descenting order by Local Information System Identifier
+  id_desc
+}
+
+type SiteCloudComputingEndpoint_Collection {
+  totalCount: Int
+  count: Int
+  limit: Int
+  skip: Int
+  sort: [SiteCloudComputingEndpoint_Sort]
+  items: [SiteCloudComputingEndpoint]
+}
+
+extend type Query {
+  siteCloudComputingEndpointById(id: ID): SiteCloudComputingEndpoint
+  siteCloudComputingEndpointByGocDBPKey(id: String): SiteCloudComputingEndpoint
+  siteCloudComputingEndpoints(filter: SiteCloudComputingEndpoint_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingEndpoint_Sort]): SiteCloudComputingEndpoint_Collection
+}

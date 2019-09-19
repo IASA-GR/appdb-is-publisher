@@ -1,0 +1,147 @@
+
+type SiteCloudComputingTemplate {
+  # Local Information System identifier
+  id: ID
+  entityName: String
+  entityCreationTime: String
+  entityValidity:Int
+  entityOtherInfo: [String]
+  # SiteEndpointPKey@gocdb
+  endpointPKey: String
+  # GLUE2EndpointID
+  endpointID: String
+  # GLUE2ResourceID
+  resourceID: String
+  # GLUE2CloudComputingInstanceTypeTemplateID
+  templateID: String
+  # GLUE2ResourceManagerForeignKey
+  resourceManagerForeignKey: String
+  # Reference to one or more marketplaces which stores the metadata of this resource template. Reference is the URL of the resource in the marketplace.
+  marketplaceURL: [String]
+  # Virtual RAM memory (MB) provided to the virtual machine (this is the total quantity of RAM the machine OS will see)
+  RAM: Int
+  # Number of virtual cores provided to the virtual machine (this is the number of core the machine OS will see)
+  CPU: Int
+  # True if direct inbound network connectivity is available to the OS, even if limited, e.g. by firewall rules.
+  networkIn: Boolean
+  # True if direct outbound network connectivity is available to the OS, even if limited, e.g. by firewall rules.
+  networkOut: Boolean
+  # The type of internal network connection available to the OS.
+  networkInfo: [String]
+  # Amount of Ephemeral storage associated to the VM. This is temporary storage which is deleted after the VM closure and is represented as a new resource.
+  ephemeralStorage: Int
+  # Size of the disk associated to the OS image (GB). If this attribute is omitted, the OS disk size will be the one specified by the CloudComputingImage entity, otherwise the CloudComputingImage OS disk will be extended to this value.
+  disk: Int
+  # The platform architecture provided to the virtual machine (ex. i386, x86_64)
+  platform: String
+  # The allowed inbound external connectivity ports (if not specified, all ports are allowed)
+  networkPortsIn: [String]
+  # The allowed outbound external connectivity ports (if not specified, all ports are allowed)
+  networkPortsOut: [String]
+  # The template's manager key
+  managerForeignKey: String
+  # The template's endpoint key
+  endpointForeignKey: String
+  # The template's share key
+  shareForeignKey: String
+  # Cloud compunting service ID
+  serviceID: String
+  # The manager hypervisor name (GLUE2CloudComputingManagerHypervisorName)
+  managerName: String
+  # The VO name as defined by the user domain policy (GLUE2PolicyUserDomainForeignKey)
+  instanceTypeVO: String
+  # The VO as defined in the cloud computing share from the user domain policy (GLUE2PolicyUserDomainForeignKey)
+  shareVO: String
+  # The VO name as defined by the user domain policy (GLUE2PolicyUserDomainForeignKey)
+  sharePolicy: String
+  # Information system data hash value
+  hash: String
+  site: Site
+  service: SiteCloudComputingService
+  share: SiteCloudComputingShare
+  manager: SiteCloudComputingManager
+  endpoint: SiteCloudComputingEndpoint
+  images(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
+}
+
+input SiteCloudComputingTemplate_Filter {
+  # Local Information System identifier
+  id: FilterStringOperators
+  entityName: FilterStringOperators
+  entityCreationTime: FilterStringOperators
+  entityValidity: FilterIntegerOperators
+  entityOtherInfo: FilterStringArrayOperators
+  # SiteEndpointPKey@gocdb
+  endpointPKey: FilterStringOperators
+  # GLUE2EndpointID
+  endpointID: FilterStringOperators
+  # GLUE2ResourceID
+  resourceID: FilterStringOperators
+  # GLUE2CloudComputingInstanceTypeTemplateID
+  templateID: FilterStringOperators
+  # GLUE2ResourceManagerForeignKey
+  resourceManagerForeignKey: FilterStringOperators
+  # Reference to one or more marketplaces which stores the metadata of this resource template. Reference is the URL of the resource in the marketplace.
+  marketplaceURL: FilterStringArrayOperators
+  # Virtual RAM memory (MB) provided to the virtual machine (this is the total quantity of RAM the machine OS will see)
+  RAM: FilterIntegerOperators
+  # Number of virtual cores provided to the virtual machine (this is the number of core the machine OS will see)
+  CPU: FilterIntegerOperators
+  # True if direct inbound network connectivity is available to the OS, even if limited, e.g. by firewall rules.
+  networkIn: Boolean
+  # True if direct outbound network connectivity is available to the OS, even if limited, e.g. by firewall rules.
+  networkOut: Boolean
+  # The type of internal network connection available to the OS.
+  networkInfo: FilterStringArrayOperators
+  # Amount of Ephemeral storage associated to the VM. This is temporary storage which is deleted after the VM closure and is represented as a new resource.
+  ephemeralStorage: FilterIntegerOperators
+  # Size of the disk associated to the OS image (GB). If this attribute is omitted, the OS disk size will be the one specified by the CloudComputingImage entity, otherwise the CloudComputingImage OS disk will be extended to this value.
+  disk: FilterIntegerOperators
+  # The platform architecture provided to the virtual machine (ex. i386, x86_64)
+  platform: FilterStringOperators
+  # The allowed inbound external connectivity ports (if not specified, all ports are allowed)
+  networkPortsIn: FilterStringArrayOperators
+  # The allowed outbound external connectivity ports (if not specified, all ports are allowed)
+  networkPortsOut: FilterStringArrayOperators
+  # The template's manager key
+  managerForeignKey: FilterStringOperators
+  # The template's endpoint key
+  endpointForeignKey: FilterStringOperators
+  # The template's share key
+  shareForeignKey: FilterStringOperators
+  # Cloud compunting service ID
+  serviceID: FilterStringOperators
+  # The manager hypervisor name (GLUE2CloudComputingManagerHypervisorName)
+  managerName: FilterStringOperators
+  # The VO name as defined by the user domain policy (GLUE2PolicyUserDomainForeignKey)
+  instanceTypeVO: FilterStringOperators
+  # The VO as defined in the cloud computing share from the user domain policy (GLUE2PolicyUserDomainForeignKey)
+  shareVO: FilterStringOperators
+  # The VO name as defined by the user domain policy (GLUE2PolicyUserDomainForeignKey)
+  sharePolicy: FilterStringOperators
+  # Information system data hash value
+  hash: FilterStringOperators
+  site: Site_Filter
+  service: SiteCloudComputingService_Filter
+  share: SiteCloudComputingShare_Filter
+  manager: SiteCloudComputingManager_Filter
+  endpoint: SiteCloudComputingEndpoint_Filter
+  images: SiteCloudComputingImage_Filter
+}
+
+enum SiteCloudComputingTemplate_Sort {
+  # Ascenting order by Local Information System Identifier
+  id_asc
+
+  # Descenting order by Local Information System Identifier
+  id_desc
+}
+
+type SiteCloudComputingTemplate_Collection {
+  totalCount: Int
+  count: Int
+  limit: Int
+  skip: Int
+  sort: [SiteCloudComputingTemplate_Sort]
+  items: [SiteCloudComputingTemplate]
+}
