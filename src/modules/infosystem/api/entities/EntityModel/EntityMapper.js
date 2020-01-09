@@ -497,6 +497,34 @@ function _createMapper(modelName, {baseFilter = {}, baseFields = [], propertyMap
   const _getRelationMap = () => Object.assign({}, relationMap || {});
 
   /**
+   * Get information about a specific relation
+   *
+   * @param   {string} name Relation name
+   * @returns {object}      The relation object of the model
+   */
+  const _getRelationInfo = (name) => {
+    let relations = _getRelationMap() || {};
+
+    return relations[name] || null;
+  }
+
+    /**
+   * Get shared fields propery mappings of a specific relation
+   *
+   * @param   {string} relationName The name of the relation
+   * @returns {object}              The property/field pairs of shared relation data
+   */
+  const _getRelationSharedFields = (relationName) => {
+    let relation = _getRelationInfo(relationName);
+
+    if (!relation || !relation.sharedFields || Object.keys(relation.sharedFields) === 0) {
+      return {};
+    }
+
+    return relation.sharedFields;
+  };
+
+  /**
    * Get the DB document ID field if such is configured for this model.
    *
    * @returns {string}  Identifier field name.
@@ -526,6 +554,7 @@ function _createMapper(modelName, {baseFilter = {}, baseFields = [], propertyMap
     getArrayOperatorMapper:   () => _arrayOperatorMapper,
     getPropertiesFromFields:  _getPropertiesFromFields,
     getRelationMap:           _getRelationMap,
+    getRelationSharedFields:  _getRelationSharedFields,
     getIdentifierField:       _getIdentifierField,
     getIdentifierProperty:    _getIdentifierProperty
   };
