@@ -369,6 +369,100 @@ const _createModel = (
     });
   };
 
+  /**
+   * Retrieve the property names of the shared fields of a relation
+   *
+   * @param   {string}    relationName  The name of the relation as defined in the model
+   * @returns {string[]}                A list of property names
+   */
+  const _getRelationSharedProperties = (relationName) => {
+    let sharedFields = _mapper.getRelationSharedFields(relationName);
+
+    return  Object.keys(sharedFields) || [];
+  };
+
+  /**
+   * Extract from given data the shared fields values of the given relation
+   *
+   * @param   {string} relationName The name of the relation as defined in the model
+   * @param   {object} data         The data object to extract shared values from
+   * @returns {object}              The extracted data
+   */
+  const _extractRelationSharedProperties  = (relationName, data) => {
+    let propNames = _getRelationSharedProperties(relationName);
+    let root = data[relationName] || {};
+
+    return propNames.reduce((acc, name) => {
+      acc[name] = root[name];
+      return acc;
+    }, {});
+  };
+
+  /**
+   * Return the given fields of the relation that are not defined by the model.
+   * Useful when trying to decide if an extra call is needed to retrieve missing fields
+   * or the shared fields cover the current information requirements.
+   *
+   * @param   {string}    relationName  The name of the relation as defined in the model
+   * @param   {string[]}  fields        The property names of the related data to query
+   * @returns {string[]}                The property names of the related data which are not shared.
+   */
+  const _getMissingRelationSharedFields = (relationName, fields) => {
+    let propNames = _getRelationSharedProperties(relationName);
+
+    return fields.reduce((acc, field) => {
+      if (propNames.indexOf(field) === -1) {
+        acc.push(field);
+      }
+
+      return acc;
+    }, []);
+  }
+
+  /**
+   * Optimization. The DB documents contain denormalized information, thus containing information
+   * that conceptualy belongs to another document. This function tries to extract such information for all of
+   * the given fields from the given data object as returned from the current model call, so that the system
+   * won't have to make another request to the DB to fetch shared information.
+   *
+   * The function returns a promise that resolves successfully if all the given relation fields are also provided
+   * by the current entity model. The promise is rejected if at least one of these fields is not provided, signaling the
+   * caller to perform a new request for the specific relation.
+   * Although this function is actually synchronous, the promise based api is used to avoid more logic to the caller as
+   * this is just for optimization purposes and it should not interfere much with the the code flow.
+   *
+   * The information as to which fields are considered shared between two entities is defined in the model definition
+   * under the relation -> sharedFields section.
+   *
+   * An example of this optimization is when the user is quering from a SiteService model the name of the site it belongs to.
+   * In the SiteService model the name and pkey of the "Site" relation are declared as shared (this must also align with the DB schema).
+   * In this case the function will resolve with infromation retrieved from this
+   *
+   * NOTE1: This function should not be used for retrieving collections.
+   * NOTE2: The sharedFields information is also used for filtering optimizations, so do not assume they are useless
+   * if this optimization is not used.
+   * NOTE3: This method must be explicitly used in the model api (eg Site/index.js) and is not automatically applied.
+   *
+   * @param   {string}    relationName  The name of the relation as defined in the model
+   * @param   {string[]}  fields        The list of fileds to query from the related model
+   * @param   {object}    data          Data returned from the current object
+   * @return  {promise}                 Resolves with shared infromation, rejects if at least one field is not shared between two models.
+   */
+  const _tryRelationalSharedFields = (relationName, fields, data) => {
+    let missing = _getMissingRelationSharedFields(relationName , fields);
+
+    if (missing.length === 0) {
+      try {
+        let results = _extractRelationSharedProperties(relationName, data);
+        return Promise.resolve(results);
+      } catch(e) {
+        return Promise.reject(e);
+      }
+    }
+
+    return Promise.reject(new Error('[Optimization] Cannot extract shared fields for relation "' + name + '->' + relationName + '". Missing fields ' + missing.join(', ') + '.'));
+  }
+
   //Setup Entity Model public api functions.
   const _modelOps = {
     findMany: findMany,
@@ -383,7 +477,8 @@ const _createModel = (
     fetchMany: fetchMany,
     getExecutionEngine: () => _execEngine,
     map: _map,
-    mapOne: _mapOne
+    mapOne: _mapOne,
+    tryRelationalSharedFields: _tryRelationalSharedFields
   };
 
   //Apply model hooks.
