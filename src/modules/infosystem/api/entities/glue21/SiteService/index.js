@@ -15,7 +15,15 @@ function _initSiteService(context) {
 
   SiteService.getAll = ({root, args, context}) => _SiteServiceModel.findMany(args, context);
 
-  SiteService.getSite = ({root, args, context}) => context.api('site').getByGocDBPKey(_.get(root, 'site.pkey'), args.fields,  context);
+  SiteService.getSite = ({root, args, context, info}) =>
+    _SiteServiceModel.tryRelationalSharedFields(info.fieldName ,args.fields, root).catch((e) =>
+        context.api('site').getByGocDBPKey(
+          _.get(root, 'site.pkey'),
+          args.fields,
+          context
+        )
+    );
+  };
 
   SiteService.getSiteServiceShares = ({root, args, context}) =>
     context.api('siteServiceShare').getAll({
