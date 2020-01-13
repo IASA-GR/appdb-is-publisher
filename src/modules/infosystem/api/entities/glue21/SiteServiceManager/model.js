@@ -36,7 +36,7 @@ function SiteServiceManagerModel(context) {
       'totalCPU'                           : 'info.GLUE2CloudComputingManagerTotalCPUs',
       'networkVirtualizationType'          : 'info.GLUE2CloudComputingManagerNetworkVirtualizationType',
       'CPUVirtualizationType'              : 'info.GLUE2CloudComputingManagerCPUVirtualizationType',
-      'virtualdiskFormat'                  : 'info.GLUE2CloudComputingManagerVirtualdiskFormat',
+      'virtualdiskFormats'                 : 'info.GLUE2CloudComputingManagerVirtualdiskFormat',
       'VMBackupRestore'                    : 'info.GLUE2CloudComputingManagerVMBackupRestore', /*glue2.1: string*/
       'hash'                               : 'info.hash', /*infosys: string*/
     },
@@ -52,9 +52,9 @@ function SiteServiceManagerModel(context) {
                             relationType: 'belongsTo',
                             relationOn: {key: 'info.GLUE2ManagerServiceForeignKey', foreignKey: 'info.GLUE2ServiceID'}
       },
-      'serviceEndpoint' : {
+      'endpoints' : {
                             name: 'SiteServiceEndpoint',
-                            relationType: 'belongsTo',
+                            relationType: 'hasMany',
                             relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}
                           },
       'images'          : {
