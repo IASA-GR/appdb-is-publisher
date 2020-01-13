@@ -1,4 +1,4 @@
-import {resolveAs, prepareItemResolverArgs} from '../../utils';
+import {resolveAs, prepareItemResolverArgs, resolveMapDataWith} from '../../utils';
 
 const SiteEndpointResolver = {
   Query: {
@@ -8,13 +8,17 @@ const SiteEndpointResolver = {
   },
   SiteCloudComputingEndpoint: {
     site: resolveAs.itemWith('siteServiceEndpoint#getSite'),
-    service: (root, args, context, info) => root.service,//resolveAs.itemWith('siteServiceEndpoint#getSiteService'),
-    images: resolveAs.collectionWith('siteServiceEndpoint#getSiteServiceEndpointImages'),
-    //templates: resolveAs.collectionWith('siteServiceEndpoint#getSiteServiceEndpointTemplates'),
+    service: resolveAs.itemWith('siteServiceEndpoint#getSiteService'),
+    images: resolveAs.collectionWith('siteServiceEndpoint#getImages'),
+    templates: resolveAs.collectionWith('siteServiceEndpoint#getTemplates'),
+    managers: resolveAs.collectionWith('siteServiceEndpoint#getManagers'),
+    shares: resolveAs.collectionWith('siteServiceEndpoint#getShares'),
     //serviceDowntimes: resolveAs.arrayWith('siteServiceEndpoint#getSiteServiceDowntimes'),
     //serviceStatus: resolveAs.itemWith('siteServiceEndpoint#getSiteServiceStatus'),
-    imageList: resolveAs.mapArrayWith('siteServiceEndpoint', 'imageList'),
-    //templateList: resolveAs.mapArrayWith('siteServiceTemplate', 'templateList')
+    imageList: resolveAs.mapArrayWith('siteServiceImage', 'imageList'),
+    templateList: resolveAs.mapArrayWith('siteServiceTemplate', 'templateList'),
+    managerList: resolveAs.mapArrayWith('siteServiceManager', 'managerList'),
+    shareList: resolveAs.mapArrayWith('siteServiceShare', 'shareList')
   }
 };
 
