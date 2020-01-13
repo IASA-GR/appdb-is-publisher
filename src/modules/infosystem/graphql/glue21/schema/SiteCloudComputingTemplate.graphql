@@ -145,3 +145,8 @@ type SiteCloudComputingTemplate_Collection {
   sort: [SiteCloudComputingTemplate_Sort]
   items: [SiteCloudComputingTemplate]
 }
+
+extend type Query {
+  siteCloudComputingTemplateById(id: ID!): SiteCloudComputingTemplate
+  siteCloudComputingTemplates(filter: SiteCloudComputingTemplate_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingTemplate_Sort]): SiteCloudComputingTemplate_Collection
+}
