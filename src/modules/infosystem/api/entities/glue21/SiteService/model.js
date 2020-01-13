@@ -35,8 +35,8 @@ function SiteServiceModel(context) {
       'endpoints'       : {name: 'SiteServiceEndpoint', relationType: 'hasMany', relationOn: {key: 'info.service.GLUE2ServiceID', foreignKey: 'info.GLUE2ServiceID'}},
       'shares'          : {name: 'SiteServiceShare', relationType: 'hasMany', relationOn: {key: 'info.GLUE2ServiceID', foreignKey: 'info.GLUE2ShareServiceForeignKey'}},
       'managers'        : {name: 'SiteServiceManager', relationType: 'hasMany', relationOn: {key: 'info.GLUE2ServiceID', foreignKey: 'info.GLUE2ManagerServiceForeignKey'}},
-      //'images'          : {name: 'SiteServiceImage', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}},
-      //'templates'       : {name: 'SiteServiceTemplate', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey',foreignKey: 'info.SiteEndpointPKey'}},
+      'images'          : {name: 'SiteServiceImage', relationType: 'hasMany', relationOn: {key: 'info.GLUE2ServiceID', foreignKey: 'info.GLUE2ServiceID'}},
+      'templates'       : {name: 'SiteServiceTemplate', relationType: 'hasMany', relationOn: {key: 'info.GLUE2ServiceID',foreignKey: 'info.GLUE2ServiceID'}}
       //'serviceStatuses' : {name: 'SiteServiceStatus', relationType: 'hasOne', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}},
       //'serviceDowntimes': {name: 'SiteServiceDowntime', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}}
     },

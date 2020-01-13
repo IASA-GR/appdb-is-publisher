@@ -15,10 +15,7 @@ function _initSiteService(context) {
 
   SiteService.getAll = ({root, args, context}) => _SiteServiceModel.findMany(args, context);
 
-  SiteService.getSite = ({root, args, context}) => {
-    console.log('[SiteService.getSite] ' , root);
-    return context.api('site').getByGocDBPKey(_.get(root, 'site.pkey'), args.fields,  context);
-  };
+  SiteService.getSite = ({root, args, context}) => context.api('site').getByGocDBPKey(_.get(root, 'site.pkey'), args.fields,  context);
 
   SiteService.getSiteServiceShares = ({root, args, context}) =>
     context.api('siteServiceShare').getAll({
@@ -41,6 +38,19 @@ function _initSiteService(context) {
       context
     });
 
+  SiteService.getSiteServiceImages = ({root, args, context}) =>
+    context.api('siteServiceImage').getAll({
+      root,
+      args: getArgsWithBaseFilter({'serviceID': root.serviceID}, args),
+      context
+    });
+
+  SiteService.getSiteServiceTemplates = ({root, args, context}) =>
+    context.api('siteServiceTemplate').getAll({
+      root,
+      args: getArgsWithBaseFilter({'serviceID': root.serviceID}, args),
+      context
+    });
   //SiteService.getSiteServiceDowntimes = ({root, args, context}) => context.api('siteServiceDowntime').getBySiteServiceEndpointPKey(root.endpointPKey, args.fields || ["_id", "info"], context);
 
   //SiteService.getSiteServiceStatus = ({root, args, context}) => context.api('siteServiceStatus').getByEndpointPKey(root.endpointPKey, args.fields, context);
