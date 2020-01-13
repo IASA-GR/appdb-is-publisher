@@ -46,7 +46,7 @@ type SiteCloudComputingManager {
   # The type of CPU virtualization (ex. full/paravirtualization/hardware assisted)
   CPUVirtualizationType: String
   # The format of virtual disk images supported (ex. qcow2, raw, vmdk)
-  virtualdiskFormat: String
+  virtualdiskFormats: [String]
   # Failover is the automatic transition of the VM to a secondary machine or server upon failure of the primary component.
   failover: String
   # If true the Cloud Computing Manager allows to move the virtual machine from one physical host to another without powering down the system
@@ -57,6 +57,7 @@ type SiteCloudComputingManager {
   hash: String
   site: Site
   service: SiteCloudComputingService
+  endpoint: SiteCloudComputingEndpoint
   templates(filter: SiteCloudComputingTemplate_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingTemplate_Sort]): SiteCloudComputingTemplate_Collection
   images(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
 }
@@ -66,61 +67,62 @@ input SiteCloudComputingManager_Filter {
   # Local Information System identifier
   id: ID
   # GocDB site endpoint primary key
-  endpointPKey: String
+  endpointPKey: FilterStringOperators
   # GLUE2ManagerServiceForeignKey
-  serviceID: String
+  serviceID: FilterStringOperators
   # GLUE2ManagerID
-  managerID: String
+  managerID: FilterStringOperators
   # GLUE2CloudComputingManagerCloudComputingServiceForeignKey
-  cloudComputingServiceForeignKey: String
+  cloudComputingServiceForeignKey: FilterStringOperators
   # Human-readable name
-  entityName: String
+  entityName: FilterStringOperators
   # Timestamp describing when the entity instance was generated
-  entityCreationTime: String
+  entityCreationTime: FilterStringOperators
   # The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant. After that period has elapsed, the information SHOULD NOT be considered relevant
-  entityValidity: String
+  entityValidity: FilterStringOperators
   # Placeholder to publish info that does not fit in any other attribute. Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax
-  entityOtherInfo: [String]
+  entityOtherInfo: FilterStringArrayOperators
   # Name of the software product adopted as manager
-  productName: String
+  productName: FilterStringOperators
   # Version of the software product adopted as manager
-  productVersion: String
+  productVersion: FilterStringOperators
   # Name of the underlying hypervisor that creates, runs and manages Virtual Machines
-  hypervisorName: String
+  hypervisorName: FilterStringOperators
   # Version of the hypervisor
-  hypervisorVersion: String
+  hypervisorVersion: FilterStringOperators
   # The total number of physical CPUs cores accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable.
-  totalCPUs: Int
+  totalCPUs: FilterIntegerOperators
   # The total amount of RAM accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable.
-  totalRAM: Int
+  totalRAM: FilterIntegerOperators
   # The maximum number of Virtual CPU who can be assigned to a single VM. (with virtual CPU it is intended the CPU cores as seen by the VM OS)
-  instanceMaxCPU: Int
+  instanceMaxCPU: FilterIntegerOperators
   # The minimum number of Virtual CPU who can be assigned to a single VM (with virtual CPU it is intended the CPU cores as seen by the VM OS)
-  instanceMinCPU: Int
+  instanceMinCPU: FilterIntegerOperators
   # The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM)
-  instanceMaxRAM: Int
+  instanceMaxRAM: FilterIntegerOperators
   # The minimum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory  it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM)
-  instanceMinRAM: Int
+  instanceMinRAM: FilterIntegerOperators
   # The maximum value (in MB) of virtual RAM memory who can be dedicated to a VM (i.e. physical host memory, not shared of swapped)
-  instanceMaxDedicatedRAM: Int
+  instanceMaxDedicatedRAM: FilterIntegerOperators
   # The minimum value (in MB) of virtual RAM memory who can is dedicated to a VM (i.e. physical host memory, notshared of swapped)
-  instanceMinDedicatedRAM: Int
+  instanceMinDedicatedRAM: FilterIntegerOperators
   # The type of network virtualization performed by the Cloud Computing Manager to segregate VMs VLANs (ex. none, vSwitch, ebtables, etc…)
-  networkVirtualizationType: String
+  networkVirtualizationType: FilterStringOperators
   # The type of CPU virtualization (ex. full/paravirtualization/hardware assisted)
-  CPUVirtualizationType: String
+  CPUVirtualizationType: FilterStringOperators
   # The format of virtual disk images supported (ex. qcow2, raw, vmdk)
-  virtualdiskFormat: String
+  virtualdiskFormats: FilterStringArrayOperators
   # Failover is the automatic transition of the VM to a secondary machine or server upon failure of the primary component.
-  failover: String
+  failover: FilterStringOperators
   # If true the Cloud Computing Manager allows to move the virtual machine from one physical host to another without powering down the system
-  liveMigration: String
+  liveMigration: FilterStringOperators
   # If true the Cloud Computing Manager allows to backup and restore the virtual machines. This is a static value anddoes not ensure the availability of the storage for the backup
-  VMBackupRestore: String
+  VMBackupRestore: FilterStringOperators
   # Information system data hash value
   hash: String
   site: Site_Filter
   service: SiteCloudComputingService_Filter
+  endpoint: SiteCloudComputingEndpoint_Filter
   templates: SiteCloudComputingTemplate_Filter
   images: SiteCloudComputingImage_Filter
 }
@@ -144,5 +146,5 @@ type SiteCloudComputingManager_Collection {
 
 extend type Query {
   siteCloudComputingManagerById(id: ID!): SiteCloudComputingManager
-  SiteCloudComputingManagers(filter: SiteCloudComputingManager_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingManager_Sort]): SiteCloudComputingManager_Collection
+  siteCloudComputingManagers(filter: SiteCloudComputingManager_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingManager_Sort]): SiteCloudComputingManager_Collection
 }
