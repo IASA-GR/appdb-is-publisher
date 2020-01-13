@@ -6,19 +6,19 @@ function SiteServiceShareModel(context) {
     dbName              : 'testdb',
     dbConnection        : () => context.storage,
     baseFilter          : { 'meta.collection': { '$eq': 'egi.top.vaproviders.shares' } },
-    baseFields          : ['_id', 'info.SiteName', 'info.SitePKey', 'info.SiteEndpointPKey', 'info.ShareVO', 'info.GLUE2ShareID', 'info.GLUE2CloudComputingShareCloudComputingEndpointForeignKey'],
+    baseFields          : ['_id', 'info.SiteName', 'info.SitePKey', 'info.SiteEndpointPKey', 'info.ShareVO', 'info.GLUE2ShareID', 'info.GLUE2CloudComputingShareCloudComputingEndpointForeignKey', 'info.GLUE2ShareServiceForeignKey'],
     excludeFields       : ['site', 'siteService', 'images', 'templates', 'serviceStatuses', 'serviceDowntimes'],
     propertyMap         : {
       'id'                                                        : '_id', /*infosys: string*/
       'site.name'                                                 : 'info.SiteName', /*gocdb: string*/
       'site.pkey'                                                 : 'info.SitePKey', /*gocdb: string*/
-      'site.endpointPKey'                                         : 'info.SiteEndpointPKey', /*gocdb: string*/
+      'endpointPKey'                                              : 'info.SiteEndpointPKey', /*gocdb: string*/
       'entityName'                                                : 'info.GLUE2EntityName',/*glue2.1: string*/
       'entityCreationTime'                                        : 'info.GLUE2EntityCreationTime',/*glue2.1: string*/
       'entityValidity'                                            : 'info.GLUE2EntityValidity',/*glue2.1: string*/
       'shareID'                                                   : 'info.GLUE2ShareID',/*glue2.1: string*/
       'description'                                               : 'info.GLUE2ShareDescription',/*glue2.1: string*/
-      'serviceForeignKey'                                         : 'info.GLUE2ShareServiceForeignKey',/*glue2.1: string*/
+      'serviceID'                                                 : 'info.GLUE2ShareServiceForeignKey',/*glue2.1: string*/
       'endpointForeignKey'                                        : 'info.GLUE2ShareEndpointForeignKey',/*glue2.1: string*/
       'cloudComputingendpointForeignKey'                          : 'info.GLUE2CloudComputingShareCloudComputingEndpointForeignKey',/*glue2.1: string*/
       'cloudComputingServiceForeignKey'                           : 'info.GLUE2CloudComputingShareCloudComputingServiceForeignKey',/*glue2.1: string*/
@@ -49,12 +49,12 @@ function SiteServiceShareModel(context) {
       'service'         : {
                             name: 'SiteService',
                             relationType: 'belongsTo',
-                            relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'},
-                            sharedFields: {'pkey': 'service.endpointPKey'}
+                            relationOn: {key: 'info.GLUE2ShareServiceForeignKey', foreignKey: 'info.GLUE2ServiceID'},
+                            sharedFields: {'name': 'site.name', 'pkey': 'site.pkey'}
                           },
-      'endpoints'       : {
+      'endpoint'       : {
                             name: 'SiteServiceEndpoint',
-                            relationType: 'hasMany',
+                            relationType: 'belongsTo',
                             relationOn: {key: 'info.GLUE2ShareEndpointForeignKey', foreignKey: 'info.GLUE2EndpointID'}
                           },
       'images'          : {
