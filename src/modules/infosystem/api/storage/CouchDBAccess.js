@@ -6,6 +6,10 @@ const _DEFAULT_LIMIT_VALUE = 1000;
 
 const _MAX_LIMIT_VALUE = 1000000000;
 
+const _MAX_RETRIES = 3;
+
+const _WAIT_RETRY = 100;
+
 const _allowedMangoProps = [
   'selector',
   'fields',
@@ -193,10 +197,21 @@ class CouchDBAccess {
       _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
       return _.first(docs) || null;
     }).catch(err => {
-      console.log('ERROR MESSAGE:' ,err.message);
-      errorLogger('findOne', Object.toString(err), context);
-      _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
-      return Promise.reject(err);
+      if (typeof retries === 'undefined' && _MAX_RETRIES > 0) {
+        retries = 1;
+      }
+
+      if (typeof retries !== 'undefined' && retries < _MAX_RETRIES) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            return this._findOne(args, context, retries).then(resolve).catch(reject);
+          }, _WAIT_RETRY || 500)
+        });
+      } else {
+        errorLogger('findOne', Object.toString(err), context);
+        _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
+        return Promise.reject(err);
+      }
     });
   }
 
@@ -220,7 +235,7 @@ class CouchDBAccess {
    *
    * @returns {Promise}         Resolves the count (number)
    */
-  _findCount(args, context) {
+  _findCount(args, context, retries) {
     let query = normalizeListArgs(args);
 
     query.limit = _MAX_LIMIT_VALUE;
@@ -234,10 +249,21 @@ class CouchDBAccess {
       _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
       return docs.length;
     }).catch(err => {
-      console.log('ERROR MESSAGE:' ,err.message);
-      errorLogger('findCount', Object.toString(err));
-      _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
-      return Promise.reject(err);
+      if (typeof retries === 'undefined' && _MAX_RETRIES > 0) {
+        retries = 1;
+      }
+
+      if (typeof retries !== 'undefined' && retries < _MAX_RETRIES) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            return this._findCount(args, context, retries).then(resolve).catch(reject);
+          }, _WAIT_RETRY || 500)
+        });
+      } else {
+        errorLogger('findCount', Object.toString(err));
+        _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
+        return Promise.reject(err);
+      }
     });
   }
 
@@ -261,7 +287,7 @@ class CouchDBAccess {
    *
    * @returns {Promise}         Resolves the list of documents.
    */
-  _findMany(args, context) {
+  _findMany(args, context, retries) {
     let query = normalizeListArgs(args);
 
     return this.queryTask('findAsync', query).then(result => {
@@ -271,10 +297,22 @@ class CouchDBAccess {
       _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
       return docs;
     }).catch(err => {
-      console.log('ERROR MESSAGE:' ,err.message);
-      errorLogger('findMany', Object.toString(err), context);
-      _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
-      return Promise.reject(err);
+      if (typeof retries === 'undefined' && _MAX_RETRIES > 0) {
+        retries = 1;
+      }
+
+      if (typeof retries !== 'undefined' && retries < _MAX_RETRIES) {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            return this._findMany(args, context, retries).then(resolve).catch(reject);
+          }, _WAIT_RETRY || 500)
+        });
+      } else {
+        errorLogger('findMany', Object.toString(err), context);
+        _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
+        return Promise.reject(err);
+      }
+
     });
   }
 
