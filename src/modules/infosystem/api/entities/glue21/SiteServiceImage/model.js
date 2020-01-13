@@ -12,7 +12,7 @@ function SiteServiceImageModel(context) {
       'id'                                                : '_id',
       'site.name'                                         : 'info.SiteName',
       'site.pkey'                                         : 'info.SitePKey',
-      'service.endpointPKey'                              : 'info.SiteEndpointPKey',
+      'endpointPKey'                                      : 'info.SiteEndpointPKey',
       'endpointID'                                        : 'info.GLUE2EndpointID',
       'serviceID'                                         : 'info.GLUE2ServiceID',
       'entityName'                                        : 'info.GLUE2EntityName',
