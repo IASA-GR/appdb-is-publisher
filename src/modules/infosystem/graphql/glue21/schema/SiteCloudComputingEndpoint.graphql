@@ -87,16 +87,25 @@ type SiteCloudComputingEndpoint {
   computingManagerWorkingAreaTotal: Int
   # (GLUE2EntityOtherInfo@topBDII)
   entityOtherInfo: String
-  # Raw list of all images the  service provides (no filtering or paging)
+  # Raw list of all images the  service endpoint provides (no filtering or paging)
   imageList: [SiteCloudComputingImage]
-  # Total count of images this service provides (@local)
+  # Total count of images this service endpoint provides (@local)
   numberOfImages: Int
-  # Raw list of all templates the service provides (no filtering or paging)
+  # Raw list of all templates the service endpoint provides (no filtering or paging)
   templateList: [SiteCloudComputingTemplate]
-  # Total count of templates this service provides (@local)
+  # Total count of templates this service endpoint provides (@local)
   numberOfTemplates: Int
+  # Raw list of all managers the service endpoint provides (no filtering or paging)
+  managerList: [SiteCloudComputingManager]
+  # Total count of managers this service endpoint provides (@local)
+  numberOfManagers: Int
+  # Raw list of all shares the service endpoint provides (no filtering or paging)
+  shareList: [SiteCloudComputingShare]
+  # Total count of shares this service endpoint provides (@local)
+  numberOfShares: Int
   # Site that the current service endpoint belongs to
   site: Site
+  # Cloud computing Service that the current service endpoint belongs to
   service: SiteCloudComputingService
   # Registered downtimes in GocDB system regarding the current service endpoint
   serviceDowntimes: [SiteServiceDowntime]
@@ -106,8 +115,10 @@ type SiteCloudComputingEndpoint {
   images(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
   # A collection of templates the current service endpoint provides to be used for VM initialization
   templates(filter: SiteCloudComputingTemplate_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingTemplate_Sort]): SiteCloudComputingTemplate_Collection
-  # A collection of shares the current service has
+  # A collection of shares the current service refers
   shares(filter: SiteCloudComputingShare_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingShare_Sort]): SiteCloudComputingShare_Collection
+  # A collection of managers the current service endpoint refers
+  managers(filter: SiteCloudComputingManager_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingManager_Sort]): SiteCloudComputingManager_Collection
 }
 
 # Filtering by Site Service
@@ -186,6 +197,8 @@ input SiteCloudComputingEndpoint_Filter {
   serviceDowntimes: SiteServiceDowntime_Filter
   # Filter by site service endpoint shares
   shares: SiteCloudComputingShare_Filter
+  # Filter by site service endpoint managers
+  managers: SiteCloudComputingManager_Filter
   #withDowntimeCount: FilterIntegerOperators
   #withImageCount: FilterIntegerOperators
   #withTemplateCount: FilterIntegerOperators
