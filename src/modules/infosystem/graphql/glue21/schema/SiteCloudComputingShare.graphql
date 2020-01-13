@@ -57,7 +57,7 @@ type SiteCloudComputingShare {
   # The cloud computing service this share belongs to
   service: SiteCloudComputingService
   # A collection of cloud computing endpoints the current share is provided from
-  endpoint: SiteCloudComputingEndpoint
+  endpoints(filter: SiteCloudComputingEndpoint_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingEndpoint_Sort]): SiteCloudComputingEndpoint_Collection
   # A collection of images the current share has
   images(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
   # A collection of templates the current share has
@@ -122,7 +122,7 @@ input SiteCloudComputingShare_Filter {
   # The cloud computing service this share belongs to
   service: SiteCloudComputingService_Filter
   # A collection of cloud computing endpoints the current share is provided from
-  endpoint: SiteCloudComputingEndpoint_Filter
+  endpoints: SiteCloudComputingEndpoint_Filter
   # A collection of images the current share has
   images: SiteCloudComputingImage_Filter
   # A collection of templates the current share has
