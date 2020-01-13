@@ -9,10 +9,12 @@ const SiteCloudComputingServiceResolver = {
   SiteCloudComputingService: {
     site: resolveAs.itemWith('siteService#getSite'),
     endpoints: resolveAs.collectionWith('siteService#getSiteServiceEndpoints'),
-    //images: resolveAs.collectionWith('siteService#getSiteServiceImages'),
-    //templates: resolveAs.collectionWith('siteService#getSiteServiceTemplates'),
+    images: resolveAs.collectionWith('siteService#getSiteServiceImages'),
+    templates: resolveAs.collectionWith('siteService#getSiteServiceTemplates'),
     serviceDowntimes: resolveAs.arrayWith('siteService#getSiteServiceDowntimes'),
     serviceStatus: resolveAs.itemWith('siteService#getSiteServiceStatus'),
+    shares: resolveAs.collectionWith('siteService#getSiteServiceShares'),
+    managers: resolveAs.collectionWith('siteService#getSiteServiceManagers')
     //imageList: resolveAs.mapArrayWith('siteServiceImage', 'imageList'),
     //templateList: resolveAs.mapArrayWith('siteServiceTemplate', 'templateList')
   }
