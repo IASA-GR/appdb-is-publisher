@@ -32,12 +32,12 @@ function SiteModel(context) {
       'hash'                : 'info.hash'
     },
     relationMap          : {
-      'services'         : {name: 'SiteService', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey:  'info.SitePKey'}},
-      'endpoints'        : {name: 'SiteServiceEndpoint', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
-      'shares'           : {name: 'SiteServiceShare', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
-      'managers'         : {name: 'SiteServiceManager', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
-      'images'           : {name: 'SiteServiceImage', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
-      'templates'        : {name: 'SiteServiceTemplate', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
+      'cloudComputingServices'  : {name: 'SiteService', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey:  'info.SitePKey'}},
+      'cloudComputingEndpoints' : {name: 'SiteServiceEndpoint', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
+      'cloudComputingShares'    : {name: 'SiteServiceShare', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
+      'cloudComputingManagers'  : {name: 'SiteServiceManager', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
+      'cloudComputingImages'    : {name: 'SiteServiceImage', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
+      'cloudComputingTemplates' : {name: 'SiteServiceTemplate', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
       'serviceStatuses'  : {name: 'SiteServiceStatus', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
       'serviceDowntimes' : {name: 'SiteServiceDowntime', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}}
     }

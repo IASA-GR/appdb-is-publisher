@@ -20,11 +20,12 @@ function _initSite(context) {
       context
     });
 
-  Site.getCloudComputingEndpoints = ({root, args, context}) => context.api('siteServiceEndpoint').getAll({
-    root,
-    args: getArgsWithBaseFilter({'site.pkey': root.pkey}, args),
-    context
-  });
+  Site.getCloudComputingEndpoints = ({root, args, context}) =>
+    context.api('siteServiceEndpoint').getAll({
+      root,
+      args: getArgsWithBaseFilter({'site.pkey': root.pkey}, args),
+      context
+    });
 
   Site.getCloudComputingImages = ({root, args, context}) =>
     context.api('siteServiceImage').getAll({
@@ -42,6 +43,13 @@ function _initSite(context) {
 
   Site.getCloudComputingManagers = ({root, args, context}) =>
     context.api('siteServiceManager').getAll({
+      root,
+      args: getArgsWithBaseFilter({'site.pkey': root.pkey}, args),
+      context
+    });
+
+  Site.getCloudComputingShares = ({root, args, context}) =>
+    context.api('siteServiceShare').getAll({
       root,
       args: getArgsWithBaseFilter({'site.pkey': root.pkey}, args),
       context
