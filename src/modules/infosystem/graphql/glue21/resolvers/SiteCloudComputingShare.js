@@ -8,7 +8,7 @@ const SiteEndpointResolver = {
   SiteCloudComputingShare: {
     site: resolveAs.itemWith('siteServiceShare#getSite'),
     service: resolveAs.itemWith('siteServiceShare#getSiteService'),
-    endpoint: resolveAs.itemWith('siteServiceShare#getSiteServiceEndpoint'),
+    endpoints: resolveAs.collectionWith('siteServiceShare#getSiteServiceEndpoints'),
     images: resolveAs.collectionWith('siteServiceShare#getSiteServiceImages'),
     templates: resolveAs.collectionWith('siteServiceShare#getSiteServiceTemplates'),
   }
