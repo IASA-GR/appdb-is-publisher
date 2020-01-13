@@ -72,7 +72,7 @@ function SiteServiceEndpointModel(context) {
       'numberOfTemplates'                                 : 'meta.num_templates',
       'shareList'                                         : 'info.shares',
       'numberOfManagers'                                  : 'meta.num_manager',
-      'managerList'                                       : 'meta.managers',
+      'managerList'                                       : 'info.managers',
       'numberOfShares'                                    : 'meta.num_shares',
       'hash'                                              : 'info.hash'
     },
@@ -103,15 +103,15 @@ function SiteServiceEndpointModel(context) {
       'images'          : {name: 'SiteServiceImage', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}},
       'templates'       : {name: 'SiteServiceTemplate', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey',foreignKey: 'info.SiteEndpointPKey'}},
       'managers'        : {name: 'SiteServiceManager', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}},
-      'shares'          : {name: 'SiteServiceShare', relationType: 'hasMany', relationOn: {key: 'info.GLUE2EndpointID', foreignKey: 'info.GLUE2ShareEndpointForeignKey'}},
+      'shares'          : {name: 'SiteServiceShare', relationType: 'hasMany', relationOn: {key: 'info.GLUE2ShareEndpointForeignKey', foreignKey: 'info.GLUE2EndpointID'}},
       'serviceStatus'   : {name: 'SiteServiceStatus', relationType: 'hasOne', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}},
       'serviceDowntimes': {name: 'SiteServiceDowntime', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}}
     },
     postProcessFields : {
-      'info.images'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.images.' + d.hash, info: d})),
-      'info.templates'  : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.templates.' + d.hash, info: d})),
-      'info.shares'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.shares.' + d.hash, info: d})),
-      'info.managers'   : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.managers.' + d.hash, info: d}))
+      'info.images'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.templates.' + d.hash, info: Object.assign({}, d)})),
+      'info.templates'  : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.templates.' + d.hash, info: Object.assign({}, d)})),
+      'info.shares'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.shares.' + d.hash, info: Object.assign({}, d)})),
+      'info.managers'   : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.managers.' + d.hash, info: Object.assign({}, d)}))
     }
   });
 }

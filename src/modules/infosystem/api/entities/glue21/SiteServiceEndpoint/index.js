@@ -13,26 +13,37 @@ function _initSiteServiceEndpoint(context) {
 
   SiteServiceEndpoint.getByEndpointID = (endpointID, fields, context) => _SiteServiceEndpointModel.findMany({filter: {'endpointID': endpointID}, fields: fields}, context);
 
-  SiteServiceEndpoint.getAll = ({root, args, context}) => {
-    console.log('[SiteServiceEndpoint.getAll] ' , args);
-    return _SiteServiceEndpointModel.findMany(args, context);
-  };
+  SiteServiceEndpoint.getAll = ({root, args, context}) => _SiteServiceEndpointModel.findMany(args, context);
 
   SiteServiceEndpoint.getSite = ({root, args, context}) => context.api('site').getByGocDBPKey(_.get(root, 'site.pkey'), args.fields,  context);
 
   SiteServiceEndpoint.getSiteService = ({root, args, context}) => context.api('siteService').getByServiceID(_.get(root, 'service.serviceID'), args.fields, context);
 
-  SiteServiceEndpoint.getSiteServiceEndpointTemplates = ({root, args, context}) =>
+  SiteServiceEndpoint.getTemplates = ({root, args, context}) =>
     context.api('siteServiceTemplate').getAll({
       root,
-      args: getArgsWithBaseFilter({'service.endpointPKey': root.endpointPKey}, args),
+      args: getArgsWithBaseFilter({'endpointPKey': root.endpointPKey}, args),
       context
     });
 
-  SiteServiceEndpoint.getSiteServiceEndpointImages = ({root, args, context}) =>
+  SiteServiceEndpoint.getImages = ({root, args, context}) =>
     context.api('siteServiceImage').getAll({
       root,
-      args: getArgsWithBaseFilter({'service.endpointPKey': root.endpointPKey}, args),
+      args: getArgsWithBaseFilter({'endpointPKey': root.endpointPKey}, args),
+      context
+    });
+
+  SiteServiceEndpoint.getManagers = ({root, args, context}) =>
+    context.api('siteServiceManager').getAll({
+      root,
+      args: getArgsWithBaseFilter({'endpointPKey': root.endpointPKey}, args),
+      context
+    });
+
+  SiteServiceEndpoint.getShares = ({root, args, context}) =>
+    context.api('siteServiceShare').getAll({
+      root,
+      args: getArgsWithBaseFilter({'endpointPKey': root.endpointPKey}, args),
       context
     });
 
