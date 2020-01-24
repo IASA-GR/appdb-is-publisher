@@ -1,6 +1,6 @@
 import EntityModel from '../../EntityModel';
 
-function SRVDowntimeModel(context) {
+function SiteServiceStatus(context) {
   return EntityModel.create({
     name                : 'SiteServiceStatus',
     dbName              : 'testdb',
@@ -18,17 +18,17 @@ function SRVDowntimeModel(context) {
       'site.prodInfrastructure'   : 'info.SiteProdInfrastructure',
       'site.endpointInProduction' : 'info.SiteEndpointInProduction',
       'site.endpointHostname'     : 'info.SiteEndpointHostname',
-      'service.endpointPKey'      : 'info.SiteEndpointPKey',
+      'endpointPKey'              : 'info.SiteEndpointPKey',
       'type'                      : 'info.StatusType',
       'endpointGroup'             : 'info.StatusEndpointGroup',
       'value'                     : 'info.StatusValue',
       'timestamp'                 : 'info.StatusTimestamp'
     },
     relationMap         : {
-      'siteService'     : {name: 'SiteService', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey:  'info.SiteEndpointPKey'}},
-      'site'            : {name: 'Site', relationType: 'belongsTo', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey' }}
+      'endpoint'     : { name: 'SiteServiceEndpoint', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey:  'info.SiteEndpointPKey'}},
+      'site'         : { name: 'Site', relationType: 'belongsTo', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}}
     }
   });
 }
 
-export default SRVDowntimeModel;
+export default SiteServiceStatus;
