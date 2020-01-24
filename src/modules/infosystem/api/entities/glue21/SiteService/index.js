@@ -23,7 +23,6 @@ function _initSiteService(context) {
           context
         )
     );
-  };
 
   SiteService.getSiteServiceShares = ({root, args, context}) =>
     context.api('siteServiceShare').getAll({
