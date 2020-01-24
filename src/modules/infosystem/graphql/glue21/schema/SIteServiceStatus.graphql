@@ -27,8 +27,9 @@ type SiteServiceStatus {
   endpointGroup: String
   value: SiteServiceStatusValue
   timestamp: String
-  siteEndpoint: SiteCloudComputingEndpoint
   site: Site
+  service: SiteCloudComputingService
+  endpoint: SiteCloudComputingEndpoint
 }
 
 input SiteServiceStatus_Filter {
@@ -37,8 +38,9 @@ input SiteServiceStatus_Filter {
   endpointGroup: FilterStringOperators
   value: SiteServiceStatusValue_Filter
   timestamp: FilterStringOperators
-  siteEndpoint: SiteCloudComputingEndpoint_Filter
   site: Site_Filter
+  service: SiteCloudComputingService_Filter
+  endpoint: SiteCloudComputingEndpoint_Filter
   #or: [SiteServiceStatus_Filter]
   #and: [SiteServiceStatus_Filter]
 }
@@ -57,7 +59,7 @@ enum SiteServiceStatus_Sort {
   ##timestamp_desc
 }
 
-type SiteServiceStatusCollection {
+type SiteServiceStatus_Collection {
   totalCount: Int
   count: Int
   limit: Int
@@ -68,5 +70,5 @@ type SiteServiceStatusCollection {
 
 extend type Query {
   siteServiceStatusById(id: ID!): SiteServiceStatus
-  siteServiceStatuses(filter: SiteServiceStatus_Filter, limit: Int, skip: Int, sort: [SiteServiceStatus_Sort]): SiteServiceStatusCollection
+  siteServiceStatuses(filter: SiteServiceStatus_Filter, limit: Int, skip: Int, sort: [SiteServiceStatus_Sort]): SiteServiceStatus_Collection
 }
