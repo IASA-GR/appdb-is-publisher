@@ -8,8 +8,9 @@ const SiteServiceImageResolver = {
   SiteCloudComputingImage: {
     site: resolveAs.itemWith('siteServiceImage#getSite'),
     service: resolveAs.itemWith('siteServiceImage#getSiteService'),
-    endpoint: resolveAs.itemWith('siteServiceImage#getSiteServiceEndpoint')
-    //templates: resolveAs.collectionWith('siteServiceImage#getSiteServiceTemplates')
+    endpoint: resolveAs.itemWith('siteServiceImage#getSiteServiceEndpoint'),
+    share: resolveAs.itemWith('siteServiceImage#getSiteServiceShare'),
+    templates: resolveAs.collectionWith('siteServiceImage#getSiteServiceTemplatesByShare')
   }
 };
 
