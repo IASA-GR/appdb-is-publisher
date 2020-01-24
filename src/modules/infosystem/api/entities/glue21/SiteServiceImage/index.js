@@ -24,6 +24,8 @@ function _initSiteServiceImage(context) {
       context
     });
 
+  SiteServiceImage.getSiteServiceShare = ({root, args, context}) => context.api('siteServiceShare').getByGLUEShareID(_.get(root, 'shareForeignKey'), args.fields, context);
+
   SiteServiceImage.getModel = () => {
     return _SiteServiceImageModel;
   };
