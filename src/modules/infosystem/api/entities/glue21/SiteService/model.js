@@ -39,12 +39,6 @@ function SiteServiceModel(context) {
       'templates'       : {name: 'SiteServiceTemplate', relationType: 'hasMany', relationOn: {key: 'info.GLUE2ServiceID',foreignKey: 'info.GLUE2ServiceID'}}
       //'serviceStatuses' : {name: 'SiteServiceStatus', relationType: 'hasOne', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}},
       //'serviceDowntimes': {name: 'SiteServiceDowntime', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}}
-    },
-    postProcessFields : {
-      //'info.images'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.images.' + d.hash, info: d})),
-      //'info.templates'  : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.templates.' + d.hash, info: d}))
-      'info.shares'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.shares.' + d.hash, info: d})),
-      'info.managers'   : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.managers.' + d.hash, info: d}))
     }
   });
 }
