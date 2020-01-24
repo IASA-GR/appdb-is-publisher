@@ -11,6 +11,8 @@ function _initSiteServiceShare(context) {
 
   SiteServiceShare.getAll = ({root, args, context}) => _SiteServiceShareModel.findMany(args, context);
 
+  SiteServiceShare.getByGLUEShareID = (shareID, fields, context) => _SiteServiceShareModel.findOne({filter: {'shareID': shareID}, fields: fields}, context);
+
   SiteServiceShare.getSite = ({root, args, context}) =>
     context.api('site').getByGocDBPKey(
       _.get(root, 'site.pkey'),
