@@ -15,7 +15,7 @@ function _initSiteServiceImage(context) {
 
   SiteServiceImage.getSiteService =  ({root, args, context}) => context.api('siteService').getByServiceID(_.get(root, 'serviceID'), args.fields, context);
 
-  SiteServiceImage.getSiteServiceEndpoint =  ({root, args, context}) => context.api('siteServiceEndpoint').getByEndpointPKey(_.get(root, 'service.endpointPKey'), args.fields, context);
+  SiteServiceImage.getSiteServiceEndpoint =  ({root, args, context}) => context.api('siteServiceEndpoint').getByEndpointPKey(_.get(root, 'endpointPKey'), args.fields, context);
 
   SiteServiceImage.getSiteServiceTemplatesByShare = ({root, args, context}) =>
     context.api('siteServiceTemplate').getAll({
