@@ -7,8 +7,10 @@ const SiteServiceTemplateResolver = {
   },
   SiteCloudComputingTemplate: {
     site: resolveAs.itemWith('siteServiceTemplate#getSite'),
-    endpoint: resolveAs.itemWith('siteServiceTemplate#getSiteService'),
-    images: resolveAs.collectionWith('siteServiceTemplate#getSiteServiceImages')
+    service: resolveAs.itemWith('siteServiceTemplate#getSiteService'),
+    endpoint: resolveAs.itemWith('siteServiceTemplate#getSiteServiceEndpoint'),
+    images: resolveAs.collectionWith('siteServiceTemplate#getSiteServiceImagesByShare'),
+    share: resolveAs.itemWith('siteServiceTemplate#getSiteServiceShare')
   }
 };
 
