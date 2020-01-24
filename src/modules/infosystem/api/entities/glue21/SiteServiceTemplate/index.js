@@ -18,9 +18,16 @@ function _initSiteServiceTemplate(context) {
       context
     );
 
+  SiteServiceTemplate.getSiteServiceEndpoint = ({root, args, context}) =>
+    context.api('siteServiceEndpoint').getByEndpointPKey(
+      _.get(root, 'endpointPKey'),
+      args.fields,
+      context
+    );
+
   SiteServiceTemplate.getSiteService = ({root, args, context}) =>
-    context.api('siteService').getByEndpointPKey(
-      _.get(root, 'service.endpointPKey'),
+    context.api('siteService').getByServiceID(
+      _.get(root, 'serviceID'),
       args.fields,
       context
     );
@@ -31,6 +38,16 @@ function _initSiteServiceTemplate(context) {
       args,
       context
     });
+
+  SiteServiceTemplate.getSiteServiceImagesByShare = ({root, args, context}) =>
+    context.api('siteServiceImage').getAll({
+      root,
+      args: getArgsWithBaseFilter({'shareForeignKey': _.get(root, 'shareForeignKey')}, args),
+      context
+    });
+
+  SiteServiceTemplate.getSiteServiceShare = ({root, args, context}) =>
+    context.api('siteServiceShare').getByGLUEShareID(_.get(root, 'shareForeignKey'), args.fields, context)
 
   SiteServiceTemplate.getModel = () => _SiteServiceTemplateModel;
 
