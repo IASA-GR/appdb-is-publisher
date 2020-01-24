@@ -1,5 +1,6 @@
 import initModel from './model';
 import _ from 'lodash';
+import {getArgsWithBaseFilter} from '../../utils';
 
 function _initSiteServiceImage(context) {
   const _SiteServiceImageModel = initModel(context);
@@ -16,11 +17,12 @@ function _initSiteServiceImage(context) {
 
   SiteServiceImage.getSiteServiceEndpoint =  ({root, args, context}) => context.api('siteServiceEndpoint').getByEndpointPKey(_.get(root, 'service.endpointPKey'), args.fields, context);
 
-  SiteServiceImage.getSharedTemplates = ({root, args, context}) => context.api('siteService').getSiteServiceTemplates({
-    root: {endpointPKey: _.get(root, 'service.endpointPKey')},
-    args,
-    context
-  });
+  SiteServiceImage.getSiteServiceTemplatesByShare = ({root, args, context}) =>
+    context.api('siteServiceTemplate').getAll({
+      root,
+      args: getArgsWithBaseFilter({'shareForeignKey': _.get(root, 'shareForeignKey')}, args),
+      context
+    });
 
   SiteServiceImage.getModel = () => {
     return _SiteServiceImageModel;
