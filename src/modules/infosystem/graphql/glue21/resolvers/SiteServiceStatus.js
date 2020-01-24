@@ -7,9 +7,9 @@ const SiteServiceStatusResolver = {
   },
   SiteServiceStatus: {
     site: resolveAs.itemWith('siteServiceStatus#getSite'),
-    siteEndpoint: resolveAs.itemWith('siteServiceStatus#getSiteService')
+    service: resolveAs.itemWith('siteServiceStatus#getSiteService'),
+    endpoint: resolveAs.itemWith('siteServiceStatus#getSiteServiceEndpoint')
   }
 };
 
-//export default SiteServiceStatusResolver;
-export default {};
+export default SiteServiceStatusResolver;
