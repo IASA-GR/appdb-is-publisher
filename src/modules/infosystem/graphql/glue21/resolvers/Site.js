@@ -13,9 +13,9 @@ const SiteResolver = {
     cloudComputingTemplates: resolveAs.collectionWith('site#getCloudComputingTemplates'),
     cloudComputingImages: resolveAs.collectionWith('site#getCloudComputingImages'),
     cloudComputingShares: resolveAs.collectionWith('site#getCloudComputingShares'),
-    cloudComputingManagers: resolveAs.collectionWith('site#getCloudComputingManagers')
+    cloudComputingManagers: resolveAs.collectionWith('site#getCloudComputingManagers'),
     // SRVDowntimes: resolveAs.arrayWith('site#getSRVDowntimes'),
-    // serviceStatuses: resolveAs.arrayWith('site#getSiteServiceStatuses'),
+    serviceStatuses: resolveAs.arrayWith('site#getSiteServiceStatuses'),
     //serviceDowntimes: resolveAs.arrayWith('site#getSiteServiceDowntimes')
   }
 };

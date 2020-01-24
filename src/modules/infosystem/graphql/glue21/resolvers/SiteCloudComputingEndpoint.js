@@ -14,7 +14,7 @@ const SiteEndpointResolver = {
     managers: resolveAs.collectionWith('siteServiceEndpoint#getManagers'),
     shares: resolveAs.collectionWith('siteServiceEndpoint#getShares'),
     //serviceDowntimes: resolveAs.arrayWith('siteServiceEndpoint#getSiteServiceDowntimes'),
-    //serviceStatus: resolveAs.itemWith('siteServiceEndpoint#getSiteServiceStatus'),
+    serviceStatus: resolveAs.itemWith('siteServiceEndpoint#getSiteServiceEndpointStatus'),
     imageList: resolveAs.mapArrayWith('siteServiceImage', 'imageList'),
     templateList: resolveAs.mapArrayWith('siteServiceTemplate', 'templateList'),
     managerList: resolveAs.mapArrayWith('siteServiceManager', 'managerList'),
