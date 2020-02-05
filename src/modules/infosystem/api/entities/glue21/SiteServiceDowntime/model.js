@@ -9,24 +9,29 @@ function SiteServiceDowntimeModel(context) {
     baseFields          : ['id', 'info.SiteName', 'info.SitePKey', 'info.SiteEndpointPKey'],
     excludeFields       : ['site', 'service'],
     propertyMap         : {
-      'id'                    : '_id',
-      'service.endpointPKey'  : 'info.SiteEndpointPKey',
-      'site.hostname'         : 'info.SiteEndpointHostname',
-      'site.name'             : 'info.SiteName',
-      'downtimePKey'          : 'info.DowntimePKey',
-      'classification'        : 'info.DowntimeClassification',
-      'severity'              : 'info.DowntimeSeverity',
-      'startDate'             : 'info.DowntimeStartDate',
-      'endDate'               : 'info.DowntimeEndDate',
-      'formatedStartDate'     : 'info.DowntimeFormatedStartDate',
-      'formatedEndDate'       : 'info.DowntimeFormatedEndDate',
-      'serviceType'           : 'info.DowntimeServiceType',
-      'gocPortalUrl'          : 'info.DowntimeGocPortalUrl',
-      'outcome'               : 'info.DowntimeOutcome'
+      'id'                      : '_id',
+      'endpointPKey'            : 'info.SiteEndpointPKey',
+      'isInProduction'          : 'info.SiteEndpointInProduction',
+      'site.name'               : 'info.SiteName',
+      'site.pkey'               : 'info.SitePKey',
+      'site.countryCode'        : 'info.SiteCountryCode',
+      'site.country'            : 'info.SiteCountryCode',
+      'site.roc'                : 'info.SiteRoc',
+      'site.prodInfrastructure' : 'info.SiteProdInfrastructure',
+      'downtimePKey'            : 'info.DowntimePKey',
+      'classification'          : 'info.DowntimeClassification',
+      'severity'                : 'info.DowntimeSeverity',
+      'startDate'               : 'info.DowntimeStartDate',
+      'endDate'                 : 'info.DowntimeEndDate',
+      'formatedStartDate'       : 'info.DowntimeFormatedStartDate',
+      'formatedEndDate'         : 'info.DowntimeFormatedEndDate',
+      'serviceType'             : 'info.DowntimeServiceType',
+      'gocPortalUrl'            : 'info.DowntimeGocPortalUrl',
+      'outcome'                 : 'info.DowntimeOutcome'
     },
     relationMap         : {
-      'site'            : {name: 'Site', relationType: 'belongsTo', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey' },  sharedFields: {'name': 'site.name'}},
-      'service'         : {name: 'SiteService', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey:  'info.SiteEndpointPKey'}, sharedFields: {'endpointPKey': 'service.endpointPKey'}}
+      'site'            : {name: 'Site', relationType: 'belongsTo', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey' },  sharedFields: {'name': 'site.name', 'pkey': 'site.pkey', 'countryCode': 'site.countryCode', 'country': 'site.country', 'roc': 'site.roc', 'prodInfrastructure': 'site.prodInfrastructure'}},
+      'endpoint'        : {name: 'SiteServiceEndpoint', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey:  'info.SiteEndpointPKey'}, sharedFields: {'endpointPKey': 'endpointPKey', 'isInProduction': 'isInProduction'}}
     }
   });
 }

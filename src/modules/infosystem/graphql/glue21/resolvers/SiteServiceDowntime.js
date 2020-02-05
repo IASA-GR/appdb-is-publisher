@@ -7,7 +7,7 @@ const SiteServiceDowntimeResolver = {
   },
   SiteServiceDowntime: {
     site        : resolveAs.itemWith('siteServiceDowntime#getSite'),
-    //service     : resolveAs.itemWith('siteServiceDowntime#getSiteService')
+    endpoint    : resolveAs.itemWith('siteServiceDowntime#getBySiteServiceEndpointPKey')
   }
 };
 

@@ -44,7 +44,7 @@ type SiteServiceDowntime {
   gocPortalUrl: String
   outcome: SiteServiceDowntimeOutcome
   site: Site
-  service: SiteCloudComputingService
+  endpoint: SiteCloudComputingEndpoint
 }
 
 input SiteServiceDowntime_Filter {
@@ -60,7 +60,7 @@ input SiteServiceDowntime_Filter {
   gocPortalUrl: FilterStringOperators
   outcome: SiteServiceDowntimeOutcome_Filter
   site: Site_Filter
-  service: SiteCloudComputingService_Filter
+  endpoint: SiteCloudComputingEndpoint_Filter
   #or: [SiteServiceDowntime_Filter]
   #and: [SiteServiceDowntime_Filter]
 }
