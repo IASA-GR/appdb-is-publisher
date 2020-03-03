@@ -16,7 +16,7 @@ const SiteResolver = {
     cloudComputingManagers: resolveAs.collectionWith('site#getCloudComputingManagers'),
     // SRVDowntimes: resolveAs.arrayWith('site#getSRVDowntimes'),
     serviceStatuses: resolveAs.arrayWith('site#getSiteServiceStatuses'),
-    //serviceDowntimes: resolveAs.arrayWith('site#getSiteServiceDowntimes')
+    serviceDowntimes: resolveAs.arrayWith('site#getSiteServiceDowntimes')
   }
 };
 
