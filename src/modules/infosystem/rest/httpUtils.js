@@ -230,6 +230,14 @@ export const _handleRequest = (pr, req, res) => {
     if (doc.data === null) {
       return Promise.resolve(_handleMissing(req, res));
     }
+    if (doc.dataType === 'collection') {
+      let items = doc.data.items || [];
+      delete doc.data.items;
+      let data = doc.data || {};
+      delete doc.data;
+      doc = Object.assign({}, doc, data || {});
+      doc.data = items;
+    }
     res.setHeader('Content-Type', 'application/json');
     res.json(doc);
     res.end();
