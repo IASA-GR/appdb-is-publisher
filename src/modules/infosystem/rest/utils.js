@@ -234,3 +234,18 @@ export const parseFilterString = (query) => {
     errors: parseResults.errors
   };
 };
+
+/**
+ * Convert any given parameter to an array.
+ * If anarray is given, it is rteturned as is,
+ * If a falsy or no parameter given, an empty array is returned
+ *
+ * @param   {any}         arr   Any type of value to convert to an array
+ * @returns {Array<any>}
+ */
+export const toArray = arr => {
+  arr = arr || [];
+  arr = Array.isArray(arr) ? arr : [arr];
+
+  return arr;
+};
