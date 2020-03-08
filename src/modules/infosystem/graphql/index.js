@@ -3,7 +3,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import {getDirectoryFiles} from './../../../lib/isql/utils/fs';
 
 const DEFAULT_SCHEMA = 'glue20';
-
+let _typeDefs = null;
 /**
  * Initialize and generate GraphQL executable schema
  * based on the type definitions in ./schema/*.graphql files
@@ -17,7 +17,7 @@ async function _init(config) {
   let resolveDefs = await getDirectoryFiles(__dirname + '/' + schemaName + '/resolvers/*.js', 'application/javascript');
   let resolvers = resolveDefs.reduce((sum, def) => merge(sum, def), {});
   let executableSchema = null;
-
+  _typeDefs = typeDefs;
   console.log('\x1b[32m[infosystem:GraphQL]\x1b[0m: Loaded schema ' + schemaName);
 
   return {
@@ -42,6 +42,15 @@ export const serviceDescription = {
   }
 };
 
+export const getTypeDefs = () => {
+  if(Array.isArray(_typeDefs)) {
+    return _typeDefs.join('\n');
+  } else {
+    return '' + _typeDefs;
+  }
+};
+
 export default {
-  init: _init
+  init: _init,
+  getTypeDefs
 }
