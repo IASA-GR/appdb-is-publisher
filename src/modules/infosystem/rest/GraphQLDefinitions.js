@@ -1,3 +1,11 @@
+import {getTypeDefs} from '../graphql/index';
+
+/**
+ * Converts default GraphQL type definitions to an OpenAPI component
+ * definitions object.
+ *
+ * @returns {object}  OpenAPI component definitions object
+ */
 export function getGraphQLDefinitions() {
   const getSchemaObjectTypes = schema => {
     return toArray(_.get(schema, 'definitions'))
