@@ -1,173 +1,9 @@
 
-import {parse} from 'graphql';
-import gql from 'graphql-tag';
-import {getTypeDefs} from '../graphql/index';
 import _ from 'lodash';
+import {extractGraphQLQueryProperties} from './utils';
+import {getGraphQLDefinitions} from './GraphQLDefinitions';
 
 const COMPONENT_PATH = '#/components/schemas/';
-
-function toArray(arr) {
-  arr = arr || [];
-  arr = Array.isArray(arr) ? arr :[arr];
-  return arr;
-}
-
-function getGraphQLDefinitions() {
-  const getSchemaObjectTypes = (schema) => {
-    return toArray(_.get(schema, 'definitions'))
-        .filter(def => ['EnumTypeDefinition', 'ObjectTypeDefinition'].indexOf(def.kind) > -1)
-        .filter(def => def.name && def.name.kind === 'Name')
-        .reduce((acc, def) => {
-          let fqdn = COMPONENT_PATH + _.get(def, "name.value");
-          // console.log('parsing ', fqdn)
-          switch (def.kind) {
-            case "EnumTypeDefinition":
-              acc[fqdn] = {
-                "type": "enum",
-                "description": _.trim(_.get(def, 'description.value')) || '',
-                "enum": toArray(_.get(def, 'values')).map(v => _.get(v, 'name.value')).filter(v => !!v)
-              };
-              break;
-            default:
-              acc[fqdn] = {
-                "type": "object",
-                "description": _.trim(_.get(def, 'description.value')),
-                "properties": getDefinitionFields(def)
-              };
-              break;
-          }
-
-          return acc;
-        }, {});
-  }
-
-  const getDefinitionFields = (definition) => {
-    let fields = toArray(_.get(definition, "fields"));
-
-    return fields.filter(f => f.kind === 'FieldDefinition')
-      .reduce((acc, f) => {
-        let name = _.trim(_.get(f, 'name.value'));
-
-        if (name) {
-          acc[name] = {}
-          let description = _.trim(_.get(f, "description.value"));
-          let ftype = _.trim(_.get(f, "type.name.value"));
-          let ftypekind = _.trim(_.get(f, "type.kind"));
-          let format = '';
-          if (ftypekind === 'NamedType') {
-            ftype = ftype === 'ID' ? 'string' : ftype;
-            switch(ftype.toLowerCase()) {
-              case 'string':
-                acc[name].type = 'string';
-                break;
-              case 'float':
-                acc[name].type = 'number';
-                acc[name].format = 'float';
-                break;
-              case 'int':
-                acc[name].type = 'integer';
-                break;
-              case 'boolean':
-                acc[name].type = 'boolean';
-                break;
-              case 'object':
-                acc[name].type = 'object';
-                acc[name].raw =  f;
-                break;
-              case 'enum':
-                  acc[name].type = 'string';
-                  acc[name].enum = [];
-                  acc[name].description = description;
-                  break;
-              case '':
-                // console.log('===> EMPTY' , f);
-                break;
-              default:
-                acc[name].graphQLType = _.get(f, 'type.type.name.value') || ftype;
-                acc[name]["$ref"] = COMPONENT_PATH + _.get(f, "type.name.value");
-                break;
-            }
-          } else if (ftypekind === 'ListType') {
-            let arrType = _.trim(_.get(f, "type.type.name.value"));
-            acc[name].type = 'array'
-            acc[name].items = {};
-            switch(arrType.toLowerCase()) {
-              case 'string':
-                acc[name].items = {type: 'string'};
-                break;
-              case 'float':
-                acc[name].items = {type: 'number', format: 'float'};
-                break;
-              case 'int':
-                acc[name].items = {type: 'integer'};
-                break;
-              case 'boolean':
-                acc[name].items = {type: 'boolean'};
-                break;
-              case 'object':
-                acc[name].items = {type: 'object', raw: f};
-                break;
-              case 'enum':
-                acc[name].items = {type: 'string', description: description, enum: []};
-                break;
-              case '':
-                // console.log('===> EMPTY' , f);
-                break;
-              default:
-                acc[name].items = {
-                  "$ref": COMPONENT_PATH + _.get(f, "type.type.name.value")
-                };
-                acc[name].graphQLType = _.get(f, "type.type.name.value");
-                acc[name].raw = f;
-                break;
-            }
-          } else {
-            // console.log('IGNORED =====> ', f);
-          }
-
-          if(description) {
-            acc[name].description = description;
-          }
-
-          if (format) {
-            acc[name].format = format;
-          }
-        }
-
-        return acc;
-      }, {});
-  }
-
-  const schema = parse(getTypeDefs());
-
-  return getSchemaObjectTypes(schema);
-}
-
-/**
- * Recursively generate subqueries from graphql-tag result
- * @param {*} selectionSetFields
- */
-function extractSubFields(selectionSetFields) {
-  selectionSetFields = toArray(selectionSetFields);
-  return selectionSetFields.map(s => {
-    if (_.get(s, 'selectionSet.kind') === 'SelectionSet') {
-      let subSelectionSet = toArray(_.get(s, 'selectionSet.selections'));
-
-      if(subSelectionSet.length > 0) {
-        let newNameValue = _.get(s, 'name.value');
-        let newFields = extractSubFields(subSelectionSet).map(sub => {
-          return _.get(sub, 'name.value');
-        });
-        newNameValue = `${newNameValue} {
-          ${newFields}
-        }`;
-        _.set(s, 'name.value', newNameValue);
-      }
-    }
-
-    return s;
-  });
-}
 
 class OpenAPIDefinitions {
   constructor() {
@@ -181,24 +17,11 @@ class OpenAPIDefinitions {
     graphQLFields,
     description = ''
   }) {
-    let query = gql`
-    {
+    let properties = extractGraphQLQueryProperties(`
       ${graphQLType} {
         ${graphQLFields}
       }
-    }`;
-
-    let fields = toArray(_.get(query, 'definitions.0.selectionSet.selections.0.selectionSet.selections'));
-    let properties = fields.map(f => {
-      let selectionSetFields = _.get(f, 'selectionSet.selections') || [];
-
-      selectionSetFields = extractSubFields(selectionSetFields);
-
-      return {
-        name: _.get(f, 'name.value'),
-        selectionSetFields: selectionSetFields
-      }
-    });
+    `)
 
     let graphqlRef = this._definitions[COMPONENT_PATH + graphQLType];
     let openAPIRefs = Object.keys(graphqlRef.properties).reduce((acc, prop) => {

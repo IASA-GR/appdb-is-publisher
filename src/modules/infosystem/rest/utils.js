@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import gql from 'graphql-tag';
+
 const DEFAULT_INDENT_SPACES = 2;
 const ENUM_PREFIX = '$ENUM_';
 const getIndent= (level, spaces = DEFAULT_INDENT_SPACES)  => {
@@ -249,3 +251,65 @@ export const toArray = arr => {
 
   return arr;
 };
+
+/**
+ * Extract recursively the used fields of a parsed GraphQL selection set
+ *
+ * @param   {Array<object>} selectionSetFields
+ * @returns {object}
+ */
+export function extractGraphQLQuerySubFields(selectionSetFields) {
+  selectionSetFields = toArray(selectionSetFields);
+
+  return selectionSetFields.map(s => {
+    if (_.get(s, 'selectionSet.kind') === 'SelectionSet') {
+      let subSelectionSet = toArray(_.get(s, 'selectionSet.selections'));
+
+      if(subSelectionSet.length > 0) {
+        let newNameValue = _.get(s, 'name.value');
+        let newFields = extractGraphQLQueryFields(subSelectionSet).map(sub => {
+          return _.get(sub, 'name.value');
+        });
+        newNameValue = `${newNameValue} {
+          ${newFields}
+        }`;
+        _.set(s, 'name.value', newNameValue);
+      }
+    }
+
+    return s;
+  });
+}
+
+/**
+ * @type GraphQLQueryFields
+ *
+ * @property {string} name
+ * @property {Array<object>} selectionSetFields
+ */
+
+/**
+ * Extracts an array of used fields from a given GraphQL query
+ *
+ * @param   {string}                      graphQLQuery  The GraphQL query to mine fields
+ * @returns {Array<GraphQLQueryFields>}                 An array of query fields
+ *
+ */
+export function extractGraphQLQueryProperties(graphQLQuery) {
+  let query = gql`${graphQLQuery}`;
+
+  let fields = toArray(_.get(query, 'definitions.0.selectionSet.selections.0.selectionSet.selections'));
+
+  let properties = fields.map(f => {
+    let selectionSetFields = _.get(f, 'selectionSet.selections') || [];
+
+    selectionSetFields = extractSubFields(selectionSetFields);
+
+    return {
+      name: _.get(f, 'name.value'),
+      selectionSetFields: selectionSetFields
+    }
+  });
+
+  return properties;
+}
