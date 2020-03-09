@@ -267,12 +267,14 @@ export function extractGraphQLQuerySubFields(selectionSetFields) {
 
       if(subSelectionSet.length > 0) {
         let newNameValue = _.get(s, 'name.value');
-        let newFields = extractGraphQLQueryFields(subSelectionSet).map(sub => {
+        let newFields = extractGraphQLQuerySubFields(subSelectionSet).map(sub => {
           return _.get(sub, 'name.value');
-        });
+        }).join('\n');
+
         newNameValue = `${newNameValue} {
-          ${newFields}
-        }`;
+            ${newFields}
+          }
+        `;
         _.set(s, 'name.value', newNameValue);
       }
     }
@@ -303,7 +305,7 @@ export function extractGraphQLQueryProperties(graphQLQuery) {
   let properties = fields.map(f => {
     let selectionSetFields = _.get(f, 'selectionSet.selections') || [];
 
-    selectionSetFields = extractSubFields(selectionSetFields);
+    selectionSetFields = extractGraphQLQuerySubFields(selectionSetFields);
 
     return {
       name: _.get(f, 'name.value'),
@@ -312,4 +314,5 @@ export function extractGraphQLQueryProperties(graphQLQuery) {
   });
 
   return properties;
+
 }

@@ -1,4 +1,7 @@
 import {getTypeDefs} from '../graphql/index';
+import {parse} from 'graphql';
+import {toArray} from './utils';
+import _ from 'lodash';
 
 /**
  * Converts default GraphQL type definitions to an OpenAPI component
@@ -6,7 +9,7 @@ import {getTypeDefs} from '../graphql/index';
  *
  * @returns {object}  OpenAPI component definitions object
  */
-export function getGraphQLDefinitions() {
+export function getGraphQLDefinitions({COMPONENT_PATH}) {
   const getSchemaObjectTypes = schema => {
     return toArray(_.get(schema, 'definitions'))
       .filter(def => ['EnumTypeDefinition', 'ObjectTypeDefinition'].indexOf(def.kind) > -1)
@@ -69,7 +72,6 @@ export function getGraphQLDefinitions() {
                 break;
               case 'object':
                 acc[name].type = 'object';
-                acc[name].raw = f;
                 break;
               case 'enum':
                 acc[name].type = 'string';
@@ -102,7 +104,7 @@ export function getGraphQLDefinitions() {
                 acc[name].items = { type: 'boolean' };
                 break;
               case 'object':
-                acc[name].items = { type: 'object', raw: f };
+                acc[name].items = { type: 'object' };
                 break;
               case 'enum':
                 acc[name].items = { type: 'string', description: description, enum: [] };
@@ -115,7 +117,6 @@ export function getGraphQLDefinitions() {
                   $ref: COMPONENT_PATH + _.get(f, 'type.type.name.value')
                 };
                 acc[name].graphQLType = _.get(f, 'type.type.name.value');
-                acc[name].raw = f;
                 break;
             }
           } else {

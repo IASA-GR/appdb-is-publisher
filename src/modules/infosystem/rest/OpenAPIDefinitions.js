@@ -7,7 +7,7 @@ const COMPONENT_PATH = '#/components/schemas/';
 
 class OpenAPIDefinitions {
   constructor() {
-    this._definitions = getGraphQLDefinitions();
+    this._definitions = getGraphQLDefinitions({COMPONENT_PATH});
     this._refs = {};
     this._paths = {};
   }
@@ -15,13 +15,18 @@ class OpenAPIDefinitions {
   getComponentFromGraphQLQuery({
     graphQLType,
     graphQLFields,
-    description = ''
+    description = '',
+
   }) {
-    let properties = extractGraphQLQueryProperties(`
+    if (!_.trim(graphQLFields)) {
+      return {};
+    }
+
+    let properties = extractGraphQLQueryProperties(`{
       ${graphQLType} {
         ${graphQLFields}
       }
-    `)
+    }`);
 
     let graphqlRef = this._definitions[COMPONENT_PATH + graphQLType];
     let openAPIRefs = Object.keys(graphqlRef.properties).reduce((acc, prop) => {
@@ -36,7 +41,7 @@ class OpenAPIDefinitions {
             let newComponent = this.getComponentFromGraphQLQuery({
               graphQLType: acc[prop].graphQLType,
               graphQLFields: fieldProperty.selectionSetFields.map(sel => _.get(sel, 'name.value')).filter(sel => !!sel).join('\n'),
-              previousObj: properties
+
             });
 
             if (acc[prop].type === 'array') {
@@ -44,7 +49,7 @@ class OpenAPIDefinitions {
             } else {
               acc[prop].properties = newComponent.properties;
             }
-
+            delete newComponent.graphQLType;
           } else {
             let subDef = this._definitions[COMPONENT_PATH + acc[prop].graphQLType];
 
@@ -56,7 +61,7 @@ class OpenAPIDefinitions {
           }
 
           delete acc[prop].graphQLType;
-          delete acc[prop].raw;
+          delete acc[prop]["$ref"];
         }
       }
 
