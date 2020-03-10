@@ -10,7 +10,8 @@ const SiteServiceTemplateResolver = {
     service: resolveAs.itemWith('siteServiceTemplate#getSiteService'),
     endpoint: resolveAs.itemWith('siteServiceTemplate#getSiteServiceEndpoint'),
     images: resolveAs.collectionWith('siteServiceTemplate#getSiteServiceImagesByShare'),
-    share: resolveAs.itemWith('siteServiceTemplate#getSiteServiceShare')
+    share: resolveAs.itemWith('siteServiceTemplate#getSiteServiceShare'),
+    manager: resolveAs.itemWith('siteServiceTemplate#getSiteServiceManager')
   }
 };
 

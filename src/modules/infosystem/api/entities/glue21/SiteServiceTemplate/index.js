@@ -46,6 +46,9 @@ function _initSiteServiceTemplate(context) {
       context
     });
 
+  SiteServiceTemplate.getSiteServiceManager = ({root, args, context}) =>
+    context.api('siteServiceManager').getByManagerID(_.get(root, 'managerForeignKey'), args.fields, context);
+
   SiteServiceTemplate.getSiteServiceShare = ({root, args, context}) =>
     context.api('siteServiceShare').getByGLUEShareID(_.get(root, 'shareForeignKey'), args.fields, context)
 
