@@ -6,7 +6,7 @@ function SiteServiceManagerModel(context) {
     dbName              : 'testdb',
     dbConnection        : () => context.storage,
     baseFilter          : { 'meta.collection': { '$eq': 'egi.top.vaproviders.managers' } },
-    baseFields          : ['_id', 'info.SiteName', 'info.SitePKey', 'info.SiteEndpointPKey'],
+    baseFields          : ['_id', 'info.SiteName', 'info.SitePKey', 'info.SiteEndpointPKey', 'info.GLUE2ManagerID','info.GLUE2ManagerServiceForeignKey'],
     excludeFields       : ['site', 'images', 'templates'],
     propertyMap         : {
       'id'                                 : '_id', /*infosys: string*/
@@ -33,7 +33,7 @@ function SiteServiceManagerModel(context) {
       'instanceMinRAM'                     : 'info.GLUE2CloudComputingManagerInstanceMinRAM', /*glue2.1: integer*/
       'liveMigration'                      : 'info.GLUE2CloudComputingManagerLiveMigration', /*glue2.1: string*/
       'totalRAM'                           : 'info.GLUE2CloudComputingManagerTotalRAM', /*glue2.1: integer*/
-      'totalCPU'                           : 'info.GLUE2CloudComputingManagerTotalCPUs',
+      'totalCPUs'                          : 'info.GLUE2CloudComputingManagerTotalCPUs',
       'networkVirtualizationType'          : 'info.GLUE2CloudComputingManagerNetworkVirtualizationType',
       'CPUVirtualizationType'              : 'info.GLUE2CloudComputingManagerCPUVirtualizationType',
       'virtualdiskFormats'                 : 'info.GLUE2CloudComputingManagerVirtualdiskFormat',

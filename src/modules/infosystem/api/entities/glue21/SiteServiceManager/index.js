@@ -9,6 +9,8 @@ function _initSiteServiceManager(context) {
 
   SiteServiceManager.getById = (id, context) => _SiteServiceManagerModel.getById(id, context);
 
+  SiteServiceManager.getByManagerID = (id, fields, context) =>_SiteServiceManagerModel.findOne({filter: {'managerID': id}, fields: fields}, context);
+
   SiteServiceManager.getAll = ({root, args, context}) => _SiteServiceManagerModel.findMany(args, context);
 
   SiteServiceManager.getSite =  ({root, args, context}) => context.api('site').getByGocDBPKey(_.get(root, 'site.pkey'), args.fields, context);
@@ -20,7 +22,7 @@ function _initSiteServiceManager(context) {
   SiteServiceManager.getSiteServiceTemplates = ({root, args, context}) =>
     context.api('siteServiceTemplate').getAll({
       root,
-      args: getArgsWithBaseFilter({'managerForeignKey': _.get(root, 'managerID')}, args),
+      args: getArgsWithBaseFilter({'managerForeignKey': _.get(root, 'managerForeignKey')}, args),
       context
     });
 
