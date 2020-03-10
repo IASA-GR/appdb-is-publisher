@@ -65,7 +65,7 @@ type SiteCloudComputingManager {
 
 input SiteCloudComputingManager_Filter {
   # Local Information System identifier
-  id: ID
+  id: FilterStringOperators
   # GocDB site endpoint primary key
   endpointPKey: FilterStringOperators
   # GLUE2ManagerServiceForeignKey
