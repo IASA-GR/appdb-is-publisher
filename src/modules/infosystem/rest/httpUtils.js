@@ -231,8 +231,8 @@ export const _handleRequest = (pr, req, res) => {
       return Promise.resolve(_handleMissing(req, res));
     }
     if (doc.dataType === 'collection') {
-      let items = doc.data.items || [];
-      delete doc.data.items;
+      let items = doc.items || [];
+      delete doc.items;
       let data = doc.data || {};
       delete doc.data;
       doc = Object.assign({}, doc, data || {});
