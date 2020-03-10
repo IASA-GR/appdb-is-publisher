@@ -44,7 +44,8 @@ function SiteServiceTemplateModel(context) {
     },
     relationMap         : {
       'site'            : { name: 'Site', relationType: 'belongsTo', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey' }, sharedFields: {'name': 'site.name', 'pkey': 'site.pkey'}},
-      'service'         : { name: 'SiteService', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey:  'info.SiteEndpointPKey'}, sharedFields: {'endpointPKey': 'service.endpointPKey'}},
+      'service'         : { name: 'SiteService', relationType: 'belongsTo', relationOn: {key: 'info.GLUE2ServiceID', foreignKey:  'info.GLUE2ServiceID'}, sharedFields: {'serviceID' :'serviceID'}},
+      'endpoint'        : { name: 'SiteServiceEndpoint', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}, sharedFields: {'endpointPKey': 'endpointPKey'}},
       'manager'         : { name: 'SiteServiceManager', relationType: 'belongsTo', relationOn: {key: 'info.GLUE2ManagerID', foreignKey: 'info.GLUE2CloudComputingInstanceTypeCloudComputingManagerForeignKey'}},
       'share'           : { name: 'SiteServiceShare', relationType: 'belongsTo', relationOn: {key: 'info.GLUE2ShareID', foreignKey: 'info.GLUE2CloudComputingInstanceTypeCloudComputingShareForeignKey'}},
       'images'          : { name: 'SiteServiceImage', relationType: 'manyToMany', relationOn: {key: 'info.GLUE2CloudComputingImageCloudComputingShareForeignKey', foreignKey:  'info.GLUE2CloudComputingInstanceTypeCloudComputingShareForeignKey'}}
