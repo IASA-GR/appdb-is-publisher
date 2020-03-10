@@ -54,6 +54,7 @@ function SiteServiceImageModel(context) {
       'site'            : { name: 'Site', relationType: 'belongsTo', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey' }, sharedFields: {'name': 'site.name', 'pkey': 'site.pkey'}},
       'service'         : { name: 'SiteService', relationType: 'belongsTo', relationOn: {key: 'info.GLUE2ServiceID', foreignKey: 'info.GLUE2ServiceID'}, sharedFields: {'endpointPKey': 'service.endpointPKey'}},
       'endpoint'        : { name: 'SiteServiceEndpoint', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}},
+      'share'           : { name: 'SiteServiceShare', relationOn: 'belongsTo', relationOn: {key: 'info.GLUE2ShareID', foreignKey: 'info.GLUE2CloudComputingImageCloudComputingShareForeignKey'}},
       'templates'       : { name: 'SiteServiceTemplate', relationType: 'manyToMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}}
     }
   });
