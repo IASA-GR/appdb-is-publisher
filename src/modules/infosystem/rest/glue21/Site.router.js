@@ -30,7 +30,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images/{imageId}/templates/{templateId}',{
     "summary": "An applicable template entry to the given VM imageunder the given share entry provided by the cloud computing endpoint.",
     "description": "",
-    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
         "in": "path",
         "name": "siteId",
@@ -139,7 +139,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images/{imageId}',{
     "summary": "An image entry provided under the specific share entry of the current cloud computing endpoint.",
     "description": "",
-    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
         "in": "path",
         "name": "siteId",
@@ -232,7 +232,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/shares/{shareId}',{
     "summary": "A share entry provided by the cloud computing endpoint.",
     "description": "",
-    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
         "in": "path",
         "name": "siteId",
@@ -310,7 +310,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/managers/{managerId}',{
     "summary": "A manager entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.",
     "description": "",
-    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
         "in": "path",
         "name": "siteId",
@@ -388,7 +388,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/images/{imageId}',{
     "summary": "A VM image entry in the information system.",
     "description": "",
-    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
         "in": "path",
         "name": "siteId",
@@ -466,7 +466,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/templates/{templateId}',{
     "summary": "Return a specific cloud computing endpoint of a specific site.",
     "description": "",
-    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
         "in": "path",
         "name": "siteId",
@@ -543,7 +543,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}',{
     "summary": "Return a specific cloud computing endpoint of a specific site.",
     "description": "",
-    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
         "in": "path",
         "name": "siteId",
