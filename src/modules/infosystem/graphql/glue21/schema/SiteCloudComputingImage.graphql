@@ -4,63 +4,63 @@ enum SiteCloudComputingImageContentType {
 }
 
 type SiteCloudComputingImage {
-  # Local Information System identifier
+  """ Local Information System identifier """
   id: ID
-  # GLUE2EntityName
+  """ GLUE2EntityName """
   entityName: String
-  # GLUE2EntityCreationTime
+  """ GLUE2EntityCreationTime """
   entityCreationTime: String
-  # GLUE2EntityValidity
+  """ GLUE2EntityValidity """
   entityValidity: Int
-  # GLUE2EntityOtherInfo
+  """ GLUE2EntityOtherInfo """
   entityOtherInfo: [String]
-  # GLUE2EndpointID
+  """ GLUE2EndpointID """
   endpointID: String
-  # Image native ID
+  """ Image native ID """
   imageID: String
-  # Description of the image.
+  """ Description of the image. """
   description: String
-  # Version of the image.
+  """ Version of the image. """
   version: String
-  # Reference to this particular template to be used during instantiation of a VM via the Endpoint.
+  """ Reference to this particular template to be used during instantiation of a VM via the Endpoint. """
   templateID: String
-  # The platform architecture to which the OS belongs (ex. i386, x86_64)
+  """ The platform architecture to which the OS belongs (ex. i386, x86_64) """
   OSPlatform: String
-  # The general family to which the OS belongs.
+  """ The general family to which the OS belongs. """
   OSFamily: String
-  # The specific name of the OS.
+  """ The specific name of the OS. """
   OSName: String
-  # The version of the OS, as defined by the vendor.
+  """ The version of the OS, as defined by the vendor. """
   OSVersion: String
-  # Minimum number of virtual CPU cores required to run the image (the actual number of cores will depend on the selected CloudComputeInstanceType)
+  """ Minimum number of virtual CPU cores required to run the image (the actual number of cores will depend on the selected CloudComputeInstanceType) """
   minCPU: Int
-  # Number of virtual CPU cores recommended to run the image (this is a recommended value, actual number of cores will depend on the selected CloudComputeInstanceType)
+  """ Number of virtual CPU cores recommended to run the image (this is a recommended value, actual number of cores will depend on the selected CloudComputeInstanceType) """
   recommendedCPU: Int
-  # Minimum virtual RAM memory required to run the image (the actual RAM value will depend on the selected CloudComputeInstanceType)
+  """ Minimum virtual RAM memory required to run the image (the actual RAM value will depend on the selected CloudComputeInstanceType) """
   minRAM: Int
-  # Virtual RAM memory recommended to run the image (this is a recommended value, the actual RAM value will depend on the selected CloudComputeInstanceType)
+  """ Virtual RAM memory recommended to run the image (this is a recommended value, the actual RAM value will depend on the selected CloudComputeInstanceType) """
   recommendedRAM: Int
-  # Size of the OS disk image in GB.
+  """ Size of the OS disk image in GB. """
   diskSize: Int
-  # Information about user access to the VM. Can be: credentials injected during contextualization, pre-defined username/password, pre-defined RSA key
+  """ Information about user access to the VM. Can be: credentials injected during contextualization, pre-defined username/password, pre-defined RSA key """
   accessInfo: String
-  # Supported contextualization mechanism (if any)
+  """ Supported contextualization mechanism (if any) """
   contextualizationName: String
-  # Custom software installed on the instance.
+  """ Custom software installed on the instance. """
   installedsoftware: [String]
-  # Reference to one or more marketplaces which stores the metadata of this instance. Reference is the URL of the resource in the marketplace.
+  """ Reference to one or more marketplaces which stores the metadata of this instance. Reference is the URL of the resource in the marketplace. """
   marketPlaceURL: String
-  # ImageBaseMpUri@appdb
+  """ ImageBaseMpUri@appdb """
   imageBaseMpUri: String
-  # ImageContentType@appdb
+  """ ImageContentType@appdb """
   imageContentType: SiteCloudComputingImageContentType
-  # ImageVoVmiInstanceId@appdb
+  """ ImageVoVmiInstanceId@appdb """
   imageVoVmiInstanceId: Int
-  # ImageVmiInstanceId@appdb
+  """ ImageVmiInstanceId@appdb """
   imageVmiInstanceId: Int
-  # ImageVmiInstanceId@appdb
+  """ ImageVmiInstanceId@appdb """
   imageVoVmiInstanceVO: String
-  # ImageAppDBVAppID@appdb
+  """ ImageAppDBVAppID@appdb """
   imageAppDBVAppID: Int
   managerForeignKey: String
   managerName: String
@@ -77,63 +77,63 @@ type SiteCloudComputingImage {
 }
 
 input SiteCloudComputingImage_Filter {
-  # Local Information System identifier
+  """ Local Information System identifier """
   id: FilterStringOperators
-  # GLUE2EntityName
+  """ GLUE2EntityName """
   entityName: FilterStringOperators
-  # GLUE2EntityCreationTime
+  """ GLUE2EntityCreationTime """
   entityCreationTime: FilterStringOperators
-  # GLUE2EntityValidity
+  """ GLUE2EntityValidity """
   entityValidity: FilterIntegerOperators
-  # GLUE2EntityOtherInfo
+  """ GLUE2EntityOtherInfo """
   entityOtherInfo: FilterStringArrayOperators
-  # GLUE2EndpointID
+  """ GLUE2EndpointID """
   endpointID: FilterStringOperators
-  # Image native ID
+  """ Image native ID """
   imageID: FilterStringOperators
-  # Description of the image.
+  """ Description of the image. """
   description: FilterStringOperators
-  # Version of the image.
+  """ Version of the image. """
   version: FilterStringOperators
-  # Reference to this particular template to be used during instantiation of a VM via the Endpoint.
+  """ Reference to this particular template to be used during instantiation of a VM via the Endpoint. """
   templateID: FilterStringOperators
-  # The platform architecture to which the OS belongs (ex. i386, x86_64)
+  """ The platform architecture to which the OS belongs (ex. i386, x86_64) """
   OSPlatform: FilterStringOperators
-  # The general family to which the OS belongs.
+  """ The general family to which the OS belongs. """
   OSFamily: FilterStringOperators
-  # The specific name of the OS.
+  """ The specific name of the OS. """
   OSName: FilterStringOperators
-  # The version of the OS, as defined by the vendor.
+  """ The version of the OS, as defined by the vendor. """
   OSVersion: FilterStringOperators
-  # Minimum number of virtual CPU cores required to run the image (the actual number of cores will depend on the selected CloudComputeInstanceType)
+  """ Minimum number of virtual CPU cores required to run the image (the actual number of cores will depend on the selected CloudComputeInstanceType) """
   minCPU: FilterIntegerOperators
-  # Number of virtual CPU cores recommended to run the image (this is a recommended value, actual number of cores will depend on the selected CloudComputeInstanceType)
+  """ Number of virtual CPU cores recommended to run the image (this is a recommended value, actual number of cores will depend on the selected CloudComputeInstanceType) """
   recommendedCPU: FilterIntegerOperators
-  # Minimum virtual RAM memory required to run the image (the actual RAM value will depend on the selected CloudComputeInstanceType)
+  """ Minimum virtual RAM memory required to run the image (the actual RAM value will depend on the selected CloudComputeInstanceType) """
   minRAM: FilterIntegerOperators
-  # Virtual RAM memory recommended to run the image (this is a recommended value, the actual RAM value will depend on the selected CloudComputeInstanceType)
+  """ Virtual RAM memory recommended to run the image (this is a recommended value, the actual RAM value will depend on the selected CloudComputeInstanceType) """
   recommendedRAM: FilterIntegerOperators
-  # Size of the OS disk image in GB.
+  """ Size of the OS disk image in GB. """
   diskSize: FilterIntegerOperators
-  # Information about user access to the VM. Can be: credentials injected during contextualization, pre-defined username/password, pre-defined RSA key
+  """ Information about user access to the VM. Can be: credentials injected during contextualization, pre-defined username/password, pre-defined RSA key """
   accessInfo: FilterStringOperators
-  # Supported contextualization mechanism (if any)
+  """ Supported contextualization mechanism (if any) """
   contextualizationName: FilterStringOperators
-  # Custom software installed on the instance.
+  """ Custom software installed on the instance. """
   installedsoftware: FilterStringArrayOperators
-  # Reference to one or more marketplaces which stores the metadata of this instance. Reference is the URL of the resource in the marketplace.
+  """ Reference to one or more marketplaces which stores the metadata of this instance. Reference is the URL of the resource in the marketplace. """
   marketPlaceURL: FilterStringOperators
-  # ImageBaseMpUri@appdb
+  """ ImageBaseMpUri@appdb """
   imageBaseMpUri: FilterStringOperators
-  # ImageContentType@appdb
+  """ ImageContentType@appdb """
   imageContentType: SiteCloudComputingImageContentType
-  # ImageVoVmiInstanceId@appdb
+  """ ImageVoVmiInstanceId@appdb """
   imageVoVmiInstanceId: FilterIntegerOperators
-  # ImageVmiInstanceId@appdb
+  """ ImageVmiInstanceId@appdb """
   imageVmiInstanceId: FilterIntegerOperators
-  # ImageVmiInstanceId@appdb
+  """ ImageVmiInstanceId@appdb """
   imageVoVmiInstanceVO: FilterStringOperators
-  # ImageAppDBVAppID@appdb
+  """ ImageAppDBVAppID@appdb """
   imageAppDBVAppID: FilterIntegerOperators
   managerForeignKey: FilterStringOperators
   managerName: FilterStringOperators
@@ -152,10 +152,10 @@ input SiteCloudComputingImage_Filter {
 }
 
 enum SiteCloudComputingImage_Sort {
-  # Ascenting order by Local Information System identifier
+  """ Ascenting order by Local Information System identifier """
   id_asc
 
-  # Descenting order by Local Information System identifier
+  """ Descenting order by Local Information System identifier """
   id_desc
 }
 

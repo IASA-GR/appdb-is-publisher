@@ -1,59 +1,59 @@
 type SiteCloudComputingManager {
-  # Local Information System identifier
+  """ Local Information System identifier """
   id: ID
-  # GocDB site endpoint primary key
+  """ GocDB site endpoint primary key """
   endpointPKey: String
-  # GLUE2ManagerServiceForeignKey
+  """ GLUE2ManagerServiceForeignKey """
   serviceID: String
-  # GLUE2ManagerID
+  """ GLUE2ManagerID """
   managerID: String
-  # GLUE2CloudComputingManagerCloudComputingServiceForeignKey
+  """ GLUE2CloudComputingManagerCloudComputingServiceForeignKey """
   cloudComputingServiceForeignKey: String
-  # Human-readable name
+  """ Human-readable name """
   entityName: String
-  # Timestamp describing when the entity instance was generated
+  """ Timestamp describing when the entity instance was generated """
   entityCreationTime: String
-  # The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant. After that period has elapsed, the information SHOULD NOT be considered relevant
+  """ The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant. After that period has elapsed, the information SHOULD NOT be considered relevant """
   entityValidity: String
-  # Placeholder to publish info that does not fit in any other attribute. Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax
+  """ Placeholder to publish info that does not fit in any other attribute. Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax """
   entityOtherInfo: [String]
-  # Name of the software product adopted as manager
+  """ Name of the software product adopted as manager """
   productName: String
-  # Version of the software product adopted as manager
+  """ Version of the software product adopted as manager """
   productVersion: String
-  # Name of the underlying hypervisor that creates, runs and manages Virtual Machines
+  """ Name of the underlying hypervisor that creates, runs and manages Virtual Machines """
   hypervisorName: String
-  # Version of the hypervisor
+  """ Version of the hypervisor """
   hypervisorVersion: String
-  # The total number of physical CPUs cores accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable.
+  """ The total number of physical CPUs cores accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable. """
   totalCPUs: Int
-  # The total amount of RAM accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable.
+  """ The total amount of RAM accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable. """
   totalRAM: Int
-  # The maximum number of Virtual CPU who can be assigned to a single VM. (with virtual CPU it is intended the CPU cores as seen by the VM OS)
+  """ The maximum number of Virtual CPU who can be assigned to a single VM. (with virtual CPU it is intended the CPU cores as seen by the VM OS) """
   instanceMaxCPU: Int
-  # The minimum number of Virtual CPU who can be assigned to a single VM (with virtual CPU it is intended the CPU cores as seen by the VM OS)
+  """ The minimum number of Virtual CPU who can be assigned to a single VM (with virtual CPU it is intended the CPU cores as seen by the VM OS) """
   instanceMinCPU: Int
-  # The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM)
+  """ The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM) """
   instanceMaxRAM: Int
-  # The minimum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory  it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM)
+  """ The minimum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory  it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM) """
   instanceMinRAM: Int
-  # The maximum value (in MB) of virtual RAM memory who can be dedicated to a VM (i.e. physical host memory, not shared of swapped)
+  """ The maximum value (in MB) of virtual RAM memory who can be dedicated to a VM (i.e. physical host memory, not shared of swapped) """
   instanceMaxDedicatedRAM: Int
-  # The minimum value (in MB) of virtual RAM memory who can is dedicated to a VM (i.e. physical host memory, notshared of swapped)
+  """ The minimum value (in MB) of virtual RAM memory who can is dedicated to a VM (i.e. physical host memory, notshared of swapped) """
   instanceMinDedicatedRAM: Int
-  # The type of network virtualization performed by the Cloud Computing Manager to segregate VMs VLANs (ex. none, vSwitch, ebtables, etc…)
+  """ The type of network virtualization performed by the Cloud Computing Manager to segregate VMs VLANs (ex. none, vSwitch, ebtables, etc…) """
   networkVirtualizationType: String
-  # The type of CPU virtualization (ex. full/paravirtualization/hardware assisted)
+  """ The type of CPU virtualization (ex. full/paravirtualization/hardware assisted) """
   CPUVirtualizationType: String
-  # The format of virtual disk images supported (ex. qcow2, raw, vmdk)
+  """ The format of virtual disk images supported (ex. qcow2, raw, vmdk) """
   virtualdiskFormats: [String]
-  # Failover is the automatic transition of the VM to a secondary machine or server upon failure of the primary component.
+  """ Failover is the automatic transition of the VM to a secondary machine or server upon failure of the primary component. """
   failover: String
-  # If true the Cloud Computing Manager allows to move the virtual machine from one physical host to another without powering down the system
+  """ If true the Cloud Computing Manager allows to move the virtual machine from one physical host to another without powering down the system """
   liveMigration: String
-  # If true the Cloud Computing Manager allows to backup and restore the virtual machines. This is a static value anddoes not ensure the availability of the storage for the backup
+  """ If true the Cloud Computing Manager allows to backup and restore the virtual machines. This is a static value anddoes not ensure the availability of the storage for the backup """
   VMBackupRestore: String
-  # Information system data hash value
+  """ Information system data hash value """
   hash: String
   site: Site
   service: SiteCloudComputingService
@@ -64,61 +64,61 @@ type SiteCloudComputingManager {
 
 
 input SiteCloudComputingManager_Filter {
-  # Local Information System identifier
+  """ Local Information System identifier """
   id: FilterStringOperators
-  # GocDB site endpoint primary key
+  """ GocDB site endpoint primary key """
   endpointPKey: FilterStringOperators
-  # GLUE2ManagerServiceForeignKey
+  """ GLUE2ManagerServiceForeignKey """
   serviceID: FilterStringOperators
-  # GLUE2ManagerID
+  """ GLUE2ManagerID """
   managerID: FilterStringOperators
-  # GLUE2CloudComputingManagerCloudComputingServiceForeignKey
+  """ GLUE2CloudComputingManagerCloudComputingServiceForeignKey """
   cloudComputingServiceForeignKey: FilterStringOperators
-  # Human-readable name
+  """ Human-readable name """
   entityName: FilterStringOperators
-  # Timestamp describing when the entity instance was generated
+  """ Timestamp describing when the entity instance was generated """
   entityCreationTime: FilterStringOperators
-  # The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant. After that period has elapsed, the information SHOULD NOT be considered relevant
+  """ The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant. After that period has elapsed, the information SHOULD NOT be considered relevant """
   entityValidity: FilterStringOperators
-  # Placeholder to publish info that does not fit in any other attribute. Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax
+  """ Placeholder to publish info that does not fit in any other attribute. Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax """
   entityOtherInfo: FilterStringArrayOperators
-  # Name of the software product adopted as manager
+  """ Name of the software product adopted as manager """
   productName: FilterStringOperators
-  # Version of the software product adopted as manager
+  """ Version of the software product adopted as manager """
   productVersion: FilterStringOperators
-  # Name of the underlying hypervisor that creates, runs and manages Virtual Machines
+  """ Name of the underlying hypervisor that creates, runs and manages Virtual Machines """
   hypervisorName: FilterStringOperators
-  # Version of the hypervisor
+  """ Version of the hypervisor """
   hypervisorVersion: FilterStringOperators
-  # The total number of physical CPUs cores accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable.
+  """ The total number of physical CPUs cores accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable. """
   totalCPUs: FilterIntegerOperators
-  # The total amount of RAM accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable.
+  """ The total amount of RAM accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable. """
   totalRAM: FilterIntegerOperators
-  # The maximum number of Virtual CPU who can be assigned to a single VM. (with virtual CPU it is intended the CPU cores as seen by the VM OS)
+  """ The maximum number of Virtual CPU who can be assigned to a single VM. (with virtual CPU it is intended the CPU cores as seen by the VM OS) """
   instanceMaxCPU: FilterIntegerOperators
-  # The minimum number of Virtual CPU who can be assigned to a single VM (with virtual CPU it is intended the CPU cores as seen by the VM OS)
+  """ The minimum number of Virtual CPU who can be assigned to a single VM (with virtual CPU it is intended the CPU cores as seen by the VM OS) """
   instanceMinCPU: FilterIntegerOperators
-  # The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM)
+  """ The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM) """
   instanceMaxRAM: FilterIntegerOperators
-  # The minimum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory  it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM)
+  """ The minimum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory  it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM) """
   instanceMinRAM: FilterIntegerOperators
-  # The maximum value (in MB) of virtual RAM memory who can be dedicated to a VM (i.e. physical host memory, not shared of swapped)
+  """ The maximum value (in MB) of virtual RAM memory who can be dedicated to a VM (i.e. physical host memory, not shared of swapped) """
   instanceMaxDedicatedRAM: FilterIntegerOperators
-  # The minimum value (in MB) of virtual RAM memory who can is dedicated to a VM (i.e. physical host memory, notshared of swapped)
+  """ The minimum value (in MB) of virtual RAM memory who can is dedicated to a VM (i.e. physical host memory, notshared of swapped) """
   instanceMinDedicatedRAM: FilterIntegerOperators
-  # The type of network virtualization performed by the Cloud Computing Manager to segregate VMs VLANs (ex. none, vSwitch, ebtables, etc…)
+  """ The type of network virtualization performed by the Cloud Computing Manager to segregate VMs VLANs (ex. none, vSwitch, ebtables, etc…) """
   networkVirtualizationType: FilterStringOperators
-  # The type of CPU virtualization (ex. full/paravirtualization/hardware assisted)
+  """ The type of CPU virtualization (ex. full/paravirtualization/hardware assisted) """
   CPUVirtualizationType: FilterStringOperators
-  # The format of virtual disk images supported (ex. qcow2, raw, vmdk)
+  """ The format of virtual disk images supported (ex. qcow2, raw, vmdk) """
   virtualdiskFormats: FilterStringArrayOperators
-  # Failover is the automatic transition of the VM to a secondary machine or server upon failure of the primary component.
+  """ Failover is the automatic transition of the VM to a secondary machine or server upon failure of the primary component. """
   failover: FilterStringOperators
-  # If true the Cloud Computing Manager allows to move the virtual machine from one physical host to another without powering down the system
+  """ If true the Cloud Computing Manager allows to move the virtual machine from one physical host to another without powering down the system """
   liveMigration: FilterStringOperators
-  # If true the Cloud Computing Manager allows to backup and restore the virtual machines. This is a static value anddoes not ensure the availability of the storage for the backup
+  """ If true the Cloud Computing Manager allows to backup and restore the virtual machines. This is a static value anddoes not ensure the availability of the storage for the backup """
   VMBackupRestore: FilterStringOperators
-  # Information system data hash value
+  """ Information system data hash value """
   hash: String
   site: Site_Filter
   service: SiteCloudComputingService_Filter
@@ -128,10 +128,10 @@ input SiteCloudComputingManager_Filter {
 }
 
 enum SiteCloudComputingManager_Sort {
-  # Ascenting order by Local Information System identifier
+  """ Ascenting order by Local Information System identifier """
   id_asc
 
-  # Descenting order by Local Information System identifier
+  """ Descenting order by Local Information System identifier """
   id_desc
 }
 

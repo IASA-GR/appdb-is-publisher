@@ -1,107 +1,110 @@
-# Represents a service provided by a Site in the information system
-# Services may contain one or more VM image references and execution templates.
+"""
+Represents a service provided by a Site in the information system
+Services may contain one or more VM image references and execution templates.
+"""
 type SiteCloudComputingService {
-  # Local Information System Identifier
+  """ Local Information System Identifier """
   id: ID
   entityName: String
   entityCreationTime: String
   entityValidity: Int
   entityOtherInfo: String
-  # The service ID as given by glue2.1
+  """ The service ID as given by glue2.1 """
   serviceID: String
-  # Maturity of the service in terms of quality of the software components
+  """ Maturity of the service in terms of quality of the software components """
   qualityLevel: String
-  # Web page providing additional information like monitoring aspects
+  """ Web page providing additional information like monitoring aspects """
   statusInfo: String
-  # The type of service according to a namespace-based classification. Examples are org.openstack or org.opennebula
+  """ The type of service according to a namespace-based classification. Examples are org.openstack or org.opennebula """
   serviceType: String
   serviceAdminDomainForeignKey: String
-  # The provided capability according to the Open Grid Service Architecture (OGSA) architecture [OGF-GFD80] (this is the union of all values assigned to the capability attribute of the endpoints part of this service)
+  """ The provided capability according to the Open Grid Service Architecture (OGSA) architecture [OGF-GFD80] (this is the union of all values assigned to the capability attribute of the endpoints part of this service) """
   capabilities: [String]
-  # Human-readable summary description of the complexity in terms of the number of endpoint types, shares and resources. The syntax should be: endpointType=X,share=Y, resource=Z.
+  """ Human-readable summary description of the complexity in terms of the number of endpoint types, shares and resources. The syntax should be: endpointType=X,share=Y, resource=Z. """
   complexity: String
-  # Link to the service Acceptable User Policy (AUP) or Terms and Conditions for the usage of the service. This shall be in URL format.
+  """ Link to the service Acceptable User Policy (AUP) or Terms and Conditions for the usage of the service. This shall be in URL format. """
   AUP: String
-  # The number of VM in Halted state (VMs not running on the system with no resources reserved)
+  """ The number of VM in Halted state (VMs not running on the system with no resources reserved) """
   haltedVM: Int
-  # The number of VM in Running state (VMs actively consuming the system resources)
+  """ The number of VM in Running state (VMs actively consuming the system resources) """
   runningVM: Int
-  # The number of VM in Suspended state (VMs not running but with reserved resources on the system)
+  """ The number of VM in Suspended state (VMs not running but with reserved resources on the system) """
   suspendedVM: Int
-  # Total number of VM known to the system (the sum of RunningVM, PendingVM, SuspendedVM and HaltedVM)
+  """ Total number of VM known to the system (the sum of RunningVM, PendingVM, SuspendedVM and HaltedVM) """
   totalVM: Int
-  # Information system data hash value
+  """ Information system data hash value """
   hash: String
-  # The site this service belongs to
+  """ The site this service belongs to """
   site: Site
-  # Registered downtimes in GocDB system regarding the current service
+  """ Registered downtimes in GocDB system regarding the current service """
   serviceDowntimes: [SiteServiceDowntime]
-  # Operational status regarding the current service as reported by the argo.egi.eu service
+  """ Operational status regarding the current service as reported by the argo.egi.eu service """
   serviceStatus: SiteServiceStatus
-  # A collection of references to VM images the the current service provides
+  """ A collection of references to VM images the the current service provides """
   images(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
-  # A collection of templates the current service provides to be used for VM initialization
+  """ A collection of templates the current service provides to be used for VM initialization """
   templates(filter: SiteCloudComputingTemplate_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingTemplate_Sort]): SiteCloudComputingTemplate_Collection
-  # A collection of shares the current service provides to be used for VM initialization
+  """ A collection of shares the current service provides to be used for VM initialization """
   shares(filter: SiteCloudComputingShare_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingShare_Sort]): SiteCloudComputingShare_Collection
-  # A collection of managers the current service provides to be used for VM initialization
+  """ A collection of managers the current service provides to be used for VM initialization """
   managers(filter: SiteCloudComputingManager_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingManager_Sort]): SiteCloudComputingManager_Collection
-  # A collection of endpoints the current service provides to be used for VM initialization
+  """ A collection of endpoints the current service provides to be used for VM initialization """
   endpoints(filter: SiteCloudComputingEndpoint_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingEndpoint_Sort]): SiteCloudComputingEndpoint_Collection
 }
 
 input SiteCloudComputingService_Filter {
-  # Local Information System Identifier
+  """ Local Information System Identifier """
   id: FilterStringOperators
   entityName: FilterStringOperators
   entityCreationTime: FilterStringOperators
   entityValidity: FilterIntegerOperators
   entityOtherInfo: FilterStringOperators
-  # The service ID as given by glue2.1
+  """ The service ID as given by glue2.1 """
   serviceID: FilterStringOperators
-  # Maturity of the service in terms of quality of the software components
+  """ Maturity of the service in terms of quality of the software components """
   qualityLevel: FilterStringOperators
-  # Web page providing additional information like monitoring aspects
+  """ Web page providing additional information like monitoring aspects """
   statusInfo: FilterStringOperators
-  # The type of service according to a namespace-based classification. Examples are org.openstack or org.opennebula
+  """ The type of service according to a namespace-based classification. Examples are org.openstack or org.opennebula """
   serviceType: FilterStringOperators
   serviceAdminDomainForeignKey: FilterStringOperators
-  # The provided capability according to the Open Grid Service Architecture (OGSA) architecture [OGF-GFD80] (this is the union of all values assigned to the capability attribute of the endpoints part of this service)
+  """ The provided capability according to the Open Grid Service Architecture (OGSA) architecture [OGF-GFD80] (this is the union of all values assigned to the capability attribute of the endpoints part of this service) """
   capabilities: FilterStringArrayOperators
-  # Human-readable summary description of the complexity in terms of the number of endpoint types, shares and resources. The syntax should be: endpointType=X,share=Y, resource=Z.
+  """ Human-readable summary description of the complexity in terms of the number of endpoint types, shares and resources. The syntax should be: endpointType=X,share=Y, resource=Z. """
   complexity: String
-  # Link to the service Acceptable User Policy (AUP) or Terms and Conditions for the usage of the service. This shall be in URL format.
+  """ Link to the service Acceptable User Policy (AUP) or Terms and Conditions for the usage of the service. This shall be in URL format. """
   AUP: String
-  # The number of VM in Halted state (VMs not running on the system with no resources reserved)
+  """ The number of VM in Halted state (VMs not running on the system with no resources reserved) """
   haltedVM: FilterIntegerOperators
-  # The number of VM in Running state (VMs actively consuming the system resources)
+  """ The number of VM in Running state (VMs actively consuming the system resources) """
   runningVM: FilterIntegerOperators
-  # The number of VM in Suspended state (VMs not running but with reserved resources on the system)
+  """ The number of VM in Suspended state (VMs not running but with reserved resources on the system) """
   suspendedVM: FilterIntegerOperators
-  # Total number of VM known to the system (the sum of RunningVM, PendingVM, SuspendedVM and HaltedVM)
+  """ Total number of VM known to the system (the sum of RunningVM, PendingVM, SuspendedVM and HaltedVM) """
   totalVM: FilterIntegerOperators
-  # Information system data hash value
+  """ Information system data hash value """
   hash: String
-  # Filter by the hosting site's values
+  """ Filter by the hosting site's values """
   site: Site_Filter
 
-  # Filter by the service's cloud computing endpoints
+  """ Filter by the service's cloud computing endpoints """
   endpoints: SiteCloudComputingEndpoint_Filter
-  # Filter by the service's images values
+  """ Filter by the service's images values """
   images: SiteCloudComputingImage_Filter
-  # Filter by service's total image count
+  """ Filter by service's total image count """
   numberOfImages: FilterIntegerOperators
-  # Filter by the service's templates values
+  """ Filter by the service's templates values """
   templates: SiteCloudComputingTemplate_Filter
-  # Filter by service's total template count
+  """ Filter by service's total template count """
   numberOfTemplates: FilterIntegerOperators
-#  managers: SiteCloudComputingManager_Filter
+  """ Filter by service's total manager count """
   numberOfManagers: FilterIntegerOperators
-#  shares: SiteCloudComputingShare_Filter
+  #shares: SiteCloudComputingShare_Filter
+  """ Filter by service's total share count """
   numberOfShares: FilterIntegerOperators
-  # Filter by site service statuses (SiteServiceStatus@argo)
+  """ Filter by site service statuses (SiteServiceStatus@argo) """
   serviceStatuses: SiteServiceStatus_Filter
-  # Filter by site service downtimes (SiteServiceStatus@gocdb)
+  """ Filter by site service downtimes (SiteServiceStatus@gocdb) """
   serviceDowntimes: SiteServiceDowntime_Filter
   #withDowntimeCount: FilterIntegerOperators
   #withImageCount: FilterIntegerOperators
@@ -111,9 +114,9 @@ input SiteCloudComputingService_Filter {
 }
 
 enum SiteCloudComputingService_Sort {
-  # Ascenting order by Local Information System Identifier
+  """ Ascenting order by Local Information System Identifier """
   id_asc
-  # Descenting order by Local Information System Identifier
+  """ Descenting order by Local Information System Identifier """
   id_desc
 }
 
