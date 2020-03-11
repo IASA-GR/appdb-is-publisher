@@ -33,19 +33,19 @@ domainName
 
 export const TEMPLATE_SITE_DETAILS_FIELDS =  () => `
 ${TEMPLATE_SITE_ITEM_FIELDS()}
-serviceStatuses{
+serviceStatuses {
   id
   type
   endpointGroup
   value
   timestamp
-  endpoint{
+  endpoint {
     id
     endpointPKey
     endpointURL
   }
 }
-serviceDowntimes{
+serviceDowntimes {
   id
   downtimePKey
   classification
@@ -57,7 +57,7 @@ serviceDowntimes{
   serviceType
   gocPortalUrl
   outcome
-  endpoint{
+  endpoint {
     id
     endpointPKey
     endpointURL

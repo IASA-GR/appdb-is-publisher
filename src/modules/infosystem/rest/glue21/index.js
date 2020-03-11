@@ -16,7 +16,10 @@ import {
   _handleRequest,
   getCollectionRequestParams
 } from '../httpUtils';
+
 import SiteRouter from './Site.router';
+import SiteCloudComputingEndpointRouter from './SiteCloudComputingEndpoint.router';
+
 import OpenAPIDefinitions from '../OpenAPIDefinitions';
 
 const swaggerUi = require('swagger-ui-express');
@@ -47,11 +50,11 @@ const SWAGGER_DOCUMENT = {
 
 if (process.env.NODE_ENV === 'development') {
   SWAGGER_DOCUMENT.servers.unshift({
-    "url": "http://localhost:5050/rest",
+    "url": "http://172.16.0.117:5050/rest",
     "description": "Localhost development instance"
   });
   SWAGGER_DOCUMENT.servers.unshift({
-    "url": "http://172.16.0.117:5050/rest",
+    "url": "http://localhost:5050/rest",
     "description": "Localhost development instance"
   });
 }
@@ -71,7 +74,9 @@ export const expressRouter = function (router, config) {
   let openAPIDefinitions = new OpenAPIDefinitions();
 
   SiteRouter.useRouter(router, {openAPIDefinitions});
-  updateRouterDescription(SiteRouter.getRoutesDescription());
+  SiteCloudComputingEndpointRouter.useRouter(router, {openAPIDefinitions});
+
+  //updateRouterDescription(SiteRouter.getRoutesDescription());
   updateSwaggerComponents(openAPIDefinitions.getAllOpenAPIComponents());
   updateSwaggerDocumentPaths(openAPIDefinitions.getAllOpenAPIPaths());
 

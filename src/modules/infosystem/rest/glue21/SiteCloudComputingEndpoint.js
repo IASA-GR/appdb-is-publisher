@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {query, TEMPLATE_COLLECTION_HEADER} from '../restModel';
 import {asyncFilterToGraphQL, resultHandlerByPath} from '../utils';
-import {TEMPLATE_SITE_DETAILS_FIELDS} from './Site';
+import {TEMPLATE_SITE_DETAILS_FIELDS, TEMPLATE_SITE_ITEM_FIELDS} from './Site';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_SERVICE_ITEM_FIELDS} from './SiteCloudComputingService';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS, TEMPLATE_SITE_SERVICE_IMAGE_DETAILS_FIELDS} from './SiteCloudComputingImage';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS, TEMPLATE_SITE_SERVICE_TEMPLATE_DETAILS_FIELDS} from './SiteCloudComputingTemplate';
@@ -46,14 +46,14 @@ entityOtherInfo
 
 export const TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS = () => `
 ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS()}
-serviceStatus{
+serviceStatus {
   id
   type
   endpointGroup
   value
   timestamp
 }
-serviceDowntimes{
+serviceDowntimes {
   id
   downtimePKey
   classification
@@ -117,15 +117,6 @@ export const getCallerByIdentifier = (id, onlyQuery = false) => {
   }
 };
 
-export const getByIdentifier = (id) => {
-  let caller = getCallerByIdentifier(id);
-  return query(`{
-    data: ${caller} {
-      ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS()}
-    }
-  }`);
-};
-
 export const getFirst = (filter = '{}', fields = null) => {
   let usedFields = _.trim((_.isFunction(fields)) ? fields() : fields);
   usedFields = usedFields || GRAPHQL_COLLECTION_DETAILS_FIELDS();
@@ -151,117 +142,153 @@ export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null,
   `).then(resultHandlerByPath(resolver || 'data'))
 }
 
-export const getSite = (endpointId) => {
-  let caller = getCallerByIdentifier(endpointId);
-  return query(`{
-    data: ${caller} {
-      id
-      site {
-        ${TEMPLATE_SITE_DETAILS_FIELDS()}
-      }
-    }
-  }`).then(resultHandlerByPath('data.site as data'));
-};
+export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
 
-export const getAllImages = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
-  return asyncFilterToGraphQL(filter).then(imagesFlt => {
-    let caller = getCallerByIdentifier(serviceId);
-    let imagesQuery = `
-      images(filter: ${imagesFlt}, limit: ${limit}, skip: ${skip}) {
-        ${TEMPLATE_COLLECTION_HEADER}
-        items {
-        ${TEMPLATE_SITE_SERVICE_IMAGE_COLLECTION_FIELDS()}
-        }
+  openAPIDefinitions.registerComponentFromGraphQLQuery({
+    name: 'SiteCloudComputingEndpointDetails',
+    description: '',
+    graphQLType: 'SiteCloudComputingEndpoint',
+    graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS()
+  })
+  .registerItemWrapperComponent({
+    name: 'SiteCloudComputingEndpointItemResponse',
+    wrapperOf: 'SiteCloudComputingEndpointDetails'
+  });
+  const getByIdentifier = (id) => {
+    let caller = getCallerByIdentifier(id);
+    return query(`{
+      data: ${caller} {
+        ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS()}
       }
-    `;
+    }`);
+  };
+
+
+  openAPIDefinitions.registerItemWrapperComponent({
+    name: 'SiteItemResponse',
+    wrapperOf: 'SiteDetails'
+  });
+  const getSite = (endpointId) => {
+    let caller = getCallerByIdentifier(endpointId);
+
     return query(`{
       data: ${caller} {
         id
-        ${imagesQuery}
-      }
-    }`).then(resultHandlerByPath('data.images'));
-  });
-};
-
-export const getImage = (serviceId, imageId) => {
-  let caller = getCallerByIdentifier(serviceId);
-  let imageQuery = SiteServiceImage.getCallerByIdentifier(imageId, true);
-
-  return query(`{
-    data: ${caller} {
-      id
-      images(filter: {${imageQuery}}, limit: 1, skip: 0) {
-        items {
-          ${TEMPLATE_SITE_SERVICE_IMAGE_DETAILS_FIELDS}
+        site {
+          ${TEMPLATE_SITE_DETAILS_FIELDS()}
         }
       }
-    }
-  }`).then(resultHandlerByPath('data.images.items.0'));
-};
+    }`).then(resultHandlerByPath('data.site'));
+  };
 
-export const getAllTemplates = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
-  return asyncFilterToGraphQL(filter).then(templatesFlt => {
-    let caller = getCallerByIdentifier(serviceId);
-    let templatesQuery = `
-      templates(filter: ${templatesFlt}, limit: ${limit}, skip: ${skip}) {
-        ${TEMPLATE_COLLECTION_HEADER}
-        items {
-        ${TEMPLATE_SITE_SERVICE_TEMPLATE_COLLECTION_FIELDS}
-        }
-      }
-    `;
-    return query(`{
-      data: ${caller} {
-        id
-        ${templatesQuery}
-      }
-    }`).then(resultHandlerByPath('data.templates'));
-  });
-};
-
-export const getTemplate = (serviceId, templateId) => {
-  let caller = getCallerByIdentifier(serviceId);
-  let templateQuery = SiteServiceTemplate.getCallerByIdentifier(templateId, true);
-
-  return query(`{
-    data: ${caller} {
-      id
-      templates(filter: {${templateQuery}}, limit: 1, skip: 0) {
-        items {
-          ${TEMPLATE_SITE_SERVICE_TEMPLATE_DETAILS_FIELDS}
-        }
-      }
-    }
-  }`).then(resultHandlerByPath('data.templates.items.0'));
-};
-
-export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
-  return asyncFilterToGraphQL(filter).then(flt => {
-    return query(`
-      {
-        data: siteServices(filter: ${flt}, limit: ${limit}, skip: ${skip}) {
+  const getAllImages = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+    return asyncFilterToGraphQL(filter).then(imagesFlt => {
+      let caller = getCallerByIdentifier(serviceId);
+      let imagesQuery = `
+        images(filter: ${imagesFlt}, limit: ${limit}, skip: ${skip}) {
           ${TEMPLATE_COLLECTION_HEADER}
-          ${TEMPLATE_SITE_SERVICE_COLLECTION_FIELDS}
+          items {
+          ${TEMPLATE_SITE_SERVICE_IMAGE_COLLECTION_FIELDS()}
+          }
+        }
+      `;
+      return query(`{
+        data: ${caller} {
+          id
+          ${imagesQuery}
+        }
+      }`).then(resultHandlerByPath('data.images'));
+    });
+  };
+
+  const getImage = (serviceId, imageId) => {
+    let caller = getCallerByIdentifier(serviceId);
+    let imageQuery = SiteServiceImage.getCallerByIdentifier(imageId, true);
+
+    return query(`{
+      data: ${caller} {
+        id
+        images(filter: {${imageQuery}}, limit: 1, skip: 0) {
+          items {
+            ${TEMPLATE_SITE_SERVICE_IMAGE_DETAILS_FIELDS}
+          }
         }
       }
-    `);
+    }`).then(resultHandlerByPath('data.images.items.0'));
+  };
+
+  const getAllTemplates = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+    return asyncFilterToGraphQL(filter).then(templatesFlt => {
+      let caller = getCallerByIdentifier(serviceId);
+      let templatesQuery = `
+        templates(filter: ${templatesFlt}, limit: ${limit}, skip: ${skip}) {
+          ${TEMPLATE_COLLECTION_HEADER}
+          items {
+          ${TEMPLATE_SITE_SERVICE_TEMPLATE_COLLECTION_FIELDS}
+          }
+        }
+      `;
+      return query(`{
+        data: ${caller} {
+          id
+          ${templatesQuery}
+        }
+      }`).then(resultHandlerByPath('data.templates'));
+    });
+  };
+
+  const getTemplate = (serviceId, templateId) => {
+    let caller = getCallerByIdentifier(serviceId);
+    let templateQuery = SiteServiceTemplate.getCallerByIdentifier(templateId, true);
+
+    return query(`{
+      data: ${caller} {
+        id
+        templates(filter: {${templateQuery}}, limit: 1, skip: 0) {
+          items {
+            ${TEMPLATE_SITE_SERVICE_TEMPLATE_DETAILS_FIELDS()}
+          }
+        }
+      }
+    }`).then(resultHandlerByPath('data.templates.items.0'));
+  };
+
+  openAPIDefinitions.registerComponentFromGraphQLQuery({
+    name: 'SiteCloudComputingEndpointItem',
+    description: '',
+    graphQLType: 'SiteCloudComputingEndpoint',
+    graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS()
+  })
+  .registerCollectionWrapperComponent({
+    name: 'SiteCloudComputingEndpointListResponse',
+    wrapperOf: 'SiteCloudComputingEndpointItem'
   });
-};
+  const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+    return asyncFilterToGraphQL(filter).then(flt => {
+      return query(`
+        {
+          data: siteCloudComputingEndpoints(filter: ${flt}, limit: ${limit}, skip: ${skip}) {
+            ${TEMPLATE_COLLECTION_HEADER}
+            items {
+              ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS()}
+            }
+          }
+        }
+      `);
+    });
+  };
 
-
-
-
-
-export default {
-  getAll,
-  getCallerByIdentifier,
-  getByIdentifier,
-  getFirst,
-  getFiltered,
-  getSite,
-  getAllImages,
-  getImage,
-  getAllTemplates,
-  getTemplate
-
+  return  {
+    getAll,
+    getCallerByIdentifier,
+    getByIdentifier,
+    getFirst,
+    getFiltered,
+    getSite,
+    getAllImages,
+    getImage,
+    getAllTemplates,
+    getTemplate,
+    getAll
+  };
 }
