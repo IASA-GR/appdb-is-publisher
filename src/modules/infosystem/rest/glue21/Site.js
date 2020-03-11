@@ -245,8 +245,9 @@ export default function Site({openAPIDefinitions}) {
     let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
     let endpointsQuery = `
       cloudComputingEndpoints(filter: {${endpointFlt}}, limit: 1, skip: 0) {
-        ${TEMPLATE_COLLECTION_HEADER}
-        ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_COLLECTION_FIELDS()}
+        items {
+          ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS()}
+        }
       }`;
     return query(`{
       data: ${siteCaller} {
