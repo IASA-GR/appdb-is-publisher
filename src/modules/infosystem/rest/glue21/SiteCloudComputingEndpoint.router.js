@@ -28,6 +28,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/managers/{managerId}',{
     "summary": "A manager entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.",
+    "tags": ["SiteCloudComputingEndpoint"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -64,6 +65,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/managers',{
     "summary": "List of managers supported by the current cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
       {
@@ -91,6 +93,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/site',{
     "summary": "Returns information about the site that provides the specific cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -116,7 +119,8 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   );
 
   openAPIDefinitions.registerGetPath("/cloud/computing/endpoints/{endpointId}", {
-    "summary": "Returns specific cloud computing endpoint infromation.",
+    "summary": "Returns specific cloud computing endpoint information.",
+    "tags": ["SiteCloudComputingEndpoint"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -143,6 +147,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath("/cloud/computing/endpoints", {
     "summary": "Return the list of available cloud computing endpoints",
+    "tags": ["SiteCloudComputingEndpoint"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters(),
     "responses": {
