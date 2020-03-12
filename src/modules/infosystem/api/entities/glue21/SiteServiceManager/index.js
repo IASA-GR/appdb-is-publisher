@@ -22,7 +22,7 @@ function _initSiteServiceManager(context) {
   SiteServiceManager.getSiteServiceTemplates = ({root, args, context}) =>
     context.api('siteServiceTemplate').getAll({
       root,
-      args: getArgsWithBaseFilter({'managerForeignKey': _.get(root, 'managerForeignKey')}, args),
+      args: getArgsWithBaseFilter({'managerForeignKey': _.get(root, 'managerID')}, args),
       context
     });
 
