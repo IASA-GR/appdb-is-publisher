@@ -569,7 +569,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   );
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/templates/{templateId}',{
-    "summary": "Return a specific cloud computing endpoint of a specific site.",
+    "summary": "Return a template entry of a specific cloud computing endpoint.",
     "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
