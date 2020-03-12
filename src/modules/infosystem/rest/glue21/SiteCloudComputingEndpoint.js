@@ -4,7 +4,7 @@ import {asyncFilterToGraphQL, resultHandlerByPath} from '../utils';
 import {TEMPLATE_SITE_DETAILS_FIELDS, TEMPLATE_SITE_ITEM_FIELDS} from './Site';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_SERVICE_ITEM_FIELDS} from './SiteCloudComputingService';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS, TEMPLATE_SITE_SERVICE_IMAGE_DETAILS_FIELDS} from './SiteCloudComputingImage';
-import {TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS, TEMPLATE_SITE_SERVICE_TEMPLATE_DETAILS_FIELDS} from './SiteCloudComputingTemplate';
+import {TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS} from './SiteCloudComputingTemplate';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS} from './SiteCloudComputingShare';
 import SiteCloudComputingManager, { TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_DETAILS_FIELDS } from './SiteCloudComputingManager';
 
@@ -253,6 +253,57 @@ export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
     }`).then(resultHandlerByPath('data.templates.items.0'));
   };
 
+  const getManagerTemplate = (endpointId, managerId, templateId) => {
+    let endpointCaller = getCallerByIdentifier(endpointId);
+    let managerFlt = SiteCloudComputingManager.getCallerByIdentifier(managerId, true);
+    let templateFlt = SiteCloudComputingManager.getCallerByIdentifier(templateId, true);
+    let templateQuery = `
+      managers(filter: {${managerFlt}}, limit: 1, skip: 0) {
+        items {
+          templates(filter: {${templateFlt}}, limit: 1, skip: 0) {
+            items {
+              ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS()}
+            }
+          }
+        }
+      }
+    `;
+
+    return query(`{
+      data: ${endpointCaller} {
+        id
+        ${templateQuery}
+      }
+    }`).then(resultHandlerByPath('data.managers.items.0.templates.items.0'));
+  };
+
+  const getAllManagerTemplates = (endpointId, managerId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+    return asyncFilterToGraphQL(filter).then(templatesFlt => {
+      let endpointCaller = getCallerByIdentifier(endpointId);
+      let managerFlt = SiteCloudComputingManager.getCallerByIdentifier(managerId, true);
+
+      let templateQuery = `managers(filter: {${managerFlt}}, limit: ${limit}, skip: ${skip}) {
+          ${TEMPLATE_COLLECTION_HEADER}
+          items {
+            templates(filter: ${templatesFlt}, limit: ${limit}, skip: ${skip}) {
+              ${TEMPLATE_COLLECTION_HEADER}
+              items {
+                ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()}
+              }
+            }
+
+          }
+        }`;
+
+        return query(`{
+        data: ${endpointCaller} {
+          id
+          ${templateQuery}
+        }
+      }`).then(resultHandlerByPath('data.managers.items.0.templates'));
+    });
+  };
+
   const getManager = (endpointId, managerId) => {
     let endpointCaller = getCallerByIdentifier(endpointId);
     let managerFlt = SiteCloudComputingManager.getCallerByIdentifier(managerId, true);
@@ -325,6 +376,8 @@ export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
     getSite,
     getAllManagers,
     getManager,
+    getAllManagerTemplates,
+    getManagerTemplate,
     getAllImages,
     getImage,
     getAllTemplates,

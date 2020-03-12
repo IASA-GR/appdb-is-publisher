@@ -25,6 +25,84 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   const SiteCloudComputingEndpoint = SiteCloudComputingEndpointInitHandler({openAPIDefinitions});
 
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/managers/{managerId}/templates/{templateId}',{
+    "summary": "A template details managed from the given manager provided by the cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "managerId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing manager`
+      },
+      {
+        "in": "path",
+        "name": "templateId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing template`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateItemResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/managers/:managerId/templates/:templateId',
+    [ItemMetaData({ entityType: 'SiteCloudComputingManager' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let managerId = _.trim(req.params.managerId);
+      let templateId = _.trim(req.params.templateId);
+
+      _handleRequest(SiteCloudComputingEndpoint.getManagerTemplate(endpointId, managerId, templateId), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/managers/{managerId}/templates',{
+    "summary": "A list of templates managed from the given manager provided by the cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "managerId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing manager`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/managers/:managerId/templates',
+    [ItemMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let managerId = _.trim(req.params.managerId);
+      let params = getCollectionRequestParams(req);
+
+      _handleRequest(SiteCloudComputingEndpoint.getAllManagerTemplates(endpointId, managerId, params), req, res);
+    }
+  );
 
   openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/managers/{managerId}',{
     "summary": "A manager entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.",
@@ -38,7 +116,6 @@ export const useRouter = (router, {openAPIDefinitions}) => {
         "type": "string",
         "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
       },
-
       {
         "in": "path",
         "name": "managerId",
@@ -55,7 +132,6 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     '/cloud/computing/endpoints/:endpointId/managers/:managerId',
     [ItemMetaData({ entityType: 'SiteCloudComputingManager' })],
     (req, res) => {
-      let siteId = _.trim(req.params.siteId);
       let endpointId = _.trim(req.params.endpointId);
       let managerId = _.trim(req.params.managerId);
 
