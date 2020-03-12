@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {query, TEMPLATE_COLLECTION_HEADER} from '../restModel';
 import {asyncFilterToGraphQL,resultHandlerByPath} from '../utils';
 import SiteCloudComputingImage, {TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_DETAILS_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_COLLECTION_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS} from './SiteCloudComputingImage';
-import SiteCloudComputingEndpoint, {TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_COLLECTION_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS} from './SiteCloudComputingEndpoint';
+import SiteCloudComputingEndpoint, { TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_COLLECTION_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS} from './SiteCloudComputingEndpoint';
 import SiteCloudComputingTemplate, { TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_COLLECTION_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS } from './SiteCloudComputingTemplate';
 import SiteCloudComputingShare, { TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS } from './SiteCloudComputingShare';
 import SiteCloudComputingManager, { TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_COLLECTION_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_DETAILS_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS } from './SiteCloudComputingManager';
@@ -418,6 +418,84 @@ export default function Site({openAPIDefinitions}) {
   };
 
   openAPIDefinitions.registerComponentFromGraphQLQuery({
+    name: 'SiteCloudComputingManagerTemplateDetails',
+    description: '',
+    graphQLType: 'SiteCloudComputingTemplate',
+    graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()
+  })
+  .registerItemWrapperComponent({
+    name: 'SiteCloudComputingManagerTemplateItemResponse',
+    wrapperOf: 'SiteCloudComputingManagerTemplateDetails'
+  });
+  const getSiteCloudComputingEndpointManagerTemplate = (siteId, endpointId, managerId, templateId) => {
+    let siteCaller = getCallerByIdentifier(siteId);
+    let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
+    let managerFlt = SiteCloudComputingManager.getCallerByIdentifier(managerId, true);
+    let templateFlt = SiteCloudComputingManager.getCallerByIdentifier(templateId, true);
+    let managerQuery = `
+      cloudComputingEndpoints(filter: {${endpointFlt}}, limit: 1, skip: 0) {
+        items {
+          managers(filter: {${managerFlt}}, limit: 1, skip: 0) {
+            items {
+              templates(filter: {${templateFlt}}, limit: 1, skip: 0) {
+                items {
+                  ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS()}
+                }
+              }
+            }
+          }
+        }
+      }`;
+
+    return query(`{
+      data: ${siteCaller} {
+        id
+        ${managerQuery}
+      }
+    }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers.items.0.templates.items.0'));
+  };
+
+  openAPIDefinitions.registerComponentFromGraphQLQuery({
+    name: 'SiteCloudComputingManagerTemplateItem',
+    description: '',
+    graphQLType: 'SiteCloudComputingTemplate',
+    graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()
+  })
+  .registerCollectionWrapperComponent({
+    name: 'SiteCloudComputingManagerTemplateListResponse',
+    wrapperOf: 'SiteCloudComputingManagerTemplateItem'
+  });
+  const getAllSiteCloudComputingEndpointManagerTemplates = (siteId, endpointId, managerId) => {
+    let siteCaller = getCallerByIdentifier(siteId);
+    let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
+    let managerFlt = SiteCloudComputingManager.getCallerByIdentifier(managerId, true);
+
+    let managerQuery = `
+      cloudComputingEndpoints(filter: {${endpointFlt}}, limit: 1, skip: 0) {
+        items {
+          managers(filter: {${managerFlt}}, limit: 1, skip: 0) {
+            items {
+              templates {
+                ${TEMPLATE_COLLECTION_HEADER}
+                items {
+                  ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()}
+                }
+
+              }
+            }
+          }
+        }
+      }`;
+
+    return query(`{
+      data: ${siteCaller} {
+        id
+        ${managerQuery}
+      }
+    }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers.items.0.templates'));
+  };
+
+  openAPIDefinitions.registerComponentFromGraphQLQuery({
     name: 'SiteCloudComputingManagerDetails',
     description: '',
     graphQLType: 'SiteCloudComputingManager',
@@ -704,8 +782,8 @@ export default function Site({openAPIDefinitions}) {
     getSiteCloudComputingEndpointImage,
     getAllSiteCloudComputingEndpointManagers,
     getSiteCloudComputingEndpointManager,
-    //getAllSiteCloudComputingEndpointManagerTemplates,
-    //getSiteCloudComputingEndpointManagerTemplate,
+    getAllSiteCloudComputingEndpointManagerTemplates,
+    getSiteCloudComputingEndpointManagerTemplate,
     getAllSiteCloudComputingEndpointShares,
     getSiteCloudComputingEndpointShare,
     getAllSiteCloudComputingEndpointShareImages,

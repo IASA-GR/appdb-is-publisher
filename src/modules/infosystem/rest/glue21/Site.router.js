@@ -306,6 +306,99 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
+  openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/managers/{managerId}/templates/{templateId}',{
+    "summary": "A template details managed from the given manager provided by the cloud computing endpoint.",
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "siteId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the name of the site if given in the form of  "name:\<sitename\>", or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "managerId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing manager`
+      },
+      {
+        "in": "path",
+        "name": "templateId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing template`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingManagerTemplateItemResponse"})
+    }
+  });
+  router.get(
+    '/sites/:siteId/cloud/computing/endpoints/:endpointId/managers/:managerId/templates/:templateId',
+    [ItemMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    (req, res) => {
+      let siteId = _.trim(req.params.siteId);
+      let endpointId = _.trim(req.params.endpointId);
+      let managerId = _.trim(req.params.managerId);
+      let templateId = _.trim(req.params.templateId);
+
+      _handleRequest(Site.getSiteCloudComputingEndpointManagerTemplate(siteId, endpointId, managerId, templateId), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/managers/{managerId}/templates',{
+    "summary": "A list of templates managed from the given manager provided by the cloud computing endpoint.",
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+      {
+        "in": "path",
+        "name": "siteId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the name of the site if given in the form of  "name:\<sitename\>", or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+
+      {
+        "in": "path",
+        "name": "managerId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing manager`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingManagerTemplateItemResponse"})
+    }
+  });
+  router.get(
+    '/sites/:siteId/cloud/computing/endpoints/:endpointId/managers/:managerId/templates',
+    [ItemMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    (req, res) => {
+      let siteId = _.trim(req.params.siteId);
+      let endpointId = _.trim(req.params.endpointId);
+      let managerId = _.trim(req.params.managerId);
+      let params = getCollectionRequestParams(req);
+
+      _handleRequest(Site.getAllSiteCloudComputingEndpointManagerTemplates(siteId, endpointId, managerId, params), req, res);
+    }
+  );
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/managers/{managerId}',{
     "summary": "A manager entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.",
