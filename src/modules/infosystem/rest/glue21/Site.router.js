@@ -29,6 +29,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images/{imageId}/templates/{templateId}',{
     "summary": "An applicable template entry to the given VM imageunder the given share entry provided by the cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -87,6 +88,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images/{imageId}/templates',{
     "summary": "A list of applicable templates to the given VM image under the given share provided by the cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
       {
@@ -138,6 +140,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images/{imageId}',{
     "summary": "An image entry provided under the specific share entry of the current cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -188,6 +191,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images',{
     "summary": "A list of images provided under the specific share entry of the current cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
       {
@@ -231,6 +235,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/shares/{shareId}',{
     "summary": "A share entry provided by the cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -273,6 +278,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/shares',{
     "summary": "List of shares supported by the current cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
       {
@@ -308,6 +314,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/managers/{managerId}/templates/{templateId}',{
     "summary": "A template details managed from the given manager provided by the cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -340,7 +347,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       }
     ]),
     "responses": {
-      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingManagerTemplateItemResponse"})
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateItemResponse"})
     }
   });
   router.get(
@@ -358,6 +365,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/managers/{managerId}/templates',{
     "summary": "A list of templates managed from the given manager provided by the cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
       {
@@ -384,7 +392,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       }
     ]),
     "responses": {
-      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingManagerTemplateItemResponse"})
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateItemResponse"})
     }
   });
   router.get(
@@ -402,6 +410,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/managers/{managerId}',{
     "summary": "A manager entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -445,6 +454,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/managers',{
     "summary": "List of managers supported by the current cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
       {
@@ -480,6 +490,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/images/{imageId}',{
     "summary": "A VM image entry in the information system.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -523,6 +534,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/images',{
     "summary": "List of VM images provided by the current cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
       {
@@ -558,6 +570,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/templates/{templateId}',{
     "summary": "Return a specific cloud computing endpoint of a specific site.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -600,6 +613,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}/templates',{
     "summary": "List of templates provided by the current cloud computing endpoint.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
       {
@@ -635,6 +649,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints/{endpointId}',{
     "summary": "Return a specific cloud computing endpoint of a specific site.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -669,6 +684,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/endpoints',{
     "summary": "Return the list of cloud computing endpoints of a specific site.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
       {
@@ -696,6 +712,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath("/sites/{siteId}", {
     "summary": "Returns specific site infromation.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -722,6 +739,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   openAPIDefinitions.registerGetPath("/sites", {
     "summary": "Returns a list of sites registered in GocDB service.",
+    "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters(),
     "responses": {
