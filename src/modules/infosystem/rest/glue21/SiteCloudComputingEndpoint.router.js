@@ -25,6 +25,243 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   const SiteCloudComputingEndpoint = SiteCloudComputingEndpointInitHandler({openAPIDefinitions});
 
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images/{imageId}/templates/{templateId}',{
+    "summary": "An image entry provided under the specific share entry of the current cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "shareId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing share`
+      },
+      {
+        "in": "path",
+        "name": "imageId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing image`
+      },
+      {
+        "in": "path",
+        "name": "templateId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing template`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateItemResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/shares/:shareId/images/:imageId/templates/:templateId',
+    [ItemMetaData({ entityType: 'SiteCloudComputindTemplate' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let shareId = _.trim(req.params.shareId);
+      let imageId = _.trim(req.params.imageId);
+      let templateId = _.trim(req.params.templateId);
+
+      _handleRequest(SiteCloudComputingEndpoint.getShareImageTemplate(endpointId, shareId, imageId, templateId), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images/{imageId}/templates',{
+    "summary": "A list of applicable templates to the given VM image under the given share provided by the cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "shareId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing share`
+      },
+      {
+        "in": "path",
+        "name": "imageId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing image`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/shares/:shareId/images/:imageId/templates',
+    [ItemMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let shareId = _.trim(req.params.shareId);
+      let imageId = _.trim(req.params.imageId);
+      let params = getCollectionRequestParams(req);
+
+      _handleRequest(SiteCloudComputingEndpoint.getAllShareImageTemplates(endpointId, shareId, imageId, params), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images/{imageId}',{
+    "summary": "An image entry provided under the specific share entry of the current cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "shareId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing share`
+      },
+      {
+        "in": "path",
+        "name": "imageId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing image`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageItemResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/shares/:shareId/images/:imageId',
+    [ItemMetaData({ entityType: 'SiteCloudComputindImage' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let shareId = _.trim(req.params.shareId);
+      let imageId = _.trim(req.params.imageId);
+
+      _handleRequest(SiteCloudComputingEndpoint.getShareImage(endpointId, shareId, imageId), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images',{
+    "summary": "A list of images provided under the specific share entry of the current cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "shareId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing share`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageListResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/shares/:shareId/images',
+    [ItemMetaData({ entityType: 'SiteCloudComputingImage' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let shareId = _.trim(req.params.shareId);
+      let params = getCollectionRequestParams(req);
+
+      _handleRequest(SiteCloudComputingEndpoint.getAllShareImages(endpointId, shareId, params), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/shares/{shareId}',{
+    "summary": "A share entry provided by the cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "shareId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing share`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingShareItemResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/shares/:shareId',
+    [ItemMetaData({ entityType: 'SiteCloudComputingShare' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let shareId = _.trim(req.params.shareId);
+
+      _handleRequest(SiteCloudComputingEndpoint.getShare(endpointId, shareId), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/shares',{
+    "summary": "List of shares supported by the current cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingShareListResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/shares',
+    [ItemMetaData({ entityType: 'SiteCloudComputingShare' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let params = getCollectionRequestParams(req);
+
+      _handleRequest(SiteCloudComputingEndpoint.getAllShares(endpointId, params), req, res);
+    }
+  );
+
   openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/managers/{managerId}/templates/{templateId}',{
     "summary": "A template details managed from the given manager provided by the cloud computing endpoint.",
     "tags": ["SiteCloudComputingEndpoint"],
