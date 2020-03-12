@@ -602,14 +602,14 @@ export default function Site({openAPIDefinitions}) {
 
 
   openAPIDefinitions.registerComponentFromGraphQLQuery({
-    name: 'SiteCloudComputingShareImageItem',
+    name: 'SiteCloudComputingImageItem',
     description: '',
     graphQLType: 'SiteCloudComputingImage',
     graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS()
   })
   .registerCollectionWrapperComponent({
-    name: 'SiteCloudComputingShareImageListResponse',
-    wrapperOf: 'SiteCloudComputingShareImageItem'
+    name: 'SiteCloudComputingImageListResponse',
+    wrapperOf: 'SiteCloudComputingImageItem'
   });
   const getAllSiteCloudComputingEndpointShareImages = (siteId, endpointId, shareId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
     return asyncFilterToGraphQL(filter).then(imagesFlt => {
@@ -642,14 +642,14 @@ export default function Site({openAPIDefinitions}) {
   };
 
   openAPIDefinitions.registerComponentFromGraphQLQuery({
-    name: 'SiteCloudComputingShareImageDetails',
+    name: 'SiteCloudComputingImageDetails',
     description: '',
     graphQLType: 'SiteCloudComputingImage',
     graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_DETAILS_FIELDS()
   })
   .registerItemWrapperComponent({
-    name: 'SiteCloudComputingShareImageItemResponse',
-    wrapperOf: 'SiteCloudComputingShareImageDetails'
+    name: 'SiteCloudComputingImageItemResponse',
+    wrapperOf: 'SiteCloudComputingImageDetails'
   });
   const getSiteCloudComputingEndpointShareImage = (siteId, endpointId, shareId, imageId) => {
     let siteCaller = getCallerByIdentifier(siteId);
@@ -657,7 +657,7 @@ export default function Site({openAPIDefinitions}) {
     let shareFlt = SiteCloudComputingShare.getCallerByIdentifier(shareId, true);
     let imageFlt = SiteCloudComputingImage.getCallerByIdentifier(imageId, true);
 
-    let templateQuery = `
+    let imageQuery = `
       cloudComputingEndpoints(filter: {${endpointFlt}}, limit: 1, skip: 0) {
         items {
           id
@@ -677,20 +677,20 @@ export default function Site({openAPIDefinitions}) {
     return query(`{
       data: ${siteCaller} {
         id
-        ${templateQuery}
+        ${imageQuery}
       }
     }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0.images.items.0'));
   };
 
   openAPIDefinitions.registerComponentFromGraphQLQuery({
-    name: 'SiteCloudComputingShareImageTemplateItem',
+    name: 'SiteCloudComputingTemplateItem',
     description: '',
     graphQLType: 'SiteCloudComputingTemplate',
     graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()
   })
   .registerCollectionWrapperComponent({
-    name: 'SiteCloudComputingShareImageTemplateListResponse',
-    wrapperOf: 'SiteCloudComputingShareImageTemplateItem'
+    name: 'SiteCloudComputingTemplateListResponse',
+    wrapperOf: 'SiteCloudComputingTemplateItem'
   });
   const getAllSiteCloudComputingEndpointShareImageTemplates = (siteId, endpointId, shareId, imageId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
     return asyncFilterToGraphQL(filter).then(templatesFlt => {
@@ -727,14 +727,14 @@ export default function Site({openAPIDefinitions}) {
   };
 
   openAPIDefinitions.registerComponentFromGraphQLQuery({
-    name: 'SiteCloudComputingShareImageTemplateDetails',
+    name: 'SiteCloudComputingTemplateDetails',
     description: '',
     graphQLType: 'SiteCloudComputingTemplate',
     graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS()
   })
   .registerItemWrapperComponent({
-    name: 'SiteCloudComputingShareImageTemplateItemResponse',
-    wrapperOf: 'SiteCloudComputingShareImageTemplateDetails'
+    name: 'SiteCloudComputingTemplateItemResponse',
+    wrapperOf: 'SiteCloudComputingTemplateDetails'
   });
   const getSiteCloudComputingEndpointShareImageTemplate = (siteId, endpointId, shareId, imageId, templateId) => {
     let siteCaller = getCallerByIdentifier(siteId);
