@@ -1,4 +1,3 @@
-import Site from './Site';
 import _ from 'lodash';
 import {
   DEFAULT_LIMIT,
@@ -16,10 +15,9 @@ import {
   _handleRequest,
   getCollectionRequestParams
 } from '../httpUtils';
-
+import OpenAPILoadComponentDefinitions from './OpenAPILoadComponentDefinitions';
 import SiteRouter from './Site.router';
 import SiteCloudComputingEndpointRouter from './SiteCloudComputingEndpoint.router';
-
 import OpenAPIDefinitions from '../OpenAPIDefinitions';
 
 const swaggerUi = require('swagger-ui-express');
@@ -73,6 +71,8 @@ const updateRouterDescription = (routerDescription) => {
 export const expressRouter = function (router, config) {
   let openAPIDefinitions = new OpenAPIDefinitions();
 
+  OpenAPILoadComponentDefinitions({openAPIDefinitions});
+
   SiteRouter.useRouter(router, {openAPIDefinitions});
   SiteCloudComputingEndpointRouter.useRouter(router, {openAPIDefinitions});
 
@@ -96,95 +96,67 @@ export const serviceDescription = {
     }
   }
 };
+
 /**
  * Rest API service description.
  */
-export const sserviceDescription = {
-  '/rest': {
-    description: 'Service to query the information system in a RESTful fashion',
-    routes: {
-
-      '/services': {
-        description: 'List of services in the information system. Services may contain one or more VM image references and execution templates.'
-      },
-      '/services/[<id> | gocdb:<endpointpkey>]': {
-        description: 'A service entry in the information system.Can be retrieved by the information system ID, or the endpoint pkey as provided by the gocdb portal API'
-      },
-      '/services/[<id> | gocdb:<endpointpkey>]/site': {
-        description: 'Retrieve the site entry theat the current service belongs to.'
-      },
-      '/services/[<id> | gocdb:<endpointpkey>]/images': {
-        description: 'Retrieve a list of VM images the current sevice provides.'
-      },
-      '/services/[<id> | gocdb:<endpointpkey>]/images/<id>': {
-        description: 'A VM image entry provided by the current service.'
-      },
-      '/services/[<id> | gocdb:<endpointpkey>]/templates': {
-        description: 'Retrieve a list of templates the current service provides.'
-      },
-      '/services/[<id> | gocdb:<endpointpkey>]/templates/<id>': {
-        description: 'A template entry provided by the current service.'
-      },
-      '/images': {
-        description: 'List of VM image entries in the information system.'
-      },
-      '/images/<id>': {
-        description: 'A VM image entry in the information system. Can be retieved with the information system ID.'
-      },
-      '/images/<id>/service': {
-        description: 'The service entry in the information system the current VM image belongs to.'
-      },
-      '/images/<id>/site': {
-        description: 'The site entry in the information system the current VM image belongs to.'
-      },
-      '/images/<id>/temlates': {
-        description: 'List of templates in the information system that can be used with the current VM image belongs to.'
-      },
-      '/images/<id>/templates/<id>': {
-        description: 'A template entry that can be used with the current VM image.'
-      },
-      '/templates': {
-        description: 'List of templates in the information system.'
-      },
-      '/templates/<id>': {
-        description: 'A template entry in the information system. Can be retrieved with the information system ID.'
-      },
-      '/templates/<id>/service': {
-        description: 'The service entry that the current template belongs to.'
-      },
-      '/templates/<id>/site': {
-        description: 'The site entry that the current template belongs to.'
-      },
-      '/templates/<id>/images': {
-        description: 'List of VM images that can use the current template.'
-      },
-      '/templates/<id>/images/<id>': {
-        description: 'A VM image entry that can use the current template.'
-      },
-      '/statuses': {
-        description: 'List of argo service status entries in the information system.'
-      },
-      '/statuses/<id>': {
-        description: 'An argo service status entry in the information system. Can be retrieved with the information system ID.'
-      },
-      '/statuses/<id>/site': {
-        description: 'The related site entry that the current argo entry refers to.'
-      },
-      '/statuses/<id>/service': {
-        description: 'The related site service entry that the current argo entry refers to.'
-      },
-      '/downtimes': {
-        description: 'List of GocDB downtime report entries in the information system.'
-      },
-      '/downtimes/<id>': {
-        description: 'A GocDB downtime report entry in the information system. Can be retrieved with the information system ID.'
-      },
-      '/downtimes/<id>/site': {
-        description: 'The related site entry that the current GocDB downtime report entry refers to.'
-      },
-      '/downtimes/<id>/service': {
-        description: 'The related site service entry the current  GocDB downtime report entry refers to.'
-      }
-    }
-  }
-};
+ export const getServiceDescription = () => {
+  return {
+    '/sites': {
+      description: 'List of sites in the information system.Each site may contain one or more services. If the site has at least one cloud service, it may also contain VM images and cloud execution templates.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]': {
+      description: 'A site entry in the information system. Can be retrieved by the information system ID, the name of the site, or the pkey as provided by the gocdb portal API'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints': {
+      description: 'List of services provided by the current site. Services may contain one or more VM image references and execution templates.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <id>]': {
+      description: 'A service entry in the information system. Can be retrieved by the information system ID, or the endpoint pkey as provided by the gocdb portal API'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/images': {
+      description: 'List of VM images provided by the current cloud computing endpoint.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/images/<id>': {
+      description: 'A VM image entry in the information system. Can be retrieved by the information system ID.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/templates': {
+      description: 'List of templates provided by the current cloud computing endpoint.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/templates/<id>': {
+      description: 'A template entry in the information system. Can be retrieved by the information system ID.'
+    },
+    //start glue 2.1 site additions
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/shares': {
+      description: 'List of shares supported by the current cloud computing endpoint.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/shares/<id>': {
+      description: 'A share entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/shares/<id>/images': {
+      description: 'A list of images provided under the specific share entry of the current cloud computing endpoint.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/shares/<id>/images/<id>': {
+      description: 'An image entry provided under the specific share entry of the current cloud computing endpoint. Can be retrieved by the information system ID.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/shares/<id>/images/<id>/templates': {
+      description: 'A list of templates available for the specific image of the specific share of the current cloud computing endpoint.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/shares/<id>/images/<id>/templates/<id>': {
+      description: 'A template entry available for the specific image of the specific share of the current cloud computing endpoint. Can be retrieved by the information system ID.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/managers': {
+      description: 'List of managers supported by the current cloud computing endpoint.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/managers/<id>': {
+      description: 'A manager entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/managers/<id>/templates': {
+      description: 'A list of templates related to the specific manager entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.'
+    },
+    '/sites/[<id> | name:<sitename> | gocdb:<pkey>]/cloud/computing/endpoints/[<id> | gocdb: <endpointpkey>]/managers/<id>/templates/<id>': {
+      description: 'A template entry related to the specific manager entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.'
+    },
+    //end glue 2.1 site additions
+  };
+}

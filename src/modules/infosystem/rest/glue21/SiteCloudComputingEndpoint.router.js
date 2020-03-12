@@ -18,12 +18,9 @@ import {
   getOpenAPICollectionParameters,
   getOpenAPI200Response
 } from '../httpUtils';
-import SiteCloudComputingEndpointInitHandler from './SiteCloudComputingEndpoint';
-
+import SiteCloudComputingEndpoint from './SiteCloudComputingEndpoint';
 
 export const useRouter = (router, {openAPIDefinitions}) => {
-
-  const SiteCloudComputingEndpoint = SiteCloudComputingEndpointInitHandler({openAPIDefinitions});
 
   openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/shares/{shareId}/images/{imageId}/templates/{templateId}',{
     "summary": "An image entry provided under the specific share entry of the current cloud computing endpoint.",
