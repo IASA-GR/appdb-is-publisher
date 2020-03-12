@@ -404,6 +404,212 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/templates/{templateId}',{
+    "summary": "Return a template entry of a specific cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "templateId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the template`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateItemResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/templates/:templateId',
+    [ItemMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let templateId = _.trim(req.params.templateId);
+
+      _handleRequest(SiteCloudComputingEndpoint.getTemplate(endpointId, templateId), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/templates',{
+    "summary": "List of templates provided by the current cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/templates',
+    [CollectionMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let params = getCollectionRequestParams(req);
+
+      _handleRequest(SiteCloudComputingEndpoint.getAllTemplates(endpointId, params), req, res);
+    }
+  );
+
+    openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/images/{imageId}/templates/{templateId}',{
+    "summary": "An applicable template entry for the specific VM image provided from the current cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "imageId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing image`
+      },
+      {
+        "in": "path",
+        "name": "templateId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing template`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateItemResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/images/:imageId/templates/:templateId',
+    [ItemMetaData({ entityType: 'SiteCloudComputindTemplate' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let imageId = _.trim(req.params.imageId);
+      let templateId = _.trim(req.params.templateId);
+
+      _handleRequest(SiteCloudComputingEndpoint.getImageTemplate(endpointId, imageId, templateId), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/images/{imageId}/templates',{
+    "summary": "A list of applicable templates for the given VM image from the cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+      {
+        "in": "path",
+        "name": "imageId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing image`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/images/:imageId/templates',
+    [ItemMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let imageId = _.trim(req.params.imageId);
+      let params = getCollectionRequestParams(req);
+
+      _handleRequest(SiteCloudComputingEndpoint.getAllImageTemplates(endpointId, imageId, params), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/images/{imageId}',{
+    "summary": "A VM image entry in the information system.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+
+      {
+        "in": "path",
+        "name": "imageId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the VM Image`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageItemResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/images/:imageId',
+    [ItemMetaData({ entityType: 'SiteCloudComputingImage' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let imageId = _.trim(req.params.imageId);
+
+      _handleRequest(SiteCloudComputingEndpoint.getImage(endpointId, imageId), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/images',{
+    "summary": "List of VM images provided by the current cloud computing endpoint.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageListResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/images',
+    [CollectionMetaData({ entityType: 'SiteCloudComputingImage' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let params = getCollectionRequestParams(req);
+
+      _handleRequest(SiteCloudComputingEndpoint.getAllImages(endpointId, params), req, res);
+    }
+  );
+
   openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/site',{
     "summary": "Returns information about the site that provides the specific cloud computing endpoint.",
     "tags": ["SiteCloudComputingEndpoint"],

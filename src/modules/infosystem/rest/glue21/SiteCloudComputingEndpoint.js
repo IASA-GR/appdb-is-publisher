@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {query, TEMPLATE_COLLECTION_HEADER} from '../restModel';
 import {asyncFilterToGraphQL, resultHandlerByPath} from '../utils';
 import {TEMPLATE_SITE_DETAILS_FIELDS, TEMPLATE_SITE_ITEM_FIELDS} from './Site';
-import {TEMPLATE_SITE_CLOUD_COMPUTING_SERVICE_ITEM_FIELDS} from './SiteCloudComputingService';
+import SiteCloudComputingService, {TEMPLATE_SITE_CLOUD_COMPUTING_SERVICE_ITEM_FIELDS} from './SiteCloudComputingService';
 import SiteCloudComputingImage, {TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_DETAILS_FIELDS} from './SiteCloudComputingImage';
 import SiteCloudComputingTemplate, {TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS} from './SiteCloudComputingTemplate';
 import SiteCloudComputingShare, { TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS } from './SiteCloudComputingShare';
@@ -181,19 +181,19 @@ export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
     }`).then(resultHandlerByPath('data.site'));
   };
 
-  const getAllImages = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+  const getAllImages = (endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
     return asyncFilterToGraphQL(filter).then(imagesFlt => {
-      let caller = getCallerByIdentifier(serviceId);
+      let endpointCaller = getCallerByIdentifier(endpointId);
       let imagesQuery = `
         images(filter: ${imagesFlt}, limit: ${limit}, skip: ${skip}) {
           ${TEMPLATE_COLLECTION_HEADER}
           items {
-          ${TEMPLATE_SITE_SERVICE_IMAGE_COLLECTION_FIELDS()}
+            ${TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS()}
           }
         }
       `;
       return query(`{
-        data: ${caller} {
+        data: ${endpointCaller} {
           id
           ${imagesQuery}
         }
@@ -201,35 +201,90 @@ export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
     });
   };
 
-  const getImage = (serviceId, imageId) => {
-    let caller = getCallerByIdentifier(serviceId);
-    let imageQuery = SiteServiceImage.getCallerByIdentifier(imageId, true);
+  const getImage = (endpointId, imageId) => {
+    let endpointCaller = getCallerByIdentifier(endpointId);
+    let imageFlt = SiteCloudComputingImage.getCallerByIdentifier(imageId, true);
 
     return query(`{
-      data: ${caller} {
+      data: ${endpointCaller} {
         id
-        images(filter: {${imageQuery}}, limit: 1, skip: 0) {
+        images(filter: {${imageFlt}}, limit: 1, skip: 0) {
           items {
-            ${TEMPLATE_SITE_SERVICE_IMAGE_DETAILS_FIELDS}
+            ${TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_DETAILS_FIELDS()}
           }
         }
       }
     }`).then(resultHandlerByPath('data.images.items.0'));
   };
 
-  const getAllTemplates = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+
+  const getAllImageTemplates = (endpointId, imageId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
     return asyncFilterToGraphQL(filter).then(templatesFlt => {
-      let caller = getCallerByIdentifier(serviceId);
+      let endpointCaller = getCallerByIdentifier(endpointId);
+      let imageFlt = SiteCloudComputingImage.getCallerByIdentifier(imageId, true);
+
       let templatesQuery = `
-        templates(filter: ${templatesFlt}, limit: ${limit}, skip: ${skip}) {
-          ${TEMPLATE_COLLECTION_HEADER}
+        images(filter: {${imageFlt}}, limit: 1, skip: 0) {
           items {
-          ${TEMPLATE_SITE_SERVICE_TEMPLATE_COLLECTION_FIELDS}
+            templates(filter: ${templatesFlt}, limit: ${limit}, skip: ${skip}) {
+              ${TEMPLATE_COLLECTION_HEADER}
+              items {
+                ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()}
+              }
+            }
           }
         }
       `;
       return query(`{
-        data: ${caller} {
+        data: ${endpointCaller} {
+          id
+          ${templatesQuery}
+        }
+      }`).then(resultHandlerByPath('data.images.items.0.templates'));
+    });
+  };
+
+  const getImageTemplate = (endpointId, imageId, templateId) => {
+    let endpointCaller = getCallerByIdentifier(endpointId);
+    let imageFlt = SiteCloudComputingImage.getCallerByIdentifier(imageId, true);
+    let templateFlt = SiteCloudComputingTemplate.getCallerByIdentifier(templateId, true);
+
+    let templateQuery = `
+      images(filter: {${imageFlt}}, limit: 1, skip: 0) {
+        items {
+          templates(filter: {${templateFlt}}, limit: 1, skip: 0) {
+            items {
+              ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS()}
+            }
+          }
+        }
+      }
+
+    `;
+
+    return query(`{
+      data: ${endpointCaller} {
+        id
+        ${templateQuery}
+      }
+    }`).then(resultHandlerByPath('data.images.items.0.templates.items.0'));
+  };
+
+
+
+  const getAllTemplates = (endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+    return asyncFilterToGraphQL(filter).then(templatesFlt => {
+      let endpointCaller = getCallerByIdentifier(endpointId);
+      let templatesQuery = `
+        templates(filter: ${templatesFlt}, limit: ${limit}, skip: ${skip}) {
+          ${TEMPLATE_COLLECTION_HEADER}
+          items {
+            ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()}
+          }
+        }
+      `;
+      return query(`{
+        data: ${endpointCaller} {
           id
           ${templatesQuery}
         }
@@ -237,16 +292,16 @@ export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
     });
   };
 
-  const getTemplate = (serviceId, templateId) => {
-    let caller = getCallerByIdentifier(serviceId);
-    let templateQuery = SiteServiceTemplate.getCallerByIdentifier(templateId, true);
+  const getTemplate = (endpointId, templateId) => {
+    let endpointCaller = getCallerByIdentifier(endpointId);
+    let templateQuery = SiteCloudComputingTemplate.getCallerByIdentifier(templateId, true);
 
     return query(`{
-      data: ${caller} {
+      data: ${endpointCaller} {
         id
         templates(filter: {${templateQuery}}, limit: 1, skip: 0) {
           items {
-            ${TEMPLATE_SITE_SERVICE_TEMPLATE_DETAILS_FIELDS()}
+            ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS()}
           }
         }
       }
@@ -538,6 +593,8 @@ export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
     getManagerTemplate,
     getAllImages,
     getImage,
+    getAllImageTemplates,
+    getImageTemplate,
     getAllTemplates,
     getTemplate,
     getAll
