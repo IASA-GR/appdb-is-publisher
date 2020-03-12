@@ -6,7 +6,7 @@ import {TEMPLATE_SITE_CLOUD_COMPUTING_SERVICE_ITEM_FIELDS} from './SiteCloudComp
 import {TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS, TEMPLATE_SITE_SERVICE_IMAGE_DETAILS_FIELDS} from './SiteCloudComputingImage';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS, TEMPLATE_SITE_SERVICE_TEMPLATE_DETAILS_FIELDS} from './SiteCloudComputingTemplate';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS} from './SiteCloudComputingShare';
-import { TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS } from './SiteCloudComputingManager';
+import SiteCloudComputingManager, { TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_DETAILS_FIELDS } from './SiteCloudComputingManager';
 
 
 export const TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS = () => `
@@ -253,6 +253,44 @@ export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
     }`).then(resultHandlerByPath('data.templates.items.0'));
   };
 
+  const getManager = (endpointId, managerId) => {
+    let endpointCaller = getCallerByIdentifier(endpointId);
+    let managerFlt = SiteCloudComputingManager.getCallerByIdentifier(managerId, true);
+    let managerQuery = `
+      managers(filter: {${managerFlt}}, limit: 1, skip: 0) {
+        items {
+          ${TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_DETAILS_FIELDS()}
+        }
+      }
+    `;
+
+    return query(`{
+      data: ${endpointCaller} {
+        id
+        ${managerQuery}
+      }
+    }`).then(resultHandlerByPath('data.managers.items.0'));
+  }
+
+  const getAllManagers = (endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+    return asyncFilterToGraphQL(filter).then(managersFlt => {
+      let endpointCaller = getCallerByIdentifier(endpointId);
+      let managersQuery = `managers(filter: ${managersFlt}, limit: ${limit}, skip: ${skip}) {
+          ${TEMPLATE_COLLECTION_HEADER}
+          items {
+            ${TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS()}
+          }
+        }`;
+
+      return query(`{
+        data: ${endpointCaller} {
+          id
+          ${managersQuery}
+        }
+      }`).then(resultHandlerByPath('data.managers'));
+    });
+  };
+
   openAPIDefinitions.registerComponentFromGraphQLQuery({
     name: 'SiteCloudComputingEndpointItem',
     description: '',
@@ -285,6 +323,8 @@ export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
     getFirst,
     getFiltered,
     getSite,
+    getAllManagers,
+    getManager,
     getAllImages,
     getImage,
     getAllTemplates,
@@ -292,3 +332,4 @@ export default function SiteCloudComputingEndpoint({openAPIDefinitions}) {
     getAll
   };
 }
+SiteCloudComputingEndpoint.getCallerByIdentifier = getCallerByIdentifier;

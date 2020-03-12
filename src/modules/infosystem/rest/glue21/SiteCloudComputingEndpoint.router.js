@@ -25,6 +25,70 @@ export const useRouter = (router, {openAPIDefinitions}) => {
 
   const SiteCloudComputingEndpoint = SiteCloudComputingEndpointInitHandler({openAPIDefinitions});
 
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/managers/{managerId}',{
+    "summary": "A manager entry provided by the cloud computing endpoint. Can be retrieved by the information system ID.",
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      },
+
+      {
+        "in": "path",
+        "name": "managerId",
+        "required": true,
+        "type": "string",
+        "description": `The information system ID of the cloud computing manager`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingManagerItemResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/managers/:managerId',
+    [ItemMetaData({ entityType: 'SiteCloudComputingManager' })],
+    (req, res) => {
+      let siteId = _.trim(req.params.siteId);
+      let endpointId = _.trim(req.params.endpointId);
+      let managerId = _.trim(req.params.managerId);
+
+      _handleRequest(SiteCloudComputingEndpoint.getManager(endpointId, managerId), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/managers',{
+    "summary": "List of managers supported by the current cloud computing endpoint.",
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPICollectionParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the primary key as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingManagerListResponse"})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/managers',
+    [ItemMetaData({ entityType: 'SiteCloudComputingManager' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+      let params = getCollectionRequestParams(req);
+
+      _handleRequest(SiteCloudComputingEndpoint.getAllManagers(endpointId, params), req, res);
+    }
+  );
+
   openAPIDefinitions.registerGetPath('/cloud/computing/endpoints/{endpointId}/site',{
     "summary": "Returns information about the site that provides the specific cloud computing endpoint.",
     "description": "",
