@@ -418,14 +418,14 @@ export default function Site({openAPIDefinitions}) {
   };
 
   openAPIDefinitions.registerComponentFromGraphQLQuery({
-    name: 'SiteCloudComputingManagerTemplateDetails',
+    name: 'SiteCloudComputingTemplateDetails',
     description: '',
     graphQLType: 'SiteCloudComputingTemplate',
     graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()
   })
   .registerItemWrapperComponent({
-    name: 'SiteCloudComputingManagerTemplateItemResponse',
-    wrapperOf: 'SiteCloudComputingManagerTemplateDetails'
+    name: 'SiteCloudComputingTemplateItemResponse',
+    wrapperOf: 'SiteCloudComputingTemplateDetails'
   });
   const getSiteCloudComputingEndpointManagerTemplate = (siteId, endpointId, managerId, templateId) => {
     let siteCaller = getCallerByIdentifier(siteId);
@@ -456,14 +456,14 @@ export default function Site({openAPIDefinitions}) {
   };
 
   openAPIDefinitions.registerComponentFromGraphQLQuery({
-    name: 'SiteCloudComputingManagerTemplateItem',
+    name: 'SiteCloudComputingTemplateItem',
     description: '',
     graphQLType: 'SiteCloudComputingTemplate',
     graphQLFields: TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()
   })
   .registerCollectionWrapperComponent({
-    name: 'SiteCloudComputingManagerTemplateListResponse',
-    wrapperOf: 'SiteCloudComputingManagerTemplateItem'
+    name: 'SiteCloudComputingTemplateListResponse',
+    wrapperOf: 'SiteCloudComputingTemplateItem'
   });
   const getAllSiteCloudComputingEndpointManagerTemplates = (siteId, endpointId, managerId) => {
     let siteCaller = getCallerByIdentifier(siteId);
