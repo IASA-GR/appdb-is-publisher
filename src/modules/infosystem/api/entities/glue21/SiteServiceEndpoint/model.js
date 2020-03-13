@@ -108,7 +108,7 @@ function SiteServiceEndpointModel(context) {
       'serviceDowntimes': {name: 'SiteServiceDowntime', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}}
     },
     postProcessFields : {
-      'info.images'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.templates.' + d.hash, info: Object.assign({}, d)})),
+      'info.images'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.images.' + d.hash, info: Object.assign({}, d)})),
       'info.templates'  : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.templates.' + d.hash, info: Object.assign({}, d)})),
       'info.shares'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.shares.' + d.hash, info: Object.assign({}, d)})),
       'info.managers'   : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.managers.' + d.hash, info: Object.assign({}, d)}))

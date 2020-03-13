@@ -1,6 +1,10 @@
-import { TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS } from "./SiteCloudComputingEndpoint";
-import { TEMPLATE_SITE_ITEM_FIELDS } from "./Site";
-import { TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS } from "./SiteCloudComputingShare";
+import _ from 'lodash';
+import {query, TEMPLATE_COLLECTION_HEADER} from '../restModel';
+import {asyncFilterToGraphQL, resultHandlerByPath} from '../utils';
+import { TEMPLATE_SITE_DETAILS_FIELDS } from "./Site";
+import { TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS } from "./SiteCloudComputingEndpoint";
+import { TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS,TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS } from "./SiteCloudComputingShare";
+import SiteCloudComputingTemplate, { TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS } from "./SiteCloudComputingTemplate";
 
 export const TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS = () =>`
 id
@@ -82,6 +86,14 @@ export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null,
   `).then(resultHandlerByPath(resolver || 'data'))
 }
 
+export const getByIdentifier = (id) => {
+  let caller = getCallerByIdentifier(id);
+  return query(`{
+    data: ${caller} {
+      ${TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_DETAILS_FIELDS()}
+    }
+  }`);
+};
 
 export const getCallerByIdentifier = (id, onlyQuery = false) => {
   if (onlyQuery) {
@@ -91,8 +103,110 @@ export const getCallerByIdentifier = (id, onlyQuery = false) => {
   }
 };
 
+export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+  return asyncFilterToGraphQL(filter).then(flt => {
+    return query(`
+      {
+        data: siteCloudComputingImages(filter: ${flt}, limit: ${limit}, skip: ${skip}) {
+          ${TEMPLATE_COLLECTION_HEADER}
+          items {
+            ${TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS()}
+          }
+        }
+      }
+    `);
+  });
+};
+
+export const getSite = (imageId) => {
+  let caller = getCallerByIdentifier(imageId);
+
+  return query(`{
+    data: ${caller} {
+      id
+      site {
+        ${TEMPLATE_SITE_DETAILS_FIELDS()}
+      }
+    }
+  }`).then(resultHandlerByPath('data.site'));
+};
+
+export const getEndpoint = (imageId) => {
+  let caller = getCallerByIdentifier(imageId);
+
+  return query(`{
+    data: ${caller} {
+      id
+      endpoint {
+        ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS()}
+      }
+    }
+  }`).then(resultHandlerByPath('data.endpoint'));
+};
+
+export const getShare = (imageId) => {
+  let caller = getCallerByIdentifier(imageId);
+
+  return query(`{
+    data: ${caller} {
+      id
+      share {
+        ${TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS()}
+      }
+    }
+  }`).then(resultHandlerByPath('data.share'));
+};
+
+export const getAllTemplates = (imageId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+  return asyncFilterToGraphQL(filter).then(templatesFlt => {
+    let imageCaller = getCallerByIdentifier(imageId);
+    let templatesQuery = `
+      templates(filter: ${templatesFlt}, limit: ${limit}, skip: ${skip}) {
+        ${TEMPLATE_COLLECTION_HEADER}
+        items {
+          ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()}
+        }
+      }
+    `;
+
+    return query(`{
+      data: ${imageCaller} {
+        id
+        ${templatesQuery}
+      }
+    }`).then(resultHandlerByPath('data.templates'));
+  });
+};
+
+export const getTemplate = (imageId, templateId) => {
+  let imageCaller = getCallerByIdentifier(imageId);
+  let templateFlt = SiteCloudComputingTemplate.getCallerByIdentifier(templateId, true);
+
+  let templateQuery = `
+    templates(filter: {${templateFlt}}, limit: 1, skip: 0) {
+      items {
+        ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS()}
+      }
+    }
+  `;
+
+  return query(`{
+    data: ${imageCaller} {
+      id
+      ${templateQuery}
+    }
+  }`).then(resultHandlerByPath('data.templates.items.0'));
+};
+
 export default {
+  getByIdentifier,
   getCallerByIdentifier,
   getFirst,
-  getFiltered
+  getFiltered,
+  getAll,
+  getSite,
+  getEndpoint,
+  getShare,
+  getAllTemplates,
+  getTemplate
 }

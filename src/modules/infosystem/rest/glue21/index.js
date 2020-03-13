@@ -16,9 +16,10 @@ import {
   getCollectionRequestParams
 } from '../httpUtils';
 import OpenAPILoadComponentDefinitions from './OpenAPILoadComponentDefinitions';
+import OpenAPIDefinitions from '../OpenAPIDefinitions';
 import SiteRouter from './Site.router';
 import SiteCloudComputingEndpointRouter from './SiteCloudComputingEndpoint.router';
-import OpenAPIDefinitions from '../OpenAPIDefinitions';
+import SiteCloudComputingImageRouter from './SiteCloudComputingImage.router';
 
 const swaggerUi = require('swagger-ui-express');
 
@@ -75,6 +76,7 @@ export const expressRouter = function (router, config) {
 
   SiteRouter.useRouter(router, {openAPIDefinitions});
   SiteCloudComputingEndpointRouter.useRouter(router, {openAPIDefinitions});
+  SiteCloudComputingImageRouter.useRouter(router, {openAPIDefinitions});
 
   //updateRouterDescription(SiteRouter.getRoutesDescription());
   updateSwaggerComponents(openAPIDefinitions.getAllOpenAPIComponents());

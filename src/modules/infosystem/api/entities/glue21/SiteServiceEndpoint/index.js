@@ -5,13 +5,15 @@ import _ from 'lodash';
 function _initSiteServiceEndpoint(context) {
   const _SiteServiceEndpointModel = initModel(context);
 
+  const IGNORE_SUB_FIELD_SELECTION = ['managerList', 'shareList', 'templateList', 'imageList'];
+
   const SiteServiceEndpoint = {};
 
   SiteServiceEndpoint.getById = (id, context) => _SiteServiceEndpointModel.getById(id, context);
 
-  SiteServiceEndpoint.getByEndpointPKey = (pkey, fields, context) => _SiteServiceEndpointModel.findOne({filter: {'endpointPKey': pkey}, fields: fields}, context);
+  SiteServiceEndpoint.getByEndpointPKey = (pkey, fields, context) => _SiteServiceEndpointModel.findOne({filter: {'endpointPKey': pkey}, fields: SiteServiceEndpoint.ignoreListFields(fields)}, context);
 
-  SiteServiceEndpoint.getByEndpointID = (endpointID, fields, context) => _SiteServiceEndpointModel.findMany({filter: {'endpointID': endpointID}, fields: fields}, context);
+  SiteServiceEndpoint.getByEndpointID = (endpointID, fields, context) => _SiteServiceEndpointModel.findMany({filter: {'endpointID': endpointID}, fields: SiteServiceEndpoint.ignoreListFields(fields)}, context);
 
   SiteServiceEndpoint.getAll = ({root, args, context}) => _SiteServiceEndpointModel.findMany(args, context);
 
@@ -52,6 +54,15 @@ function _initSiteServiceEndpoint(context) {
   SiteServiceEndpoint.getSiteServiceEndpointStatus = ({root, args, context}) => context.api('siteServiceStatus').getByEndpointPKey(root.endpointPKey, args.fields, context);
 
   SiteServiceEndpoint.getModel = () => _SiteServiceEndpointModel;
+
+  SiteServiceEndpoint.ignoreListFields = (fields) => {
+    fields = fields || [];
+    fields = Array.isArray(fields) ? fields : [fields];
+
+    return _.uniq(fields.map((field => {
+      return IGNORE_SUB_FIELD_SELECTION.find(ignoredField => _.startsWith(field, ignoredField)) || field;
+    })));
+  };
 
   return SiteServiceEndpoint;
 }
