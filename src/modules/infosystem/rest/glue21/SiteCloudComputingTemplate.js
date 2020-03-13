@@ -2,11 +2,10 @@ import _ from 'lodash';
 import {query, TEMPLATE_COLLECTION_HEADER} from '../restModel';
 import {asyncFilterToGraphQL, resultHandlerByPath} from '../utils';
 import {TEMPLATE_SITE_DETAILS_FIELDS} from './Site';
-import {TEMPLATE_SITE_CLOUD_COMPUTING_SERVICE_ITEM_FIELDS} from './SiteCloudComputingService';
-import {TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_COLLECTION_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_DETAILS_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS} from './SiteCloudComputingImage';
-import {TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS} from './SiteCloudComputingShare';
-import {TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS} from './SiteCloudComputingManager';
-import { TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS } from './SiteCloudComputingEndpoint';
+import SiteCloudComputingImage, {TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_DETAILS_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS} from './SiteCloudComputingImage';
+import {TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS} from './SiteCloudComputingShare';
+import {TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_DETAILS_FIELDS} from './SiteCloudComputingManager';
+import { TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS } from './SiteCloudComputingEndpoint';
 
 export const TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS = () =>`
 id
@@ -140,22 +139,10 @@ export const getSite = (templateId) => {
     data: ${caller} {
       id
       site {
-        ${TEMPLATE_SITE_DETAILS_FIELDS}
+        ${TEMPLATE_SITE_DETAILS_FIELDS()}
       }
     }
   }`).then(resultHandlerByPath('data.site as data'));
-};
-
-export const getSiteService = (templateId) => {
-  let caller = getCallerByIdentifier(templateId);
-  return query(`{
-    data: ${caller} {
-      id
-      service {
-        ${TEMPLATE_SITE_SERVICE_DETAILS_FIELDS}
-      }
-    }
-  }`).then(resultHandlerByPath('data.service as data'));
 };
 
 export const getByIdentifier = (id) => {
@@ -163,7 +150,7 @@ export const getByIdentifier = (id) => {
 
   return query(`{
     data: ${caller} {
-      ${TEMPLATE_SITE_SERVICE_TEMPLATE_DETAILS_FIELDS}
+      ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_DETAILS_FIELDS()}
     }
   }`);
 };
@@ -172,15 +159,95 @@ export const getAll =  ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 
   return asyncFilterToGraphQL(filter).then(flt => {
     return query(`
       {
-        data: siteServiceTemplates(filter: ${flt}, limit: ${limit}, skip: ${skip}) {
+        data: siteCloudComputingTemplates(filter: ${flt}, limit: ${limit}, skip: ${skip}) {
           ${TEMPLATE_COLLECTION_HEADER}
           items {
-          ${TEMPLATE_SITE_SERVICE_TEMPLATE_COLLECTION_FIELDS}
+          ${TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS()}
           }
         }
       }
     `);
   });
+};
+
+export const getEndpoint = (templateId) => {
+  let caller = getCallerByIdentifier(templateId);
+
+  return query(`{
+    data: ${caller} {
+      id
+      endpoint {
+        ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS()}
+      }
+    }
+  }`).then(resultHandlerByPath('data.endpoint'));
+};
+
+export const getShare = (templateId) => {
+  let caller = getCallerByIdentifier(templateId);
+
+  return query(`{
+    data: ${caller} {
+      id
+      share {
+        ${TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS()}
+      }
+    }
+  }`).then(resultHandlerByPath('data.share'));
+};
+
+export const getManager = (templateId) => {
+  let caller = getCallerByIdentifier(templateId);
+
+  return query(`{
+    data: ${caller} {
+      id
+      manager {
+        ${TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_DETAILS_FIELDS()}
+      }
+    }
+  }`).then(resultHandlerByPath('data.manager'));
+};
+
+export const getAllImages = (templateId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+  return asyncFilterToGraphQL(filter).then(imagesFlt => {
+    let templateCaller = getCallerByIdentifier(templateId);
+    let imagesQuery = `
+      images(filter: ${imagesFlt}, limit: ${limit}, skip: ${skip}) {
+        ${TEMPLATE_COLLECTION_HEADER}
+        items {
+          ${TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS()}
+        }
+      }
+    `;
+
+    return query(`{
+      data: ${templateCaller} {
+        id
+        ${imagesQuery}
+      }
+    }`).then(resultHandlerByPath('data.images'));
+  });
+};
+
+export const getImage = (templateId, imageId) => {
+  let templateCaller = getCallerByIdentifier(templateId);
+  let imageFlt = SiteCloudComputingImage.getCallerByIdentifier(imageId, true);
+
+  let imagesQuery = `
+    images(filter: {${imageFlt}}, limit: 1, skip: 0) {
+      items {
+        ${TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_DETAILS_FIELDS()}
+      }
+    }
+  `;
+
+  return query(`{
+    data: ${templateCaller} {
+      id
+      ${imagesQuery}
+    }
+  }`).then(resultHandlerByPath('data.images.items.0'));
 };
 
 export default {
@@ -191,6 +258,10 @@ export default {
   getCallerByIdentifier,
   getSiteServiceImage,
   getAllSiteServiceImages,
-  getSiteService,
-  getSite
+  getSite,
+  getEndpoint,
+  getShare,
+  getManager,
+  getAllImages,
+  getImage
 };
