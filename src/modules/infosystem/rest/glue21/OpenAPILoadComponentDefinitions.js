@@ -197,14 +197,21 @@ export default function OpenAPILoadComponentDefinitions({openAPIDefinitions}) {
     name: 'SiteServiceStatusListResponse',
     wrapperOf: 'SiteServiceStatusItem'
   })
+  .registerListWrapperComponent({
+    name: 'SiteServiceStatusArrayResponse',
+    wrapperOf: 'SiteServiceStatusDetails'
+  })
   .registerComponentFromGraphQLQuery({
     name: 'SiteServiceStatusDetails',
     description: '',
     graphQLType: 'SiteServiceStatus',
     graphQLFields: TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS()
   })
+
   .registerItemWrapperComponent({
     name: 'SiteServiceStatusItemResponse',
     wrapperOf: 'SiteServiceStatusDetails'
   })
+
+
 }

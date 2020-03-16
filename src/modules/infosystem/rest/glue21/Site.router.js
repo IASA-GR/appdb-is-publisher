@@ -3,6 +3,7 @@ import {
   DEFAULT_LIMIT,
   RequestMetaData,
   CollectionMetaData,
+  ListMetaData,
   ItemMetaData,
   applyMetaData,
   _handleMissing,
@@ -702,6 +703,34 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let siteId = _.trim(req.params.siteId);
 
       _handleRequest(Site.getAllSiteCloudComputingEndpoints(siteId, params), req, res);
+    }
+  );
+
+  openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/statuses',{
+    "summary": "Return the list of service endpoint statuses of the specific site",
+    "tags": ["Site"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "siteId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the name of the site if given in the form of  "name:<sitename>", or the pkey as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteServiceStatusArrayResponse"})
+    }
+  });
+  router.get(
+    '/sites/:siteId/cloud/computing/statuses',
+    [ListMetaData({ entityType: 'SiteServiceStatus' })],
+    (req, res) => {
+      let params = getCollectionRequestParams(req);
+      let siteId = _.trim(req.params.siteId);
+
+      _handleRequest(Site.getServiceStatuses(siteId, params), req, res);
     }
   );
 
