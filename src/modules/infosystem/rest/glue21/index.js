@@ -21,6 +21,8 @@ import SiteRouter from './Site.router';
 import SiteCloudComputingEndpointRouter from './SiteCloudComputingEndpoint.router';
 import SiteCloudComputingImageRouter from './SiteCloudComputingImage.router';
 import SiteCloudComputingTemplateRouter from './SiteCloudComputingTemplate.router';
+import SiteServiceStatusRouter from './SiteServiceStatus.router';
+import SiteServiceStatus from './SiteServiceStatus';
 
 const swaggerUi = require('swagger-ui-express');
 
@@ -79,7 +81,7 @@ export const expressRouter = function (router, config) {
   SiteCloudComputingEndpointRouter.useRouter(router, {openAPIDefinitions});
   SiteCloudComputingImageRouter.useRouter(router, {openAPIDefinitions});
   SiteCloudComputingTemplateRouter.useRouter(router, {openAPIDefinitions});
-
+  SiteServiceStatusRouter.useRouter(router, {openAPIDefinitions});
   //updateRouterDescription(SiteRouter.getRoutesDescription());
   updateSwaggerComponents(openAPIDefinitions.getAllOpenAPIComponents());
   updateSwaggerDocumentPaths(openAPIDefinitions.getAllOpenAPIPaths());
