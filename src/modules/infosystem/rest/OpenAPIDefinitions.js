@@ -105,6 +105,22 @@ class OpenAPIDefinitions {
     return this;
   }
 
+  registerListWrapperComponent({
+    name,
+    wrapperOf,
+    description = ''
+  }) {
+    let wrapper = this.getListResponseType(wrapperOf);
+
+    if (_.trim(description)) {
+      wrapper.description = description;
+    }
+
+    this._refs = Object.assign({}, this._refs, {[name]: wrapper});
+
+    return this;
+  }
+
   registerItemWrapperComponent({
     name,
     wrapperOf,
@@ -213,6 +229,35 @@ class OpenAPIDefinitions {
       }
     }
   };
+
+  getListResponseType(componentName) {
+    return {
+      "type": "object",
+      "properties": {
+        "entityType": {
+          "type": "string",
+          "description": "The entity type wrapped in the data section. Eg Site, SiteCloudComputingEndpoint etc"
+        },
+        "dataType": {
+          "type": "string",
+          "enum": ["item", "collection"],
+          "description": "Indicates if the data section is a collection of entities or a single entity"
+        },
+        "httpStatus": {
+          "type": "integer",
+          "default": 200,
+          "description": "The returning HTTP status of the response"
+        },
+        "data": {
+          "type": "array",
+          "description": "An array of items of the specific entityType",
+          "items": {
+            "$ref": "#/components/schemas/" + componentName
+          }
+        }
+      }
+    }
+  }
 
   getOpenAPICollectionParameters(extraParams) {
     extraParams = extraParams || [];

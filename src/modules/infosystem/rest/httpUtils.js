@@ -26,6 +26,14 @@ export const RequestMetaData = ({entityType = null, dataType = 'item'} = {entity
 export const CollectionMetaData = ({entityType}) => RequestMetaData({entityType, dataType: 'collection'});
 
 /**
+ * Returns function to create an express middleware RequestMetaData for list response types.
+ *
+ * @param {object} args             Metadata arguments.
+ * @param {object} args.entityType  Name of information system entity.
+ */
+export const ListMetaData = ({entityType}) => RequestMetaData({entityType, dataType: 'list'});
+
+/**
  * Returns function to create an express middleware RequestMetaData for item response types.
  *
  * @param {object} args             Metadata arguments.
@@ -230,7 +238,7 @@ export const _handleRequest = (pr, req, res) => {
     if (doc.data === null) {
       return Promise.resolve(_handleMissing(req, res));
     }
-    if (doc.dataType === 'collection') {
+    if (doc.dataType === 'collection' || doc.dataType === 'list') {
       let items = doc.items || [];
       delete doc.items;
       let data = doc.data || {};
