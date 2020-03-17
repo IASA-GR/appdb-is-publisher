@@ -706,7 +706,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
-  openAPIDefinitions.registerGetPath('/sites/{siteId}/cloud/computing/statuses',{
+  openAPIDefinitions.registerGetPath('/sites/{siteId}/monitoring/statuses',{
     "summary": "Return the list of service endpoint statuses of the specific site",
     "tags": ["Site"],
     "description": "",
@@ -724,7 +724,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   });
   router.get(
-    '/sites/:siteId/cloud/computing/statuses',
+    '/sites/:siteId/monitoring/statuses',
     [ListMetaData({ entityType: 'SiteServiceStatus' })],
     (req, res) => {
       let params = getCollectionRequestParams(req);
