@@ -19,6 +19,8 @@ function _initSiteServiceDowntime(context) {
 
   SiteServiceDowntime.getModel = () => _SiteServiceDowntimeModel;
 
+  SiteServiceDowntime.getSiteServiceEndpoint = ({root, args, context}) => context.api('siteServiceEndpoint').getByEndpointPKey(_.get(root, 'endpointPKey'), args.fields, context);
+
   return SiteServiceDowntime;
 }
 
