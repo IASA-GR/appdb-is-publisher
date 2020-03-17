@@ -22,7 +22,7 @@ import SiteCloudComputingEndpointRouter from './SiteCloudComputingEndpoint.route
 import SiteCloudComputingImageRouter from './SiteCloudComputingImage.router';
 import SiteCloudComputingTemplateRouter from './SiteCloudComputingTemplate.router';
 import SiteServiceStatusRouter from './SiteServiceStatus.router';
-import SiteServiceStatus from './SiteServiceStatus';
+import SiteServiceDowntimeRouter from './SiteServiceDowntime.router';
 
 const swaggerUi = require('swagger-ui-express');
 
@@ -82,7 +82,8 @@ export const expressRouter = function (router, config) {
   SiteCloudComputingImageRouter.useRouter(router, {openAPIDefinitions});
   SiteCloudComputingTemplateRouter.useRouter(router, {openAPIDefinitions});
   SiteServiceStatusRouter.useRouter(router, {openAPIDefinitions});
-  //updateRouterDescription(SiteRouter.getRoutesDescription());
+  SiteServiceDowntimeRouter.useRouter(router, {openAPIDefinitions});
+
   updateSwaggerComponents(openAPIDefinitions.getAllOpenAPIComponents());
   updateSwaggerDocumentPaths(openAPIDefinitions.getAllOpenAPIPaths());
 
@@ -106,7 +107,7 @@ export const serviceDescription = {
 /**
  * Rest API service description.
  */
- export const getServiceDescription = () => {
+export const getServiceDescription = () => {
   return {
     '/sites': {
       description: 'List of sites in the information system.Each site may contain one or more services. If the site has at least one cloud service, it may also contain VM images and cloud execution templates.'
