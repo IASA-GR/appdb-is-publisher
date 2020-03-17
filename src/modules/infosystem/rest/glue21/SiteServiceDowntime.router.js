@@ -65,7 +65,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   );
 
   openAPIDefinitions.registerGetPath("/monitoring/downtimes/{downtimeId}", {
-    "summary": "A service endpoint downtime entry in the information system.",
+    "summary": "A service downtime entry in the information system.",
     "tags": ["Monitoring"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
@@ -92,7 +92,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   );
 
   openAPIDefinitions.registerGetPath("/monitoring/downtimes", {
-    "summary": "Return the list of service endpoint downtimes",
+    "summary": "Return the list of service downtimes as reported from gocdb service",
     "tags": ["Monitoring"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters(),
