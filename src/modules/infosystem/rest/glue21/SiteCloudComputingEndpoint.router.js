@@ -4,6 +4,7 @@ import {
   RequestMetaData,
   CollectionMetaData,
   ItemMetaData,
+  ListMetaData,
   applyMetaData,
   _handleMissing,
   getInvalidFilterFromError,
@@ -607,6 +608,33 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
+  openAPIDefinitions.registerGetPath("/cloud/computing/endpoints/{endpointId}/monitoring/downtimes", {
+    "summary": "Returns the ongoing or scheduled downtimes of the specific cloud computing endpoint as reported from gocdb service.",
+    "tags": ["SiteCloudComputingEndpoint"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "endpointId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the pkey as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": '#/components/schemas/SiteCloudComputingStatusItemResponse'})
+    }
+  });
+  router.get(
+    '/cloud/computing/endpoints/:endpointId/monitoring/downtimes',
+    [ListMetaData({ entityType: 'SiteCloudComputingDowntime' })],
+    (req, res) => {
+      let endpointId = _.trim(req.params.endpointId);
+
+      _handleRequest(SiteCloudComputingEndpoint.getServiceDowntimes(endpointId), req, res);
+    }
+  );
+
   openAPIDefinitions.registerGetPath("/cloud/computing/endpoints/{endpointId}/monitoring/status", {
     "summary": "Returns the status of the specific cloud computing endpoint as reported from argo monitoring service.",
     "tags": ["SiteCloudComputingEndpoint"],
@@ -638,7 +666,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "summary": "Returns information about the site that provides the specific cloud computing endpoint.",
     "tags": ["SiteCloudComputingEndpoint"],
     "description": "",
-    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+    "parameters": openAPIDefinitions.getListResponseType([
       {
         "in": "path",
         "name": "endpointId",
