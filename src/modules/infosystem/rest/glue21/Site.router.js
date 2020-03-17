@@ -65,7 +65,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       }
     ]),
     "responses": {
-      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingShareImageTemplateItemResponse"})
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateItemResponse"})
     }
   });
   router.get(
@@ -117,7 +117,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       }
     ]),
     "responses": {
-      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingShareImageTemplateListResponse"})
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
     }
   });
   router.get(
@@ -169,7 +169,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       }
     ]),
     "responses": {
-      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingShareImageItemResponse"})
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageItemResponse"})
     }
   });
   router.get(
@@ -213,7 +213,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       }
     ]),
     "responses": {
-      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingShareImageListResponse"})
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageListResponse"})
     }
   });
   router.get(
