@@ -734,6 +734,34 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
+  openAPIDefinitions.registerGetPath('/sites/{siteId}/monitoring/downtimes',{
+    "summary": "Return the list of ongoing or scheduled service downtimes for the specific site as reported in gocdb",
+    "tags": ["Site"],
+    "description": "",
+    "parameters": openAPIDefinitions.getOpenAPIItemParameters([
+      {
+        "in": "path",
+        "name": "siteId",
+        "required": true,
+        "type": "string",
+        "description": `Can be the information system ID, or the name of the site if given in the form of  "name:<sitename>", or the pkey as provided by the GocDB service if given in the form of "gocdb:<pkey>"`
+      }
+    ]),
+    "responses": {
+      "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteServiceDowntimeArrayResponse"})
+    }
+  });
+  router.get(
+    '/sites/:siteId/monitoring/downtimes',
+    [ListMetaData({ entityType: 'SiteServiceDowntime' })],
+    (req, res) => {
+      let params = getCollectionRequestParams(req);
+      let siteId = _.trim(req.params.siteId);
+
+      _handleRequest(Site.getServiceDowntimes(siteId, params), req, res);
+    }
+  );
+
   openAPIDefinitions.registerGetPath("/sites/{siteId}", {
     "summary": "Returns specific site infromation.",
     "tags": ["Site"],

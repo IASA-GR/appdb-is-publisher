@@ -7,6 +7,7 @@ import SiteCloudComputingTemplate, { TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_COLL
 import SiteCloudComputingShare, { TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS } from './SiteCloudComputingShare';
 import SiteCloudComputingManager, { TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_COLLECTION_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_DETAILS_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS } from './SiteCloudComputingManager';
 import SiteServiceStatus, { TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS } from './SiteServiceStatus';
+import { TEMPLATE_SITE_SERVICE_DOWNTIME_DETAILS_FIELDS } from './SiteServiceDowntime';
 
 
 export const TEMPLATE_SITE_ITEM_FIELDS = () => `
@@ -603,6 +604,22 @@ export const getServiceStatuses = (siteId) => {
   }`).then(resultHandlerByPath('data.serviceStatuses as items'));
 };
 
+export const getServiceDowntimes = (siteId) => {
+  let siteCaller = getCallerByIdentifier(siteId);
+  let statusesQuery = `
+    serviceDowntimes {
+      ${TEMPLATE_SITE_SERVICE_DOWNTIME_DETAILS_FIELDS()}
+    }`;
+
+    return query(`{
+      data: ${siteCaller} {
+        id
+        ${statusesQuery}
+      }
+  }`).then(resultHandlerByPath('data.serviceDowntimes as items'));
+};
+
+
 export default {
   getAll,
   getByIdentifier,
@@ -624,6 +641,7 @@ export default {
   getAllSiteCloudComputingEndpointShareImageTemplates,
   getSiteCloudComputingEndpointShareImageTemplate,
   getServiceStatuses,
+  getServiceDowntimes,
   TEMPLATE_SITE_ITEM_FIELDS,
   TEMPLATE_SITE_DETAILS_FIELDS
 };
