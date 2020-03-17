@@ -1,31 +1,18 @@
 import _ from 'lodash';
 import {
-  DEFAULT_LIMIT,
-  RequestMetaData,
   CollectionMetaData,
   ItemMetaData,
-  applyMetaData,
   _handleMissing,
-  getInvalidFilterFromError,
-  getGraphqlErrors,
-  handleInvalidFilterError,
-  handleUnknownFilter,
-  handleInvalidGraphQLFilterError,
-  handleGenericGraphQLError,
   _handleRequest,
   getCollectionRequestParams,
-  getOpenAPIItemParameters,
-  getOpenAPICollectionParameters,
-  getOpenAPI200Response
 } from '../httpUtils';
 import SiteServiceStatus from './SiteServiceStatus';
 
-
 export const useRouter = (router, {openAPIDefinitions}) => {
 
-  openAPIDefinitions.registerGetPath("/cloud/computing/statuses/{statusId}/endpoint",{
+  openAPIDefinitions.registerGetPath("/monitoring/statuses/{statusId}/endpoint",{
     "summary": "The cloud computing endpoint that the status refers to.",
-    "tags": ["SiteServiceStatus"],
+    "tags": ["Monitoring"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -41,7 +28,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   });
   router.get(
-    '/cloud/computing/statuses/:statusId/endpoint',
+    '/monitoring/statuses/:statusId/endpoint',
     [ItemMetaData({ entityType: 'SiteCloudComputingEndpoint' })],
     (req, res) => {
       let statusId = _.trim(req.params.statusId);
@@ -50,9 +37,9 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
-  openAPIDefinitions.registerGetPath('/cloud/computing/statuses/{statusId}/site',{
+  openAPIDefinitions.registerGetPath('/monitoring/statuses/{statusId}/site',{
     "summary": "The site that the specific status entry refers to.",
-    "tags": ["SiteServiceStatus"],
+    "tags": ["Monitoring"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -68,7 +55,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   });
   router.get(
-    '/cloud/computing/statuses/:statusId/site',
+    '/monitoring/statuses/:statusId/site',
     [ItemMetaData({ entityType: 'Site' })],
     (req, res) => {
       let statusId = _.trim(req.params.statusId);
@@ -77,9 +64,9 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
-  openAPIDefinitions.registerGetPath("/cloud/computing/statuses/{statusId}", {
+  openAPIDefinitions.registerGetPath("/monitoring/statuses/{statusId}", {
     "summary": "A service endpoint status entry in the information system.",
-    "tags": ["SiteServiceStatus"],
+    "tags": ["Monitoring"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
       {
@@ -95,7 +82,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   });
   router.get(
-    '/cloud/computing/statuses/:statusId',
+    '/monitoring/statuses/:statusId',
     [ItemMetaData({ entityType: 'SiteServiceStatus' })],
     (req, res) => {
       let statusId = _.trim(req.params.statusId);
@@ -104,9 +91,9 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
-  openAPIDefinitions.registerGetPath("/cloud/computing/statuses", {
+  openAPIDefinitions.registerGetPath("/monitoring/statuses", {
     "summary": "Return the list of service endpoint statuses",
-    "tags": ["SiteServiceStatus"],
+    "tags": ["Monitoring"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters(),
     "responses": {
@@ -116,7 +103,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   })
   router.get(
-    '/cloud/computing/statuses',
+    '/monitoring/statuses',
     [CollectionMetaData({ entityType: 'SiteServiceStatus' })],
     (req, res) => {
       let params = getCollectionRequestParams(req);

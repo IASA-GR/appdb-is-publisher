@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {query, TEMPLATE_COLLECTION_HEADER} from '../restModel';
 import {asyncFilterToGraphQL, resultHandlerByPath} from '../utils';
 import {TEMPLATE_SITE_DETAILS_FIELDS} from './Site';
-import { TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS } from './SiteCloudComputingEndpoint';
+import {TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS} from './SiteCloudComputingEndpoint';
 
 export const TEMPLATE_SITE_SERVICE_STATUS_ITEM_FIELDS = () => `
   id
@@ -104,12 +104,13 @@ export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0
   });
 };
 
-
-
 export default {
   getAll,
   getCallerByIdentifier,
   getByIdentifier,
   getSite,
-  getEndpoint
+  getEndpoint,
+  TEMPLATE_SITE_SERVICE_STATUS_ITEM_FIELDS,
+  TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS,
+  TEMPLATE_SITE_SERVICE_STATUS_COLLECTION_FIELDS
 }
