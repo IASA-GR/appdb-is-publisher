@@ -7,6 +7,7 @@ import SiteCloudComputingTemplate, {TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_
 import SiteCloudComputingShare, { TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS } from './SiteCloudComputingShare';
 import SiteCloudComputingManager, { TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_DETAILS_FIELDS } from './SiteCloudComputingManager';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_SERVICE_ITEM_FIELDS} from './SiteCloudComputingService'
+import { TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS } from './SiteServiceStatus';
 
 export const TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS = () => `
 id
@@ -284,6 +285,19 @@ export const getTemplate = (endpointId, templateId) => {
       }
     }
   }`).then(resultHandlerByPath('data.templates.items.0'));
+};
+
+export const getServiceStatus = (endpointId) => {
+  let endpointCaller = getCallerByIdentifier(endpointId);
+
+  return query(`{
+    data: ${endpointCaller} {
+      id
+      serviceStatus {
+        ${TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS()}
+      }
+    }
+  }`).then(resultHandlerByPath('data.serviceStatus'));
 };
 
 export const getShareImageTemplate = (endpointId, shareId, imageId, templateId) => {
@@ -564,6 +578,7 @@ export default  {
   getImageTemplate,
   getAllTemplates,
   getTemplate,
+  getServiceStatus,
   getAll,
   TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS,
   TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS,
