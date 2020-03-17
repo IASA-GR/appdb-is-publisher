@@ -5,6 +5,7 @@ import {TEMPLATE_SITE_CLOUD_COMPUTING_TEMPLATE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_
 import {TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_ITEM_FIELDS, TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS} from './SiteCloudComputingShare';
 import {TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS} from './SiteCloudComputingManager';
 import {TEMPLATE_SITE_SERVICE_STATUS_ITEM_FIELDS, TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS} from './SiteServiceStatus';
+import {TEMPLATE_SITE_SERVICE_DOWNTIME_ITEM_FIELDS, TEMPLATE_SITE_SERVICE_DOWNTIME_DETAILS_FIELDS} from './SiteServiceDowntime';
 
 export default function OpenAPILoadComponentDefinitions({openAPIDefinitions}) {
   openAPIDefinitions.registerComponentFromGraphQLQuery({
@@ -207,11 +208,33 @@ export default function OpenAPILoadComponentDefinitions({openAPIDefinitions}) {
     graphQLType: 'SiteServiceStatus',
     graphQLFields: TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS()
   })
-
   .registerItemWrapperComponent({
     name: 'SiteServiceStatusItemResponse',
     wrapperOf: 'SiteServiceStatusDetails'
   })
-
+  .registerComponentFromGraphQLQuery({
+    name: 'SiteServiceDowntimeItem',
+    description: '',
+    graphQLType: 'SiteServiceDowntime',
+    graphQLFields: TEMPLATE_SITE_SERVICE_DOWNTIME_ITEM_FIELDS()
+  })
+  .registerCollectionWrapperComponent({
+    name: 'SiteServiceDowntimeListResponse',
+    wrapperOf: 'SiteServiceDowntimeItem'
+  })
+  .registerListWrapperComponent({
+    name: 'SiteServiceDowntimeArrayResponse',
+    wrapperOf: 'SiteServiceDowntimeDetails'
+  })
+  .registerComponentFromGraphQLQuery({
+    name: 'SiteServiceDowntimeDetails',
+    description: '',
+    graphQLType: 'SiteServiceDowntime',
+    graphQLFields: TEMPLATE_SITE_SERVICE_DOWNTIME_DETAILS_FIELDS()
+  })
+  .registerItemWrapperComponent({
+    name: 'SiteServiceDowntimeItemResponse',
+    wrapperOf: 'SiteServiceDowntimeDetails'
+  });
 
 }
