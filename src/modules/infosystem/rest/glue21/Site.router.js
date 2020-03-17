@@ -706,8 +706,8 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
-  openAPIDefinitions.registerGetPath('/sites/{siteId}/monitoring/statuses',{
-    "summary": "Return the list of service endpoint statuses of the specific site",
+  openAPIDefinitions.registerGetPath('/sites/{siteId}/monitoring/status',{
+    "summary": "Return the list of servics statuses for the the specific site as reported from argo monitoring service",
     "tags": ["Site"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPIItemParameters([
@@ -724,7 +724,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   });
   router.get(
-    '/sites/:siteId/monitoring/statuses',
+    '/sites/:siteId/monitoring/status',
     [ListMetaData({ entityType: 'SiteServiceStatus' })],
     (req, res) => {
       let params = getCollectionRequestParams(req);

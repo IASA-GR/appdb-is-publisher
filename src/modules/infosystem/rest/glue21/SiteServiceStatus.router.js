@@ -10,7 +10,7 @@ import SiteServiceStatus from './SiteServiceStatus';
 
 export const useRouter = (router, {openAPIDefinitions}) => {
 
-  openAPIDefinitions.registerGetPath("/monitoring/statuses/{statusId}/endpoint",{
+  openAPIDefinitions.registerGetPath("/monitoring/status/{statusId}/endpoint",{
     "summary": "The cloud computing endpoint that the status refers to.",
     "tags": ["Monitoring"],
     "description": "",
@@ -28,7 +28,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   });
   router.get(
-    '/monitoring/statuses/:statusId/endpoint',
+    '/monitoring/status/:statusId/endpoint',
     [ItemMetaData({ entityType: 'SiteCloudComputingEndpoint' })],
     (req, res) => {
       let statusId = _.trim(req.params.statusId);
@@ -37,7 +37,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
-  openAPIDefinitions.registerGetPath('/monitoring/statuses/{statusId}/site',{
+  openAPIDefinitions.registerGetPath('/monitoring/status/{statusId}/site',{
     "summary": "The site that the specific status entry refers to.",
     "tags": ["Monitoring"],
     "description": "",
@@ -55,7 +55,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   });
   router.get(
-    '/monitoring/statuses/:statusId/site',
+    '/monitoring/status/:statusId/site',
     [ItemMetaData({ entityType: 'Site' })],
     (req, res) => {
       let statusId = _.trim(req.params.statusId);
@@ -64,7 +64,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
-  openAPIDefinitions.registerGetPath("/monitoring/statuses/{statusId}", {
+  openAPIDefinitions.registerGetPath("/monitoring/status/{statusId}", {
     "summary": "A service endpoint status entry in the information system.",
     "tags": ["Monitoring"],
     "description": "",
@@ -82,7 +82,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   });
   router.get(
-    '/monitoring/statuses/:statusId',
+    '/monitoring/status/:statusId',
     [ItemMetaData({ entityType: 'SiteServiceStatus' })],
     (req, res) => {
       let statusId = _.trim(req.params.statusId);
@@ -91,8 +91,8 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   );
 
-  openAPIDefinitions.registerGetPath("/monitoring/statuses", {
-    "summary": "Return the list of service endpoint statuses",
+  openAPIDefinitions.registerGetPath("/monitoring/status", {
+    "summary": "Return the list of service statuses as reported from the argo monitoring service",
     "tags": ["Monitoring"],
     "description": "",
     "parameters": openAPIDefinitions.getOpenAPICollectionParameters(),
@@ -103,7 +103,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     }
   })
   router.get(
-    '/monitoring/statuses',
+    '/monitoring/status',
     [CollectionMetaData({ entityType: 'SiteServiceStatus' })],
     (req, res) => {
       let params = getCollectionRequestParams(req);
