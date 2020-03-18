@@ -3,6 +3,10 @@
 #scalar url;
 #scalar email;
 
+directive @deprecated(
+  reason: String = "No longer supported"
+) on FIELD_DEFINITION | ENUM_VALUE
+
 """ Filter for string comparison """
 input FilterStringOperators {
   """ Exact equal with given text """
