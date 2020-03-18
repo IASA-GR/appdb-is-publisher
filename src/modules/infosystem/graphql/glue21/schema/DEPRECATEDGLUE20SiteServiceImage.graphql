@@ -1,0 +1,102 @@
+enum SiteServiceImageContentType {
+  vo
+  va
+}
+
+type DEPRECATEDGLUE20SiteServiceImage {
+  # Local Information System identifier
+  id: ID
+  # GLUE2EntityName
+  entityName: String
+  # (GLUE2ApplicationEnvironmentID@topBDII)
+  applicationEnvironmentID: String
+  # GLUE2ApplicationEnvironmentRepository (appdb MPUri)
+  applicationEnvironmentRepository: String
+  # The name of the application or environment. (GLUE2ApplicationEnvironmentAppName@topBDII)
+  applicationEnvironmentAppName: String
+  # The version of the application or environment, as defined by the supplier. (GLUE2ApplicationEnvironmentAppVersion@topBDII)
+  applicationEnvironmentAppVersion: String
+  # A human-readable description of this application or environment. (GLUE2ApplicationEnvironmentDescription@topBDII)
+  applicationEnvironmentDescription: String
+  # GLUE2ApplicationEnvironmentComputingManagerForeignKey
+  applicationEnvironmentComputingManagerForeignKey: String
+  # ImageBaseMpUri@appdb
+  imageBaseMpUri: String
+  # ImageContentType@appdb
+  imageContentType: SiteServiceImageContentType
+  # ImageVoVmiInstanceId@appdb
+  imageVoVmiInstanceId: Int
+  # ImageVmiInstanceId@appdb
+  imageVmiInstanceId: Int
+  # ImageVmiInstanceId@appdb
+  imageVoVmiInstanceVO: String
+  # ImageAppDBVAppID@appdb
+  imageAppDBVAppID: Int
+  # hash@is
+  hash: String
+  site: Site
+  service: DEPRECATEDGLUE20SiteService
+  templates(filter: DEPRECATEDGLUE20SiteServiceTemplate_Filter, limit: Int, skip: Int, sort: [DEPRECATEDGLUE20SiteServiceTemplate_Sort]): DEPRECATEDGLUE20SiteServiceTemplateCollection
+}
+
+input DEPRECATEDGLUE20SiteServiceImage_Filter {
+  # Local Information System identifier
+  id: FilterStringOperators
+  # GLUE2EntityName
+  entityName: FilterStringOperators
+  # GLUE2ApplicationEnvironmentID
+  applicationEnvironmentID: FilterStringOperators
+  # GLUE2ApplicationEnvironmentRepository (appdb MPUri)
+  applicationEnvironmentRepository: FilterStringOperators
+  # GLUE2ApplicationEnvironmentAppName
+  applicationEnvironmentAppName: FilterStringOperators
+  # GLUE2ApplicationEnvironmentAppVersion
+  applicationEnvironmentAppVersion: FilterStringOperators
+  # GLUE2ApplicationEnvironmentDescription
+  applicationEnvironmentDescription: FilterStringOperators
+  # GLUE2ApplicationEnvironmentComputingManagerForeignKey
+  applicationEnvironmentComputingManagerForeignKey: FilterStringOperators
+  # ImageBaseMpUri@appdb
+  imageBaseMpUri: FilterStringOperators
+  # ImageContentType@appdb
+  imageContentType: SiteServiceImageContentType
+  # AppDB Virtual Machine Image ID reference in VO image list (ImageVoVmiInstanceId@appdb)
+  imageVoVmiInstanceId: FilterIntegerOperators
+  # AppDB Virtual Machine Image ID (ImageVmiInstanceId@appdb)
+  imageVmiInstanceId: FilterIntegerOperators
+  # VO supporting this AppDB Virtual Machine Image instance (imageVoVmiInstanceVO@appdb)
+  imageVoVmiInstanceVO: FilterStringOperators
+  # AppDB Virtual Appliance ID (ImageAppDBVAppID@appdb)
+  imageAppDBVAppID: FilterIntegerOperators
+  # hash@is
+  hash: String
+  site: Site_Filter
+  service: DEPRECATEDGLUE20SiteService_Filter
+  templates: DEPRECATEDGLUE20SiteServiceTemplate_Filter,
+  #hasSiteServiceTemplates: Boolean
+  #or: [SiteServiceImage_Filter]
+  #and: [SiteServiceImage_Filter]
+}
+
+enum DEPRECATEDGLUE20SiteServiceImage_Sort {
+  # Ascenting order by Local Information System identifier
+  id_asc
+
+  # Descenting order by Local Information System identifier
+  id_desc
+
+}
+
+
+type DEPRECATEDGLUE20SiteServiceImageCollection {
+  totalCount: Int
+  count: Int
+  limit: Int
+  skip: Int
+  sort: [DEPRECATEDGLUE20SiteServiceImage_Sort]
+  items: [DEPRECATEDGLUE20SiteServiceImage]
+}
+
+extend type Query {
+  siteServiceImages(filter: DEPRECATEDGLUE20SiteServiceImage_Filter, limit: Int, skip: Int, sort: [DEPRECATEDGLUE20SiteServiceImage_Sort]): DEPRECATEDGLUE20SiteServiceImageCollection @deprecated(reason: "Use siteCloudComputingImages instead. Remains for nagios probes only and will be removed in future releases")
+}
