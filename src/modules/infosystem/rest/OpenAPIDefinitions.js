@@ -10,6 +10,7 @@ class OpenAPIDefinitions {
     this._definitions = getGraphQLDefinitions({COMPONENT_PATH});
     this._refs = {};
     this._paths = {};
+    this._filters = {};
   }
 
   getComponentFromGraphQLQuery({
@@ -137,8 +138,21 @@ class OpenAPIDefinitions {
     return this;
   }
 
-  registerGetPath(path, data) {
+  registerPathFilter({
+    path,
+    type
+  }) {
+
+    let fqdn = '#/components/schemas/' + type;
+    this._filters[path] = fqdn;
+  }
+
+  registerGetPath(path, data, options) {
     this._paths = Object.assign({}, this._paths, { [path]: { "get": data } });
+
+    if (options && options.filter && options.filter.graphQLType) {
+      this.registerPathFilter({path, type: options.filter.graphQLType});
+    }
     return this;
   }
 
@@ -155,8 +169,16 @@ class OpenAPIDefinitions {
     return Object.assign({}, /*this._definitions,*/ this._refs || {});
   }
 
+  getAllGraphQLDefinitions() {
+    return Object.assign({}, this._definitions || {});
+  }
+
   getAllOpenAPIPaths() {
     return Object.assign({}, this._paths || {});
+  }
+
+  getAllFilters() {
+    return Object.assign({}, this._filters || {});
   }
 
   getItemResponseType(componentName) {

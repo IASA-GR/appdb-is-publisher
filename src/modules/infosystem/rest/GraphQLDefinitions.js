@@ -12,7 +12,7 @@ import _ from 'lodash';
 export function getGraphQLDefinitions({COMPONENT_PATH}) {
   const getSchemaObjectTypes = schema => {
     return toArray(_.get(schema, 'definitions'))
-      .filter(def => ['EnumTypeDefinition', 'ObjectTypeDefinition'].indexOf(def.kind) > -1)
+      .filter(def => ['EnumTypeDefinition', 'ObjectTypeDefinition', 'InputObjectTypeDefinition'].indexOf(def.kind) > -1)
       .filter(def => def.name && def.name.kind === 'Name')
       .reduce((acc, def) => {
         let fqdn = COMPONENT_PATH + _.get(def, 'name.value');
@@ -27,6 +27,14 @@ export function getGraphQLDefinitions({COMPONENT_PATH}) {
                 .filter(v => !!v)
             };
             break;
+          case 'InputObjectTypeDefinition':
+              acc[fqdn] = {
+                type: 'object',
+                inputType: 'filter',
+                description: _.trim(_.get(def, 'description.value')),
+                properties: getDefinitionFields(def)
+              };
+              break;
           default:
             acc[fqdn] = {
               type: 'object',
@@ -44,7 +52,7 @@ export function getGraphQLDefinitions({COMPONENT_PATH}) {
     let fields = toArray(_.get(definition, 'fields'));
 
     return fields
-      .filter(f => f.kind === 'FieldDefinition')
+      .filter(f => f.kind === 'FieldDefinition' || f.kind === 'InputValueDefinition')
       .reduce((acc, f) => {
         let name = _.trim(_.get(f, 'name.value'));
 
@@ -57,6 +65,9 @@ export function getGraphQLDefinitions({COMPONENT_PATH}) {
           if (ftypekind === 'NamedType') {
             ftype = ftype === 'ID' ? 'string' : ftype;
             switch (ftype.toLowerCase()) {
+              case 'inputvaluedefinition':
+                acc[name].type = 'object';
+                break;
               case 'string':
                 acc[name].type = 'string';
                 break;
