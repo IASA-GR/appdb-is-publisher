@@ -88,9 +88,30 @@ export const expressRouter = function (router, config) {
   updateSwaggerDocumentPaths(openAPIDefinitions.getAllOpenAPIPaths());
 
   require('fs').writeFileSync('generatedSwaggerSchema.json', JSON.stringify(SWAGGER_DOCUMENT, null, 2), 'utf-8');
+  require('fs').writeFileSync('infosys.swaggerui.json', JSON.stringify({
+    definitions: openAPIDefinitions.getAllGraphQLDefinitions(),
+    filters: openAPIDefinitions.getAllFilters()
+  }, null, 2), 'utf-8');
+  router.get('/_assets/infosys.swaggerui.js', function(req, res) {
+    require('fs').readFile(__dirname + '/infosys.swaggerui.js', {encoding: 'utf8'}, (error, data) => {
+      if (error) {
+        res.status(500);
+        res.send(error);
+      } else {
+        require('fs').readFile('infosys.swaggerui.json', {encoding: 'utf8'}, (error, jsondata) => {
+          if (!error) {
+            data += '\nINFOSYS=' + jsondata;
+          }
+          res.send(data);
+        });
 
+      }
+    })
+  });
   router.use('/', swaggerUi.serve);
-  router.get('/', swaggerUi.setup(SWAGGER_DOCUMENT));
+  router.get('/', swaggerUi.setup(SWAGGER_DOCUMENT, {
+    customJs: '/rest/_assets/infosys.swaggerui.js'
+  }));
 
   console.log('[infosystem:Rest] Inited');
   return router;
