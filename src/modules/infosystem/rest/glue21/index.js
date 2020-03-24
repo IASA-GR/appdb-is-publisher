@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import fs from 'fs';
 import {
   DEFAULT_LIMIT,
   RequestMetaData,
@@ -74,6 +75,7 @@ const updateRouterDescription = (routerDescription) => {
 };
 export const expressRouter = function (router, config) {
   let openAPIDefinitions = new OpenAPIDefinitions();
+  let swaggerUIOptions = {};
 
   OpenAPILoadComponentDefinitions({openAPIDefinitions});
 
@@ -87,31 +89,35 @@ export const expressRouter = function (router, config) {
   updateSwaggerComponents(openAPIDefinitions.getAllOpenAPIComponents());
   updateSwaggerDocumentPaths(openAPIDefinitions.getAllOpenAPIPaths());
 
-  require('fs').writeFileSync('generatedSwaggerSchema.json', JSON.stringify(SWAGGER_DOCUMENT, null, 2), 'utf-8');
-  require('fs').writeFileSync('infosys.swaggerui.json', JSON.stringify({
-    definitions: openAPIDefinitions.getAllGraphQLDefinitions(),
-    filters: openAPIDefinitions.getAllFilters()
-  }, null, 2), 'utf-8');
-  router.get('/_assets/infosys.swaggerui.js', function(req, res) {
-    require('fs').readFile(__dirname + '/infosys.swaggerui.js', {encoding: 'utf8'}, (error, data) => {
-      if (error) {
-        res.status(500);
-        res.send(error);
-      } else {
-        require('fs').readFile('infosys.swaggerui.json', {encoding: 'utf8'}, (error, jsondata) => {
-          if (!error) {
-            data += '\nINFOSYS=' + jsondata;
-          }
-          res.send(data);
-        });
+  fs.writeFileSync('generatedSwaggerSchema.json', JSON.stringify(SWAGGER_DOCUMENT, null, 2), 'utf-8');
 
-      }
-    })
-  });
+  if (process.env.NODE_ENV === 'development') {
+    fs.writeFileSync('infosys.swaggerui.json', JSON.stringify({
+      definitions: openAPIDefinitions.getAllGraphQLDefinitions(),
+      filters: openAPIDefinitions.getAllFilters()
+    }, null, 2), 'utf-8');
+
+    router.get('/_assets/infosys.swaggerui.js', function(req, res) {
+      fs.readFile(__dirname + '/infosys.swaggerui.js', {encoding: 'utf8'}, (error, data) => {
+        if (error) {
+          res.status(500);
+          res.send(error);
+        } else {
+          fs.readFile('infosys.swaggerui.json', {encoding: 'utf8'}, (error, jsondata) => {
+            if (!error) {
+              data += '\nINFOSYS=' + jsondata;
+            }
+            res.send(data);
+          });
+        }
+      });
+    });
+
+    swaggerUIOptions.customJs = '/rest/_assets/infosys.swaggerui.js';
+  }
+
   router.use('/', swaggerUi.serve);
-  router.get('/', swaggerUi.setup(SWAGGER_DOCUMENT, {
-    customJs: '/rest/_assets/infosys.swaggerui.js'
-  }));
+  router.get('/', swaggerUi.setup(SWAGGER_DOCUMENT, swaggerUIOptions));
 
   console.log('[infosystem:Rest] Inited');
   return router;
