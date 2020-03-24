@@ -159,13 +159,14 @@ const _FilterExpressions = [
  */
 export const parseFilterString = (query) => {
   if (_.isPlainObject(query)) {
-    return {filter: query, errors: []};
+    return {filter: query, errors: [], explain: []};
   }
 
   if (!_.isString(query)) {
     return {
       filter: query,
-      errors: ['Invalid filter string given']
+      errors: ['Invalid filter string given'],
+      explain: []
     };
   }
 
@@ -174,7 +175,8 @@ export const parseFilterString = (query) => {
 
     return {
       filter,
-      errors: []
+      errors: [],
+      explain: []
     };
   } catch (e) {}
 
@@ -206,6 +208,15 @@ export const parseFilterString = (query) => {
         if (_.isFunction(filterExpr.getOp)) {
           op = filterExpr.getOp(op, value);
         }
+
+        acc.explain.push({
+          path: path,
+          level: path.split('.').length - 1,
+          op: op,
+          value: value,
+          valueType: filterExpr.name
+        });
+
         op = (op) ? `.${op}` : '';
         let fltObj = _.set({}, `${path}${op}`, value);
         acc.filter = _.merge(acc.filter, fltObj);
@@ -225,7 +236,7 @@ export const parseFilterString = (query) => {
     filterExpr.expr.lastIndex = 0;
 
     return acc;
-  }, {initial: query ,filter: {}, errors: []});
+  }, {initial: query ,filter: {}, errors: [], explain: []});
 
   if (_.trim(parseResults.initial) !== '') {
     parseResults.errors.push('Cannot parse all of the filter string. Unknown filter "' + _.trim(parseResults.initial) + '".');
@@ -233,7 +244,8 @@ export const parseFilterString = (query) => {
 
   return {
     filter: parseResults.filter,
-    errors: parseResults.errors
+    errors: parseResults.errors,
+    explain: parseResults.explain
   };
 };
 
