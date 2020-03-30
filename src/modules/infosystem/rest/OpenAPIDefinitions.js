@@ -2,8 +2,9 @@
 import _ from 'lodash';
 import {extractGraphQLQueryProperties} from './utils';
 import {getGraphQLDefinitions} from './GraphQLDefinitions';
-
+import {DEFAULT_LIMIT} from './httpUtils';
 const COMPONENT_PATH = '#/components/schemas/';
+
 
 class OpenAPIDefinitions {
   constructor() {
@@ -300,9 +301,10 @@ class OpenAPIDefinitions {
         "name": "limit",
         "required": false,
         "schema": {
-          "type": "integer"
+          "type": "integer",
+          "default": DEFAULT_LIMIT
         },
-        "description": "Maximum number of items to return."
+        "description": "Maximum number of items to return. Any value less than 1 will return all of the entries."
       },
       {
         "in": "query",
@@ -312,7 +314,7 @@ class OpenAPIDefinitions {
           "type": "integer",
           "default": 0
         },
-        "description": "Number of items to skip before returning the results."
+        "description": "Number of items to skip before returning the results. Defaults to 0."
       }
     ]);
   };
