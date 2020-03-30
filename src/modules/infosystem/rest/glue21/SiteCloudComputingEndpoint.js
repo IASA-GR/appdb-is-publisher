@@ -565,7 +565,7 @@ export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0
           }
         }
       }
-    `);
+    `).then(resultHandlerByPath('data'));
   });
 };
 

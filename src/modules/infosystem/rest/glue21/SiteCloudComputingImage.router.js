@@ -77,7 +77,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   });
   router.get(
     '/cloud/computing/images/:imageId/templates',
-    [ItemMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    [CollectionMetaData({ entityType: 'SiteCloudComputingTemplate' })],
     (req, res) => {
       let imageId = _.trim(req.params.imageId);
       let params = getCollectionRequestParams(req);

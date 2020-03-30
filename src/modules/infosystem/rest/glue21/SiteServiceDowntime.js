@@ -93,16 +93,6 @@ export const getEndpoint = (id, imageId) => {
 
 export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
   return asyncFilterToGraphQL(filter).then(flt => {
-    console.log(`
-    {
-      data: SiteServiceDowntimes(filter: ${flt}, limit: ${limit}, skip: ${skip}) {
-        ${TEMPLATE_COLLECTION_HEADER}
-        items {
-          ${TEMPLATE_SITE_SERVICE_DOWNTIME_ITEM_FIELDS()}
-        }
-      }
-    }
-  `);
     return query(`
       {
         data: SiteServiceDowntimes(filter: ${flt}, limit: ${limit}, skip: ${skip}) {
@@ -112,7 +102,7 @@ export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0
           }
         }
       }
-    `);
+    `).then(resultHandlerByPath('data'));
   });
 };
 

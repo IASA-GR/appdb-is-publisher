@@ -122,7 +122,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/shares/:shareId/images/:imageId/templates',
-    [ItemMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    [CollectionMetaData({ entityType: 'SiteCloudComputingTemplate' })],
     (req, res) => {
       let siteId = _.trim(req.params.siteId);
       let endpointId = _.trim(req.params.endpointId);
@@ -218,7 +218,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/shares/:shareId/images',
-    [ItemMetaData({ entityType: 'SiteCloudComputingImage' })],
+    [CollectionMetaData({ entityType: 'SiteCloudComputingImage' })],
     (req, res) => {
       let siteId = _.trim(req.params.siteId);
       let endpointId = _.trim(req.params.endpointId);
@@ -298,7 +298,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/shares',
-    [ItemMetaData({ entityType: 'SiteCloudComputingShare' })],
+    [CollectionMetaData({ entityType: 'SiteCloudComputingShare' })],
     (req, res) => {
       let siteId = _.trim(req.params.siteId);
       let endpointId = _.trim(req.params.endpointId);
@@ -393,7 +393,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/managers/:managerId/templates',
-    [ItemMetaData({ entityType: 'SiteCloudComputingTemplate' })],
+    [CollectionMetaData({ entityType: 'SiteCloudComputingTemplate' })],
     (req, res) => {
       let siteId = _.trim(req.params.siteId);
       let endpointId = _.trim(req.params.endpointId);
@@ -474,7 +474,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/managers',
-    [ItemMetaData({ entityType: 'SiteCloudComputingManager' })],
+    [CollectionMetaData({ entityType: 'SiteCloudComputingManager' })],
     (req, res) => {
       let siteId = _.trim(req.params.siteId);
       let endpointId = _.trim(req.params.endpointId);

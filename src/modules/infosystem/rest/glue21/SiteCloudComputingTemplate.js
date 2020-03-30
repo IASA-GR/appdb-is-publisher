@@ -166,7 +166,7 @@ export const getAll =  ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 
           }
         }
       }
-    `);
+    `).then(resultHandlerByPath('data'));
   });
 };
 
