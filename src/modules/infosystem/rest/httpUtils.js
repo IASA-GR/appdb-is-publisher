@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 export const DEFAULT_LIMIT = 20;
+export const DEFAULT_LIMIT_MAX = 1000000000;
 
 /**
  * Express middleware to attach request metadata to express request object.
@@ -273,9 +274,14 @@ export const _handleRequest = (pr, req, res) => {
  * @returns {object}      Collection parameters.
  */
 export const getCollectionRequestParams = (req) => {
+  let limit = parseInt(req.query.limit);
+
+  limit = (isNaN(limit)) ? DEFAULT_LIMIT : limit;
+  limit = (limit <= 0) ? DEFAULT_LIMIT_MAX : limit;
+
   return {
     filter: _.trim(req.query.filter) || {},
-    limit: parseInt(req.query.limit) || DEFAULT_LIMIT,
+    limit: limit,
     skip: parseInt(req.query.skip) || 0
   };
 }
