@@ -19,7 +19,7 @@ type Site {
   name: String
   """ Short version of site name (SiteShortName@gocdb) """
   shortName: String
-  """ OfficiaL bame of site (SiteOfficialName@gocdb) """
+  """ Official name of site (SiteOfficialName@gocdb) """
   officialName: String
   """ Description of site (SiteDescription@gocdb) """
   description: String
@@ -83,7 +83,7 @@ input Site_Filter {
   name: FilterStringOperators
   """ Short version of site name (SiteShortName@gocdb) """
   shortName: FilterStringOperators
-  """ Officila bame of site (SiteOfficialName@gocdb) """
+  """ Official name of site (SiteOfficialName@gocdb) """
   officialName: FilterStringOperators
   """ Description of site (SiteDescription@gocdb) """
   description: FilterStringOperators
@@ -103,7 +103,7 @@ input Site_Filter {
   subgrid: FilterStringOperators
   """ Site roc (SiteRoc@gocdb) """
   roc: FilterStringOperators
-  """ Indcates if site is in procuction state (SiteProdInfrastructure@gocdb) """
+  """ Indicates if site is in procuction state (SiteProdInfrastructure@gocdb) """
   prodInfrastructure: SiteInfrastructureState
   """ Certification status of site (SiteCertStatus@gocdb) """
   certStatus: SiteCertificationStatus
@@ -121,17 +121,17 @@ input Site_Filter {
   serviceStatuses: SiteServiceStatus_Filter
   """ Filter by site service downtimes (SiteServiceStatus@gocdb) """
   serviceDowntimes: SiteServiceDowntime_Filter
-  """ Filter by site's services values """
+  """ Filter by site's services value """
   cloudComputingServices: SiteCloudComputingService_Filter
-  """ Filter by site's service endpoints values """
+  """ Filter by site's service endpoints value """
   cloudComputingEndpoints: SiteCloudComputingEndpoint_Filter
-  """ Filter by site service endpoint images values """
+  """ Filter by site service endpoint images value """
   cloudComputingImages: SiteCloudComputingImage_Filter
-  """ Filter by site service endpoint template values """
+  """ Filter by site service endpoint template value """
   cloudComputingTemplates: SiteCloudComputingTemplate_Filter
-  """ Filter by site service endpoint shares values """
+  """ Filter by site service endpoint shares value """
   cloudComputingShares: SiteCloudComputingShare_Filter
-  """ Filter by site service endpoint manager values """
+  """ Filter by site service endpoint manager value """
   cloudComputingManagers: SiteCloudComputingManager_Filter
   """ Filter by site service endpoint images count """
   withImageCount: FilterIntegerOperators

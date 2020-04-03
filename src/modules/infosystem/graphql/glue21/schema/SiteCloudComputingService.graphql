@@ -5,9 +5,13 @@ Services may contain one or more VM image references and execution templates.
 type SiteCloudComputingService {
   """ Local Information System Identifier """
   id: ID
+  """ Entity name """
   entityName: String
+  """ Entity creation time """
   entityCreationTime: String
+  """ Entity validity """
   entityValidity: Int
+  """ Entity other info """
   entityOtherInfo: String
   """ The service ID as given by glue2.1 """
   serviceID: String
