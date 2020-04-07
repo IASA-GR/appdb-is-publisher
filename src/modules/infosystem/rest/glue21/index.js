@@ -92,7 +92,7 @@ export const expressRouter = function (router, config) {
   fs.writeFileSync('generatedSwaggerSchema.json', JSON.stringify(SWAGGER_DOCUMENT, null, 2), 'utf-8');
 
   if (process.env.NODE_ENV === 'development') {
-    fs.writeFileSync('infosys.swaggerui.json', JSON.stringify({
+    fs.writeFileSync('dist/infosys.swaggerui.json', JSON.stringify({
       definitions: openAPIDefinitions.getAllGraphQLDefinitions(),
       filters: openAPIDefinitions.getAllFilters()
     }, null, 2), 'utf-8');
@@ -103,7 +103,7 @@ export const expressRouter = function (router, config) {
           res.status(500);
           res.send(error);
         } else {
-          fs.readFile('infosys.swaggerui.json', {encoding: 'utf8'}, (error, jsondata) => {
+          fs.readFile('dist/infosys.swaggerui.json', {encoding: 'utf8'}, (error, jsondata) => {
             if (!error) {
               data += '\nINFOSYS=' + jsondata;
             }
