@@ -9,9 +9,9 @@ directive @deprecated(
 
 """ Filter for string comparison """
 input FilterStringOperators {
-  """ Exact equal with given text """
+  """ Exact equal to given text """
   eq: String
-  """ Not equal with given text """
+  """ Not equal to given text """
   ne: String
   """ Contains given text. Can use '*' for any text. """
   like: String
@@ -22,7 +22,7 @@ input FilterStringOperators {
   """ Does not contain given text (case insensitive). Can use '*' for any text. """
   nilike: String
   """
-  Must be equal with one of the values in the given array of text elements.
+  Must be equal to one of the values in the given array of text elements.
   If '*' wildcard is used in a text element it will act as 'like' operator.
   """
   oneOf: [String]
@@ -34,17 +34,17 @@ input FilterStringOperators {
 
 """ Filter for integer comparisons """
 input FilterIntegerOperators {
-  """ Equal with given integer """
+  """ Equal to given integer """
   eq: Int
-  """ Not equal with given integer """
+  """ Not equal to given integer """
   ne: Int
   """ Greater than given integer """
   gt: Int
   """ Less than given integer """
   lt: Int
-  """ Greater or equal with given integer """
+  """ Greater than or equal to given integer """
   ge: Int
-  """ Less or equal with given integer """
+  """ Less than or equal to given integer """
   le: Int
   """ Must be equal to one of the values in the given array of integers """
   oneOf: [Int]
@@ -58,17 +58,17 @@ input FilterIntegerOperators {
 
 """ Filter for integer comparisons """
 input FilterFloatOperators {
-  """ Equal with given float """
+  """ Equal to given float """
   eq: Float
-  """ Not equal with given float """
+  """ Not equal to given float """
   ne: Float
   """ Greater than given float """
   gt: Float
   """ Less than given float """
   lt: Float
-  """ Greater or equal with given float """
+  """ Greater than or equal to given float """
   ge: Float
-  """ Less or equal with given float """
+  """ Less than or equal to given float """
   le: Float
   """ Must be equal to one of the values in the given array of integers """
   oneOf: [Float]
