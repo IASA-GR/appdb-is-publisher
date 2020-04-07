@@ -14,14 +14,26 @@ function initInfosys() {
     return document.querySelectorAll('.opblock-get');
   }
 
-  function onFilterInput(path, ev) {
-    console.log(path + ': ' + ev.target.value);
-  }
-
   function setupFilterInput(path, filterInput) {
-    filterInput.addEventListener("focus", (ev) => onFilterInput(path, ev));
-    filterInput.addEventListener("change", (ev) => onFilterInput(path, ev));
-    filterInput.addEventListener("keypress", (ev) => onFilterInput(path, ev));
+    if (!filterInput.parentElement.querySelector('a.help') && INFOSYS.filters[path]) {
+      var a = document.createElement('a');
+
+      // Create the text node for anchor element.
+      var link = document.createTextNode("available search terms");
+
+      // Append the text node to anchor element.
+      a.appendChild(link);
+
+      // Set the title.
+      a.title = "Click to view valid search items for the specific filter";
+      a.className = 'help';
+      a.setAttribute('style', 'padding-left: 5px;text-style: none; text-decoration: none; color: #3636b9;');
+      // Set the href property.
+      a.href = "/docs/rest/filters/" + INFOSYS.filters[path].replace('#/components/schemas/', '');
+      a.target = "_blank";
+
+      filterInput.parentElement.append(a);
+    }
   }
 
   function preload(cb) {
@@ -81,5 +93,4 @@ function initInfosys() {
     init(checkGets());
     preload(init);
   }, 1000);
-
 }

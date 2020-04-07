@@ -1,9 +1,11 @@
 const fs = require('fs')
 const MAX_TRAVERSE_LEVEL = 2;
-const definitions = JSON.parse(fs.readFileSync('infosys.swaggerui.json', 'utf8')).definitions;
+const definitions = JSON.parse(fs.readFileSync(__dirname + '/dist/infosys.swaggerui.json', 'utf8')).definitions;
 const defNames = Object.keys(definitions);
 const _ = require('lodash');
-
+const EXCLUDE_FILTER_OPS = ['oneOf', 'between', 'containsSome', 'icontainsSome', 'containsAll', 'icontainsAll'];
+const EXCLUDE_FILTER_PROPS = ['computingEndpointComputingServiceForeignKey', 'serviceAdminDomainForeignKey', 'cloudComputingServiceForeignKey', 'cloudComputingendpointForeignKey', 'endpointServiceForeignKey', 'resourceManagerForeignKey', 'endpointForeignKey', 'managerForeignKey', 'shareForeignKey', 'serviceForeignKey'];
+const ALLOW_EXPORT_FILTERS = ['Site_Filter', 'SiteCloudComputingEndpoint_Filter', 'SiteCloudComputingImage_Filter', 'SiteCloudComputingTemplate_Filter', 'SiteCloudComputingManager_Filter', 'SiteCloudComputingShare_Filter', 'SiteServiceDowntime_Filter', 'SiteServiceStatus_Filter'];
 const find = function(arr, func) {
   let res = [];
 
@@ -71,6 +73,9 @@ const getFlatPropOutput = function(item, level = 0) {
   item.properties = item.properties || item;
 
   return Object.keys(item.properties || {}).reduce(function(acc, name) {
+    if(EXCLUDE_FILTER_PROPS.indexOf(name) > -1) {
+      return acc;
+    }
     let prop = item.properties[name];
     let ref = prop['$ref'];
     let filterName = name;
@@ -82,7 +87,9 @@ const getFlatPropOutput = function(item, level = 0) {
       fopProps = getFlatPropOutput(fop, level);
 
       Object.keys(fopProps).forEach(fopName => {
-
+        if (EXCLUDE_FILTER_OPS.indexOf(fopName) > -1) {
+          return;
+        }
         let fopProp = fop.properties[fopName] || {};
         let descr = _.trim(prop.description);
         let filterDesc = _.trim(fopProp.description);
@@ -212,16 +219,20 @@ const getFilterOutput = function(refName) {
 const getStyle = () => `
 <style>
 body {
-  max-width: 900px;
-  min-width: 900px;
   font-size: 14px;
   font-family: "Arial";
   color: #222;
+}
+#app {
+  max-width: 1024px;
+  margin: 0 auto;
 }
 table {
   margin: 0 auto;
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+
 }
 table > thead > tr > th {
   text-align: left;
@@ -236,6 +247,8 @@ table > tbody > tr > td {
 table > thead > tr:first-child > th {
   background-color: #c0c0c0;
   height: 50px;
+  max-width: 550px;
+  min-width: 550px;
 }
 table > thead > tr > th:first-child {
   border-left: 1px solid #aaa;
@@ -243,30 +256,41 @@ table > thead > tr > th:first-child {
 table > thead > tr > th:last-child {
   border-right: 1px solid #aaa;
 }
+
+table > thead > tr > th:nth-child(2) {
+  max-width: 50px;
+  width: 50px;
+  min-width: 50px;
+}
+
 table > tbody > tr:nth-child(even) {
   background-color: #f3f3f3;
 }
+
 table > tbody > tr > td {
   padding: 10px;
   padding-top: 5px;
   vertical-align: top;
 }
+
 table > tbody > tr > td:first-child {
-  max-width: 550px;
-  min-width: 550px;
-  white-space: nowrap;
+  white-space: prewrap;
 }
+
 .filtername {
   font-weight: 600;
   color: #333;
 }
+
 .opsep {
   margin-left: -4px;
 }
+
 .opsep, .sep {
   font-weight: bold;
   color: #1e3068;
 }
+
 .op {
   font-weight: 500;
   color: #525f88;
@@ -277,54 +301,50 @@ table > tbody > tr > td:first-child {
   display: inline-block;
   white-space: nowrap;
 }
+
 .value > pre {
   color: #888;
+  font-style: italic;
+}
+
+h2 {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  display: block;
+  background-color: white;
+  padding: 10px;
+  padding-left: 5px;
+  border: 1px solid #d0d0d0;
+  border-radius: 2px;
+  box-shadow: 0px 5px 5px -3px #a0a0a0;
+  color: #666;
+  min-width: 1044px;
+  margin-left: -20px;
 }
 </style>
 `
 
 const getExampleValue = (item) => {
-  switch(item.dataType) {
-    case "string":
-      if (item.isArray) {
-        return '<span class="value datatype_string"><pre>"&lt;text&gt;", ...</pre></span>';
-      } else {
-        return '<span class="value datatype_string"><pre>"&lt;text1&gt;"</pre></span>';
-      }
-    case "enum":
-      if(item.isArray) {
-        return '<span class="value datatype_enum"><pre>&lt;enum1&gt;, ...</pre></span>';
-      }
-      return '<span class="value datatype_enum"><pre>&lt;enum value&gt;</pre></span>';
-    case "float":
-      if (item.isArray) {
-        return '<span class="value datatype_float"><pre>&lt;float1&gt;, ...</pre></span>';
-      }
-      return '<span class="value datatype_float"><pre>&lt;float value&gt;</pre></span>';
-    case "integer":
-      if (item.isArray) {
-        return '<span class="value datatype_integer"><pre>&lt;integer1&gt;, ...</pre></span>';
-      }
-      return '<span class="value datatype_integer"><pre>&lt;integer value&gt;</pre></span>';
-    case "number":
-      if (item.isArray) {
-        return '<span class="value datatype_number"><pre>&lt;number1&gt;, ...</pre></span>';
-      }
-      return '<span class="value datatype_number"><pre>&lt;number value&gt;</pre></span>';
-    case "boolean":
-      return '<span class="value datatype_enum"><pre>&lt;true or false&gt;</pre></span>';
-    default:
-      return ''
+  if (item.dataType === 'string') {
+    return '<span class="value datatype_string"><pre>"&lt;string&gt;"</pre></span>';
   }
+  return '<span class="value datatype_' + item.dataType + '"><pre>&lt;' + item.dataType  + '&gt;</pre></span>';
 }
-const exportToHTML = function(refName) {
+
+const getFilterDisplayName = function(refName) {
+  return (refName || '').replace('#/components/schemas/', '');
+}
+
+const exportHTMLTable = function(refName) {
+  let displayName = getFilterDisplayName(refName);
   let fout = getFilterOutput(refName);
   let foutFilters = _.keys(fout.filters);
-  let html = '<HTML><HEAD>'+getStyle()+'</HEAD><BODY><TABLE id="' + fout.component + '_Filter'  + '"><THEAD>'
+  let html = '<H2 id="' + displayName  + '">Supported ' + displayName.split('_')[0] + ' queries</H2>';
 
-  html += '<TR ><TH colspan="3">'+refName+'</TH></TR>';
+  html += '<TABLE id="' + displayName  + '"><THEAD>';
   html += '<TR><TH>Search Item</TH>';
-  html += '<TH>DataType</TH>';
+  html += '<TH>Type</TH>';
   html += '<TH>Description</TH>';
   html += '</THEAD><TBODY>';
 
@@ -357,10 +377,46 @@ const exportToHTML = function(refName) {
     return '<TR><TD>' + htmlFilter + '</TD><TD>' + dataType + '</TD><TD>' + desc + '</TD></TR>';
   }).join('\n')
 
-  html += '</TBODY></TABLE></BODY></HTML>'
+  html += '</TBODY></TABLE>';
 
-  fs.writeFileSync('infosys.swagger.html', html, 'utf8');
+  return html;
 }
-exportToHTML('#/components/schemas/Site_Filter');
+
+const getHeader = function(title) {
+  title = _.trim(title);
+  title = (title) ? '<title>' + title + '</title>' : '';
+
+  return '<!DOCTYPE html><HTML><HEAD>'+getStyle()+'<meta charset="UTF-8">' + title + '</HEAD><BODY><DIV id="app">';
+};
+
+const getFooter = function() {
+  return '</DIV></BODY></HTML>';
+}
+
+const saveHTML = function(filterName, html) {
+  fs.writeFileSync(__dirname + '/dist/infosys.filter.' + filterName + '.html', html, 'utf8');
+}
+
+const exportToHTML = function() {
+  let filters = Filters.map(f => f.name).filter(f => ALLOW_EXPORT_FILTERS.indexOf(getFilterDisplayName(f)) > -1);
+  let html = getHeader();
+
+  html = filters.reduce(function(acc, filterName) {
+    console.log('Generating HTML for filter ' + filterName);
+    let htmlText = exportHTMLTable(filterName);
+    acc += htmlText;
+
+    htmlText = getHeader('Available search terms for ' + getFilterDisplayName(filterName).replace('_Filter', '') + ' filter') + htmlText + getFooter();
+    saveHTML(getFilterDisplayName(filterName), htmlText);
+    return acc;
+  }, html)
+
+  html += getFooter();
+
+  fs.writeFileSync(__dirname + '/dist/infosys.filter.html', html, 'utf8');
+}
+
+
+exportToHTML();
 //let fout = getFilterOutput('#/components/schemas/Site_Filter');
 
