@@ -7,7 +7,7 @@ import { express as voyagerExpress } from 'graphql-voyager/middleware';
 import graphiqlExpress from 'express-graphiql-middleware';
 import DataLoader from 'dataloader';
 import {serviceDescription as graphqlServiceDescription} from './modules/infosystem/graphql';
-import {expressRouter as restRouter, handleNoImlementation, handleUnknown, serviceDescription as restServiceDescription} from './modules/infosystem/rest';
+import {expressRouter as restRouter, handleNoImlementation, handleUnknown, serviceDescription as restServiceDescription, documentationRouter as restDocumentationRouter} from './modules/infosystem/rest';
 import {expressRouter as proxyRouter} from './modules/couchDBProxy';
 import http from 'http';
 import https from 'https';
@@ -171,6 +171,7 @@ function _initServer(conf) {
   app.use('/couchdb', proxyRouter(express.Router(), Configuration.getModuleConfiguration('couchDBProxy'), 'couchdb'));
   console.log('\x1b[32m[ISPublisher:CouchDBProxy]\x1b[0m: Couchdb proxy served in path "/couchdb"' );
 
+  app.use('/docs', restDocumentationRouter(express.Router()));
   // Handle any other route
   app.use('*', miscRoutes(express.Router()));
 

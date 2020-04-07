@@ -92,3 +92,37 @@ export const serviceDescription = function getServiceDescription({schema}) {
     return {};
   }
 };
+
+/**
+ * Add routes of documentation content fot the rest api
+ *
+ * @param   {object} router Express router instance
+ * @returns {object}        Express router instance
+ */
+export const documentationRouter = function(router) {
+  router.get('/rest/filters/:filter', function(req, res) {
+    require('fs').readFile('dist/infosys.filter.' + req.params.filter + '.html', 'utf8', function(err, data) {
+      if (err) {
+        res.status(404);
+        res.send('' + err);
+        return;
+      }
+      res.setHeader('Content-Type', 'text/html');
+      res.send(data);
+    })
+  });
+
+  router.get('/rest/filters', function(req, res) {
+    require('fs').readFile('dist/infosys.filter.html', 'utf8', function(err, data) {
+      if (err) {
+        res.status(404);
+        res.send('' + err);
+        return;
+      }
+      res.setHeader('Content-Type', 'text/html');
+      res.send(data);
+    })
+  });
+
+  return router;
+}
