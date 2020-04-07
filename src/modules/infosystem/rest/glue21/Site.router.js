@@ -119,6 +119,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingTemplate_Filter'
+    }
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/shares/:shareId/images/:imageId/templates',
@@ -215,6 +219,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingImage_Filter'
+    }
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/shares/:shareId/images',
@@ -294,6 +302,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     ]),
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingShareListResponse"})
+    }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingShare_Filter'
     }
   });
   router.get(
@@ -390,6 +402,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateItemResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingTemplate_Filter'
+    }
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/managers/:managerId/templates',
@@ -471,6 +487,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingManagerListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingManager_Filter'
+    }
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/managers',
@@ -551,6 +571,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingImage_Filter'
+    }
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/images',
@@ -630,6 +654,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingTemplate_Filter'
+    }
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints/:endpointId/templates',
@@ -694,6 +722,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingEndpointListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingEndpoint_Filter'
+    }
   });
   router.get(
     '/sites/:siteId/cloud/computing/endpoints',
@@ -722,6 +754,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteServiceStatusArrayResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteServiceStatus_Filter'
+    }
   });
   router.get(
     '/sites/:siteId/monitoring/status',
@@ -749,6 +785,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     ]),
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteServiceDowntimeArrayResponse"})
+    }
+  }, {
+    filter: {
+      graphQLType: 'SiteServiceDowntime_Filter'
     }
   });
   router.get(
@@ -799,6 +839,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
         "ref": '#/components/schemas/SiteListResponse',
         "description": "List of sites in the information system.Each site may contain one or more services. If the site has at least one cloud service, it may also contain VM images and cloud execution templates."
       })
+    }
+  }, {
+    filter: {
+      graphQLType: 'Site_Filter'
     }
   })
   router.get(

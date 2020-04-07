@@ -101,6 +101,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
         "ref": '#/components/schemas/SiteServiceDowntimeListResponse',
       })
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteServiceDowntime_Filter'
+    }
   })
   router.get(
     '/monitoring/downtimes',

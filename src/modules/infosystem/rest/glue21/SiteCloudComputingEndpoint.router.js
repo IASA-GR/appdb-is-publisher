@@ -104,6 +104,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingTemplate_Filter'
+    }
   });
   router.get(
     '/cloud/computing/endpoints/:endpointId/shares/:shareId/images/:imageId/templates',
@@ -184,6 +188,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingImage_Filter'
+    }
   });
   router.get(
     '/cloud/computing/endpoints/:endpointId/shares/:shareId/images',
@@ -247,6 +255,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     ]),
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingShareListResponse"})
+    }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingShare_Filter'
     }
   });
   router.get(
@@ -326,6 +338,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingTemplate_Filter'
+    }
   });
   router.get(
     '/cloud/computing/endpoints/:endpointId/managers/:managerId/templates',
@@ -390,6 +406,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingManagerListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingManager_Filter'
+    }
   });
   router.get(
     '/cloud/computing/endpoints/:endpointId/managers',
@@ -452,6 +472,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     ]),
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
+    }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingTemplate_Filter'
     }
   });
   router.get(
@@ -531,6 +555,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingTemplateListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingTemplate_Filter'
+    }
   });
   router.get(
     '/cloud/computing/endpoints/:endpointId/images/:imageId/templates',
@@ -595,6 +623,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     ]),
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageListResponse"})
+    }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingImage_Filter'
     }
   });
   router.get(
@@ -725,6 +757,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       "200": openAPIDefinitions.getOpenAPI200Response({
         "ref": '#/components/schemas/SiteCloudComputingEndpointListResponse',
       })
+    }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingEndpoint_Filter'
     }
   })
   router.get(

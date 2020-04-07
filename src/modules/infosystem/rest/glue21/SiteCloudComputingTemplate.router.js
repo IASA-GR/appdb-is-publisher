@@ -73,6 +73,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     "responses": {
       "200": openAPIDefinitions.getOpenAPI200Response({"ref": "#/components/schemas/SiteCloudComputingImageListResponse"})
     }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingImage_Filter'
+    }
   });
   router.get(
     '/cloud/computing/templates/:templateId/images',
@@ -229,6 +233,10 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       "200": openAPIDefinitions.getOpenAPI200Response({
         "ref": '#/components/schemas/SiteCloudComputingTemplateListResponse',
       })
+    }
+  }, {
+    filter: {
+      graphQLType: 'SiteCloudComputingTemplate_Filter'
     }
   })
   router.get(
