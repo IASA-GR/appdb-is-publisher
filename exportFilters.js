@@ -85,7 +85,7 @@ function HTMLExport() {
       }
       let prop = item.properties[name];
       let ref = prop['$ref'];
-      let filterName = name;
+      let filterName = _.trim(name);
       let fop = find(FilterOperators, op => op.name === ref);
       let fopProps = {};
 
@@ -98,69 +98,84 @@ function HTMLExport() {
             return;
           }
           let fopProp = fop.properties[fopName] || {};
-          let descr = _.trim(prop.description);
+          let descr =_.trim(prop.description);
           let filterDesc = _.trim(fopProp.description);
 
           if (descr) {
-            if (/^GLUE2/.test(descr) === false) {
-              descr = descr.charAt(0).toLowerCase() + descr.slice(1);
-            }
-
-            if (_.startsWith(_.trim(descr), 'where')) {
-              descr += ' on ' + fopName + ' ' + _.trim(descr);
+            if (_.startsWith(descr, 'where')) {
+              descr += ' on ' + fopName + ' ' + _.lowerFirst(descr);
             } else if (filterDesc) {
-              if (!_.startsWith(_.trim(filterDesc).toLowerCase(), 'contains') &&
-                !_.startsWith(_.trim(filterDesc).toLowerCase(), 'does') &&
-                !_.startsWith(_.trim(filterDesc).toLowerCase(), 'must')
+              if (!_.startsWith(filterDesc.toLowerCase(), 'contains') &&
+                !_.startsWith(filterDesc.toLowerCase(), 'does') &&
+                !_.startsWith(filterDesc.toLowerCase(), 'must')
               ) {
                 descr += ' is';
               }
-              descr += ' ' + filterDesc;
+              descr += ' ' + _.lowerFirst(filterDesc);
             }
           } else if (filterName && filterDesc) {
+
             if (filterName.indexOf('.') > -1) {
-              descr = ' where ' + filterName.split('.')[1];
+              descr = ' where ' + _.lowerFirst(_.trim(filterName).split('.')[1]);
             } else {
-              descr = ' where ' + filterName;
+              descr = ' where ' + _.lowerFirst(filterName);
             }
 
-            if (!_.startsWith(_.trim(filterDesc).toLowerCase(), 'contains') &&
-                !_.startsWith(_.trim(filterDesc).toLowerCase(), 'does') &&
-                !_.startsWith(_.trim(filterDesc).toLowerCase(), 'must')
+            if (!_.startsWith(filterDesc.toLowerCase(), 'contains') &&
+                !_.startsWith(filterDesc.toLowerCase(), 'does') &&
+                !_.startsWith(filterDesc.toLowerCase(), 'must')
               ) {
               descr += ' is';
             }
 
             descr += ' ' + filterDesc;
           } else  if (filterDesc) {
-            filterDesc = filterDesc.charAt(0).toLowerCase() + filterDesc.slice(1);
+            descr += ' where ' + _.lowerFirst(filterDesc);
+          }
 
-            descr += ' where ' + filterDesc;
+          if (/where\sfilter\sby\s/gi.test(descr)) {
+            descr = descr.replace(/where\sfilter\sby\s/gi, 'where ');
           }
 
           acc[filterName + '::' + fopName] = {
             dataType: (fopProp.type === 'array') ? (fopProp.items.format || fopProp.items.type) : fopProp.type,//fopProp.dataType || fopProp.type,
-            description: _.capitalize(descr) || '<none>',
+            description: _.upperFirst(descr) || '',
             itemDescription: item.description,
             isArray: (fopProp.type === 'array'),
             validValues: fopProp.validValues || []
           };
-
         });
       }
       // Check if the item is a primitive value
       else if (['string', 'number', 'integer', 'boolean', 'float', 'array'].indexOf(prop.type) > -1) {
+        let descr = ' is exact equal to the given ';
+
+        switch(prop.type) {
+          case 'string':
+          case 'number':
+          case 'integer':
+          case 'float':
+            descr += prop.type;
+            break;
+          case 'boolean':
+            descr = 'is true or false';
+            break;
+          default:
+            descr = '';
+            break;
+        }
+
         acc[name] = {
           dataType: (prop.type === 'array') ? (prop.items.format || prop.items.type) : prop.type,
-          description: prop.description,
+          description: prop.description + ' ' + _.trim(descr),
           isArray: (prop.type === 'array'),
           itemDescription: item.description,
           validValues: []
         };
       }
       //Check if the item is a Filter input object
-      else if (isFilter(prop['$ref'])) {
-        fop = find(Filters, (f) => f.name === prop['$ref']);
+      else if (isFilter(ref)) {
+        fop = find(Filters, (f) => f.name === ref);
 
         if (fop) {
           fopProps = getFlatPropOutput(fop, level + 1);
@@ -168,20 +183,33 @@ function HTMLExport() {
           Object.keys(fopProps).forEach(fopName => {
             try {
               let fopProp = fopProps[fopName];
-              let propDescr = _.get(prop, 'description') || '';
+              let propDescr =_.trim(_.get(prop, 'description'));
               let descr = _.trim(fopProp.description);
 
               if (descr) {
                 if (/^GLUE2/.test(descr) === false) {
-                  descr = descr.charAt(0).toLowerCase() + descr.slice(1);
+                  descr = _.lowerFirst(descr);
                 } else if (_.startsWith(_.trim(descr), 'where')) {
-                  descr += ' on ' + fopName + ' ' + _.trim(descr);
+                  descr += ' on ' + fopName + ' ' + _.lowerFirst(_.trim(descr));
                 }
+              }
+
+              if (propDescr) {
+                if (_.startsWith(propDescr.toLowerCase(), 'filter by') === false ) {
+                  propDescr = 'Filter by ' + _.lowerFirst(propDescr);
+                }
+
+                propDescr += (_.startsWith(_.trim(descr).toLowerCase(), 'where') ? '' : ' where');
+                descr = _.trim(_.lowerFirst(descr)) || ' equals given value';
+              }
+
+              if (/where\sfilter\sby\s/gi.test(descr)) {
+                descr = descr.replace(/where\sfilter\sby\s/gi, 'where ');
               }
 
               acc[filterName + '.' + fopName] = {
                 dataType: fopProp.dataType || prop.type,
-                description: propDescr + ' ' + descr,
+                description: _.trim(propDescr + ' ' + descr) || '',
                 itemDescription: item.description,
                 isArray: fopProp.isArray,
                 validValues: fopProp.validValues || []
@@ -199,8 +227,9 @@ function HTMLExport() {
 
           });
         }
-      } else if(isEnum(prop['$ref'])) {
-        fop = find(Enumerations, (e) => e.name === prop['$ref']);
+      } else if(isEnum(ref)) {
+        fop = find(Enumerations, (e) => e.name === ref);
+
         acc[name] = {
           dataType: 'enum',
           description: prop.description,
@@ -209,7 +238,7 @@ function HTMLExport() {
           itemDescription: item.description
         };
       } else {
-        console.log(prop)
+        console.log(prop);
       }
 
       return acc;
@@ -357,28 +386,25 @@ function HTMLExport() {
 
     html += foutFilters.map(fname => {
       let f = fout.filters[fname];
-      let desc = f.description
+      let desc = f.description;
+      let dataType = f.dataType;
       let filter = fname.split('::');
       let htmlFilter = '<span class="filtername">' + filter[0] +' </span>';
+
       if (filter.length > 1) {
         htmlFilter += '<span class="opsep">::</span><span class="op">' + filter[1] + '</span>';
       }
       htmlFilter += '<span class="sep">:</span>';
-      let dataType = f.dataType;
+
       if (f.isArray) {
         dataType += '[]';
       } else if (f.dataType === 'enum') {
-        if (!_.endsWith(desc, '.')) {
+        if (desc && !_.endsWith(desc, '.')) {
           desc += '. ';
         }
         desc += '<b>Valid Values:</b>' + f.validValues.join(',');
-      } else if (f.dataType === 'string') {
-        if (f.isArray) {
-
-        } else {
-
-        }
       }
+
       htmlFilter += getExampleValue(f);
 
       return '<TR><TD>' + htmlFilter + '</TD><TD>' + dataType + '</TD><TD>' + desc + '</TD></TR>';
@@ -428,7 +454,7 @@ function HTMLExport() {
 
 function init() {
   if (process.env.NODE_ENV === 'development') {
-    console.log('Initialize dummy infosystem to collect and generate filter documentation');
+    console.log('[EXPORT_FILTERS]: Initialize dummy infosystem instance to collect and generate filter documentation');
     return infosys.default().then(() => {
       initRestAPIRouter(express.Router());
       HTMLExport();
@@ -436,7 +462,10 @@ function init() {
     }).catch(err => {
       console.log('[EXPORT_FILTERS]: Could not generate filter docs. Reason: ' , err);
       return Promise.resolve(true);
-    });
+    }).then(() => {
+      console.log('[EXPORT_FILTERS]: Dispose dummy infosystem instance as no longer needed');
+      return Promise.resolve(true);
+    })
   } else {
     try {
       console.log('[EXPORT_FILTERS]: Generate filter documentation from distribution')
