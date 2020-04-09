@@ -5,13 +5,13 @@ Services may contain one or more VM image references and execution templates.
 type SiteCloudComputingService {
   """ Local Information System Identifier """
   id: ID
-  """ Entity name """
+  """ Entity name (GLUE2EntityName)"""
   entityName: String
-  """ Entity creation time """
+  """ Timestamp describing when the entity instance was generated (GLUE2EntityCreationTime) """
   entityCreationTime: String
-  """ Entity validity """
+  """ The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant (GLUE2EntityValidity). After that period has elapsed, the information SHOULD NOT be considered relevant """
   entityValidity: Int
-  """ Entity other info """
+  """ Placeholder to publish info that does not fit in any other attribute (GLUE2EntityOtherInfo). Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax """
   entityOtherInfo: String
   """ The service ID as given by glue2.1 """
   serviceID: String
@@ -59,49 +59,52 @@ type SiteCloudComputingService {
 input SiteCloudComputingService_Filter {
   """ Local Information System Identifier """
   id: FilterStringOperators
+  """ Service entity name """
   entityName: FilterStringOperators
+  """ Service entity creation timestamp """
   entityCreationTime: FilterStringOperators
+  """ Validity of service entity after its creation """
   entityValidity: FilterIntegerOperators
+  """ Share entity generic information"""
   entityOtherInfo: FilterStringOperators
-  """ The service ID as given by glue2.1 """
+  """ Service global unique ID """
   serviceID: FilterStringOperators
-  """ Maturity of the service in terms of quality of the software components """
+  """ Quality level of the service software components """
   qualityLevel: FilterStringOperators
-  """ Web page providing additional information like monitoring aspects """
+  """ Status information URL"""
   statusInfo: FilterStringOperators
-  """ The type of service according to a namespace-based classification. Examples are org.openstack or org.opennebula """
+  """ Namespace-based service type """
   serviceType: FilterStringOperators
   serviceAdminDomainForeignKey: FilterStringOperators
-  """ The provided capability according to the Open Grid Service Architecture (OGSA) architecture [OGF-GFD80] (this is the union of all values assigned to the capability attribute of the endpoints part of this service) """
+  """ Provided OSGA capability """
   capabilities: FilterStringArrayOperators
-  """ Human-readable summary description of the complexity in terms of the number of endpoint types, shares and resources. The syntax should be: endpointType=X,share=Y, resource=Z. """
+  """ Service complexity """
   complexity: String
-  """ Link to the service Acceptable User Policy (AUP) or Terms and Conditions for the usage of the service. This shall be in URL format. """
+  """ Acceptable User Policy URL """
   AUP: String
-  """ The number of VM in Halted state (VMs not running on the system with no resources reserved) """
+  """ Number of VM in Halted state"""
   haltedVM: FilterIntegerOperators
-  """ The number of VM in Running state (VMs actively consuming the system resources) """
+  """ Number of VM in Running state"""
   runningVM: FilterIntegerOperators
-  """ The number of VM in Suspended state (VMs not running but with reserved resources on the system) """
+  """ Number of VM in Suspended state"""
   suspendedVM: FilterIntegerOperators
-  """ Total number of VM known to the system (the sum of RunningVM, PendingVM, SuspendedVM and HaltedVM) """
+  """ Total number of VM """
   totalVM: FilterIntegerOperators
   """ Information system data hash value """
   hash: String
-  """ Filter by the hosting site's values """
+  """ Filter by the site's values """
   site: Site_Filter
-
   """ Filter by the service's cloud computing endpoints """
   endpoints: SiteCloudComputingEndpoint_Filter
-  """ Filter by the service's images values """
+  """ Filter by the service's cloud computing images values """
   images: SiteCloudComputingImage_Filter
-  """ Filter by service's total image count """
+  """ Filter by service's total cloud computing image count """
   numberOfImages: FilterIntegerOperators
-  """ Filter by the service's templates values """
+  """ Filter by the service's cloud computing templates values """
   templates: SiteCloudComputingTemplate_Filter
-  """ Filter by service's total template count """
+  """ Filter by service's total cloud computing template count """
   numberOfTemplates: FilterIntegerOperators
-  """ Filter by service's total manager count """
+  """ Filter by service's total cloud computing manager count """
   numberOfManagers: FilterIntegerOperators
   #shares: SiteCloudComputingShare_Filter
   """ Filter by service's total share count """
@@ -134,7 +137,8 @@ type SiteCloudComputingService_Collection {
 }
 
 extend type Query {
+  """ Get a cloud computing service based on the information system ID """
   siteCloudComputingServiceById(id: ID): SiteCloudComputingService
-  siteCloudComputingServiceByGocDBPKey(id: String): SiteCloudComputingService
+  """ Get the collection of all available cloud computing services in the information system """
   siteCloudComputingServices(filter: SiteCloudComputingService_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingService_Sort]): SiteCloudComputingService_Collection
 }

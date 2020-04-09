@@ -3,7 +3,6 @@ import {resolveAs, prepareItemResolverArgs, resolveMapDataWith} from '../../util
 const SiteCloudComputingServiceResolver = {
   Query: {
     siteCloudComputingServiceById: (root, args, context, info) => context.api('siteService').getById(args.id, prepareItemResolverArgs(args, info).fields || [], context),
-    siteCloudComputingServiceByGocDBPKey: (root, args, context, info) => context.api('siteService').getByEndpointPKey(args.id, prepareItemResolverArgs(args, info).fields || [], context),
     siteCloudComputingServices: resolveAs.collectionWith('siteService')
   },
   SiteCloudComputingService: {
