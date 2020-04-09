@@ -3,19 +3,19 @@ type SiteCloudComputingManager {
   id: ID
   """ GocDB site endpoint primary key """
   endpointPKey: String
-  """ GLUE2ManagerServiceForeignKey """
+  """ Service global unique ID (GLUE2ManagerServiceForeignKey) """
   serviceID: String
-  """ GLUE2ManagerID """
+  """ Manager global unique ID (GLUE2ManagerID) """
   managerID: String
   """ GLUE2CloudComputingManagerCloudComputingServiceForeignKey """
   cloudComputingServiceForeignKey: String
-  """ Human-readable name """
+  """ Entity name (GLUE2EntityName)"""
   entityName: String
-  """ Timestamp describing when the entity instance was generated """
+  """ Timestamp describing when the entity instance was generated (GLUE2EntityCreationTime) """
   entityCreationTime: String
   """ The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant. After that period has elapsed, the information SHOULD NOT be considered relevant """
   entityValidity: String
-  """ Placeholder to publish info that does not fit in any other attribute. Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax """
+  """ Placeholder to publish info that does not fit in any other attribute (GLUE2EntityOtherInfo). Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax """
   entityOtherInfo: [String]
   """ Name of the software product adopted as manager """
   productName: String
@@ -50,15 +50,20 @@ type SiteCloudComputingManager {
   """ Failover is the automatic transition of the VM to a secondary machine or server upon failure of the primary component. """
   failover: String
   """ If true the Cloud Computing Manager allows to move the virtual machine from one physical host to another without powering down the system """
-  liveMigration: String
+  liveMigration: Boolean
   """ If true the Cloud Computing Manager allows to backup and restore the virtual machines. This is a static value anddoes not ensure the availability of the storage for the backup """
-  VMBackupRestore: String
+  VMBackupRestore: Boolean
   """ Information system data hash value """
   hash: String
+  """ Site that the image belongs to """
   site: Site
+  """ Associated cloud computing service """
   service: SiteCloudComputingService
+  """ Associated cloud computing endpoint """
   endpoint: SiteCloudComputingEndpoint
+  """ Associated cloud computing templates """
   templates(filter: SiteCloudComputingTemplate_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingTemplate_Sort]): SiteCloudComputingTemplate_Collection
+  """ Associated cloud computing images """
   images(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
 }
 
@@ -68,62 +73,67 @@ input SiteCloudComputingManager_Filter {
   id: FilterStringOperators
   """ GocDB site endpoint primary key """
   endpointPKey: FilterStringOperators
-  """ GLUE2ManagerServiceForeignKey """
+  """ Service global unique ID """
   serviceID: FilterStringOperators
-  """ GLUE2ManagerID """
+  """ Manager global unique ID """
   managerID: FilterStringOperators
-  """ GLUE2CloudComputingManagerCloudComputingServiceForeignKey """
+  """ Service foreign key ID to this entity"""
   cloudComputingServiceForeignKey: FilterStringOperators
-  """ Human-readable name """
+  """ Manager entity name """
   entityName: FilterStringOperators
-  """ Timestamp describing when the entity instance was generated """
+  """ Manager entity creation timestamp  """
   entityCreationTime: FilterStringOperators
-  """ The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant. After that period has elapsed, the information SHOULD NOT be considered relevant """
+  """ Validity of manager entity after its creation"""
   entityValidity: FilterStringOperators
-  """ Placeholder to publish info that does not fit in any other attribute. Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax """
+  """ Manager entity generic information"""
   entityOtherInfo: FilterStringArrayOperators
   """ Name of the software product adopted as manager """
   productName: FilterStringOperators
   """ Version of the software product adopted as manager """
   productVersion: FilterStringOperators
-  """ Name of the underlying hypervisor that creates, runs and manages Virtual Machines """
+  """ Name of the underlying hypervisor """
   hypervisorName: FilterStringOperators
   """ Version of the hypervisor """
   hypervisorVersion: FilterStringOperators
-  """ The total number of physical CPUs cores accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable. """
+  """ The total number of physical CPUs cores"""
   totalCPUs: FilterIntegerOperators
-  """ The total amount of RAM accessible via any of the available Endpoints and managed by this Cloud Compute Manager. This value SHOULD represent the total installed capacity, i.e. including resources which are temporarily unavailable. """
+  """ The total amount of accessible RAM """
   totalRAM: FilterIntegerOperators
-  """ The maximum number of Virtual CPU who can be assigned to a single VM. (with virtual CPU it is intended the CPU cores as seen by the VM OS) """
+  """ Maximum number of Virtual CPU per VM"""
   instanceMaxCPU: FilterIntegerOperators
-  """ The minimum number of Virtual CPU who can be assigned to a single VM (with virtual CPU it is intended the CPU cores as seen by the VM OS) """
+  """ Minimum number of Virtual CPU per VM"""
   instanceMinCPU: FilterIntegerOperators
-  """ The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM) """
+  """ Maximum value (in MB) of virtual RAM per VM"""
   instanceMaxRAM: FilterIntegerOperators
-  """ The minimum value (in MB) of virtual RAM memory who can be assigned to a single VM (with virtual RAM memory  it is intended the amount of RAM seen by the VM OS, not the phisical RAM dedicated to the VM) """
+  """ Minimum value (in MB) of virtual RAM per VM"""
   instanceMinRAM: FilterIntegerOperators
-  """ The maximum value (in MB) of virtual RAM memory who can be dedicated to a VM (i.e. physical host memory, not shared of swapped) """
+  """ Maximum value (in MB) of dedicated virtual RAM per VM"""
   instanceMaxDedicatedRAM: FilterIntegerOperators
-  """ The minimum value (in MB) of virtual RAM memory who can is dedicated to a VM (i.e. physical host memory, notshared of swapped) """
+  """ Minimum value (in MB) of dedicated virtual RAM per VM """
   instanceMinDedicatedRAM: FilterIntegerOperators
-  """ The type of network virtualization performed by the Cloud Computing Manager to segregate VMs VLANs (ex. none, vSwitch, ebtables, etc…) """
+  """Network virtualization type """
   networkVirtualizationType: FilterStringOperators
-  """ The type of CPU virtualization (ex. full/paravirtualization/hardware assisted) """
+  """ CPU virtualization """
   CPUVirtualizationType: FilterStringOperators
-  """ The format of virtual disk images supported (ex. qcow2, raw, vmdk) """
+  """ Virtual disk image supported format"""
   virtualdiskFormats: FilterStringArrayOperators
-  """ Failover is the automatic transition of the VM to a secondary machine or server upon failure of the primary component. """
+  """ Failover to a secondary machine"""
   failover: FilterStringOperators
-  """ If true the Cloud Computing Manager allows to move the virtual machine from one physical host to another without powering down the system """
-  liveMigration: FilterStringOperators
-  """ If true the Cloud Computing Manager allows to backup and restore the virtual machines. This is a static value anddoes not ensure the availability of the storage for the backup """
-  VMBackupRestore: FilterStringOperators
+  """ Enabled live migration"""
+  liveMigration: Boolean
+  """ Allow to backup and restore the virtual machines"""
+  VMBackupRestore: Boolean
   """ Information system data hash value """
   hash: String
+  """ Site that the manager belongs to"""
   site: Site_Filter
+  """ Cloud computing service that the manager belongs to"""
   service: SiteCloudComputingService_Filter
+  """ Associated cloud computing endpoint """
   endpoint: SiteCloudComputingEndpoint_Filter
+  """ Associated cloud computing templates """
   templates: SiteCloudComputingTemplate_Filter
+  """ Associated cloud computing images """
   images: SiteCloudComputingImage_Filter
 }
 
@@ -145,6 +155,8 @@ type SiteCloudComputingManager_Collection {
 }
 
 extend type Query {
+  """ Get a cloud computing manager based on the information system ID """
   siteCloudComputingManagerById(id: ID!): SiteCloudComputingManager
+  """ Get the collection of all available cloud computing managers in the information system """
   siteCloudComputingManagers(filter: SiteCloudComputingManager_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingManager_Sort]): SiteCloudComputingManager_Collection
 }
