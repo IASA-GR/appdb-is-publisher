@@ -23,11 +23,11 @@ type Site {
   officialName: String
   """ Description of site (SiteDescription@gocdb) """
   description: String
-  """ Site url in gocDB portal (SiteGocdbPortalUrl@gpcdb) """
+  """ Site URL in gocDB portal (SiteGocdbPortalUrl@gpcdb) """
   gocdbPortalUrl: String
-  """ Site home url (SiteHomeUrl@gocdb) """
+  """ Site home URL (SiteHomeUrl@gocdb) """
   homeUrl: String
-  """ Site GIIS url (SiteGiisUrl@gocdb) """
+  """ Site GIIS URL (SiteGiisUrl@gocdb) """
   giisUrl: String
   """ Site country code (SiteCountryCode@gocdb) """
   countryCode: String
@@ -37,7 +37,7 @@ type Site {
   tier: String
   """ Site sub grid (SiteSubgrid@gocdb) """
   subgrid: String
-  """ Site roc (SiteRoc@gocdb) """
+  """ Site ROC (SiteRoc@gocdb) """
   roc: String
   """ Indcates if site is in procuction state (SiteProdInfrastructure@gocdb) """
   prodInfrastructure: String #SiteInfrastructureState
@@ -77,71 +77,71 @@ type Site {
 input Site_Filter {
   """ Local Information System Identifier """
   id: FilterStringOperators
-  """ GocDB Site identifier (SitePKey@gocdb) """
+  """ GocDB Site identifier """
   pkey: FilterStringOperators
-  """ Site name (SiteName@gocdb) """
+  """ Site name """
   name: FilterStringOperators
-  """ Short version of site name (SiteShortName@gocdb) """
+  """ Short version of site name """
   shortName: FilterStringOperators
-  """ Official name of site (SiteOfficialName@gocdb) """
+  """ Official name of site """
   officialName: FilterStringOperators
-  """ Description of site (SiteDescription@gocdb) """
+  """ Description of site """
   description: FilterStringOperators
-  """ Site url in gocDB portal (SiteGocdbPortalUrl@gpcdb) """
+  """ Site URL in gocDB portal """
   gocdbPortalUrl: FilterStringOperators
-  """ Site home url (SiteHomeUrl@gocdb) """
+  """ Site home URL """
   homeUrl: FilterStringOperators
-  """ Site GIIS url (SiteGiisUrl@gocdb) """
+  """ Site GIIS URL """
   giisUrl: FilterStringOperators
-  """ Site country code (SiteCountryCode@gocdb) """
+  """ Site country code """
   countryCode: FilterStringOperators
-  """ Site country name (SiteCountry@gocdb) """
+  """ Site country name """
   country: FilterStringOperators
-  """ Site tier (SiteTier@gocdb) """
+  """ Site tier """
   tier: FilterStringOperators
-  """ Site sub grid (SiteSubgrid@gocdb) """
+  """ Site sub grid """
   subgrid: FilterStringOperators
-  """ Site roc (SiteRoc@gocdb) """
+  """ Site ROC """
   roc: FilterStringOperators
-  """ Indicates if site is in procuction state (SiteProdInfrastructure@gocdb) """
+  """ Site in production value"""
   prodInfrastructure: SiteInfrastructureState
-  """ Certification status of site (SiteCertStatus@gocdb) """
+  """ Certification status of site """
   certStatus: SiteCertificationStatus
-  """ Timezone of site (SiteTimezone@gocdb) """
+  """ Site timezone """
   timezone: FilterStringOperators
-  """ Site coordinates (latitude) (SiteLatitude@gocdb) """
+  """ Site physical latitude location coordinates """
   latitude: FilterFloatOperators
-  """ Site coordinates (longitude) (SiteLongitude#gocdb) """
+  """ Site physical longitude location coordinates """
   longitude: FilterFloatOperators
-  """ Site domain name (SiteDomainname@gocdb) """
+  """ Site domain name """
   domainName: FilterStringOperators
   """ Information system data hash value """
   hash: String
-  """ Filter by site service statuses (SiteServiceStatus@argo) """
+  """ Filter by site service status """
   serviceStatuses: SiteServiceStatus_Filter
-  """ Filter by site service downtimes (SiteServiceStatus@gocdb) """
+  """ Filter by site service downtimes """
   serviceDowntimes: SiteServiceDowntime_Filter
-  """ Filter by site's services value """
+  """ Filter by site's clooud computing service value """
   cloudComputingServices: SiteCloudComputingService_Filter
-  """ Filter by site's service endpoints value """
+  """ Filter by site's cloud computing endpoint value """
   cloudComputingEndpoints: SiteCloudComputingEndpoint_Filter
-  """ Filter by site service endpoint images value """
+  """ Filter by site cloud computing endpoint image value """
   cloudComputingImages: SiteCloudComputingImage_Filter
-  """ Filter by site service endpoint template value """
+  """ Filter by site cloud computing endpoint template value """
   cloudComputingTemplates: SiteCloudComputingTemplate_Filter
-  """ Filter by site service endpoint shares value """
+  """ Filter by site cloud computing endpoint shares value """
   cloudComputingShares: SiteCloudComputingShare_Filter
-  """ Filter by site service endpoint manager value """
+  """ Filter by site cloud computing endpoint manager value """
   cloudComputingManagers: SiteCloudComputingManager_Filter
-  """ Filter by site service endpoint images count """
+  """ Filter by site cloud computing endpoint images count """
   withImageCount: FilterIntegerOperators
-  """ Filter by site service endpoint templates count """
+  """ Filter by site cloud computing endpoint templates count """
   withTemplateCount: FilterIntegerOperators
-  """ Filter by site service endpoint services count """
+  """ Filter by site cloud computing endpoint services count """
   withServiceCount: FilterIntegerOperators
-  """ Filter by site service endpoint shares count """
+  """ Filter by site cloud computing endpoint shares count """
   withShareCount: FilterIntegerOperators
-  """ Filter by site service endpoint managers count """
+  """ Filter by site cloud computing endpoint managers count """
   withManagerCount: FilterIntegerOperators
   #or: [Site_Filter]
   #and: [Site_Filter]
@@ -166,8 +166,12 @@ type Site_Collection {
 }
 
 extend type Query {
+  """ Get a site based on the information system ID """
   siteById(id: ID!): Site
+  """ Get a site based on its GOCDB ID """
   siteByGocDBPKey(id: String!): Site
+  """ Get a site based on its name """
   siteByName(name: String!): Site
+  """ Get the collection of all available sites in the information system """
   sites(filter: Site_Filter, limit: Int, skip: Int, sort: [Site_Sort]): Site_Collection
 }
