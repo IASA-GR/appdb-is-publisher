@@ -2,49 +2,53 @@
 type SiteCloudComputingTemplate {
   """ Local Information System identifier """
   id: ID
+  """ Entity name (GLUE2EntityName)"""
   entityName: String
+  """ Timestamp describing when the entity instance was generated (GLUE2EntityCreationTime) """
   entityCreationTime: String
+  """ The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant (GLUE2EntityValidity). After that period has elapsed, the information SHOULD NOT be considered relevant """
   entityValidity:Int
+  """ Placeholder to publish info that does not fit in any other attribute (GLUE2EntityOtherInfo). Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax """
   entityOtherInfo: [String]
-  """ SiteEndpointPKey@gocdb """
+  """ Endpoint primary key (GocDB pkey) """
   endpointPKey: String
-  """ GLUE2EndpointID """
+  """ Endpoint global unique ID (GLUE2EndpointID) """
   endpointID: String
-  """ GLUE2ResourceID """
+  """ Resource global unique ID (GLUE2ResourceID) """
   resourceID: String
-  """ GLUE2CloudComputingInstanceTypeTemplateID """
+  """ Template global unique ID (GLUE2CloudComputingInstanceTypeTemplateID) """
   templateID: String
-  """ GLUE2ResourceManagerForeignKey """
+  """ Resource manager key in the infrastructure (GLUE2ResourceManagerForeignKey) """
   resourceManagerForeignKey: String
-  """ Reference to one or more marketplaces which stores the metadata of this resource template. Reference is the URL of the resource in the marketplace. """
+  """ Reference to one or more marketplaces which stores the metadata of this resource template. Reference is the URL of the resource in the marketplace (GLUE2CloudComputingInstanceTypeMarketplaceURL)."""
   marketplaceURL: [String]
-  """ Virtual RAM memory (MB) provided to the virtual machine (this is the total quantity of RAM the machine OS will see) """
+  """ Virtual RAM memory (MB) provided to the virtual machine (this is the total quantity of RAM the machine OS will see)  (GLUE2CloudComputingInstanceTypeRAM)"""
   RAM: Int
-  """ Number of virtual cores provided to the virtual machine (this is the number of core the machine OS will see) """
+  """ Number of virtual cores provided to the virtual machine (this is the number of core the machine OS will see) (GLUE2CloudComputingInstanceTypeCPU)"""
   CPU: Int
-  """ True if direct inbound network connectivity is available to the OS, even if limited, e.g. by firewall rules. """
+  """ True if direct inbound network connectivity is available to the OS, even if limited, e.g. by firewall rules.  (GLUE2CloudComputingInstanceTypeNetworkIn) """
   networkIn: Boolean
-  """ True if direct outbound network connectivity is available to the OS, even if limited, e.g. by firewall rules. """
+  """ True if direct outbound network connectivity is available to the OS, even if limited, e.g. by firewall rules. (GLUE2CloudComputingInstanceTypeNetworkOut)"""
   networkOut: Boolean
-  """ The type of internal network connection available to the OS. """
+  """ The type of internal network connection available to the OS (GLUE2CloudComputingInstanceTypeNetworkInfo). """
   networkInfo: [String]
-  """ Amount of Ephemeral storage associated to the VM. This is temporary storage which is deleted after the VM closure and is represented as a new resource. """
+  """ Amount of Ephemeral storage associated to the VM. This is temporary storage which is deleted after the VM closure and is represented as a new resource (GLUE2CloudComputingInstanceTypeEphemeralStorage). """
   ephemeralStorage: Int
-  """ Size of the disk associated to the OS image (GB). If this attribute is omitted, the OS disk size will be the one specified by the CloudComputingImage entity, otherwise the CloudComputingImage OS disk will be extended to this value. """
+  """ Size of the disk associated to the OS image (GB). If this attribute is omitted, the OS disk size will be the one specified by the CloudComputingImage entity, otherwise the CloudComputingImage OS disk will be extended to this value (GLUE2CloudComputingInstanceTypeDisk). """
   disk: Int
-  """ The platform architecture provided to the virtual machine (ex. i386, x86_64) """
+  """ The platform architecture provided to the virtual machine (ex. i386, x86_64) (GLUE2CloudComputingInstanceTypePlatform)"""
   platform: String
-  """ The allowed inbound external connectivity ports (if not specified, all ports are allowed) """
+  """ The allowed inbound external connectivity ports (if not specified, all ports are allowed) (GLUE2CloudComputingInstanceTypeNetworkPortsIn)"""
   networkPortsIn: [String]
-  """ The allowed outbound external connectivity ports (if not specified, all ports are allowed) """
+  """ The allowed outbound external connectivity ports (if not specified, all ports are allowed) (GLUE2CloudComputingInstanceTypeNetworkPortsOut) """
   networkPortsOut: [String]
-  """ The template's manager key """
+  """ The template's manager key (GLUE2CloudComputingInstanceTypeCloudComputingManagerForeignKey)"""
   managerForeignKey: String
-  """ The template's endpoint key """
+  """ The template's endpoint key (GLUE2CloudComputingInstanceTypeCloudComputingEndpointForeignKey)"""
   endpointForeignKey: String
-  """ The template's share key """
+  """ The template's share key (GLUE2CloudComputingInstanceTypeCloudComputingShareForeignKey)"""
   shareForeignKey: String
-  """ Cloud compunting service ID """
+  """ Cloud computing service ID (GLUE2ServiceID)"""
   serviceID: String
   """ The manager hypervisor name (GLUE2CloudComputingManagerHypervisorName) """
   managerName: String
@@ -56,76 +60,92 @@ type SiteCloudComputingTemplate {
   sharePolicy: String
   """ Information system data hash value """
   hash: String
+  """ Site the template belongs to"""
   site: Site
+  """ Associated cloud computing service """
   service: SiteCloudComputingService
+  """ Associated cloud computing share """
   share: SiteCloudComputingShare
+  """ Associated cloud computing manager """
   manager: SiteCloudComputingManager
+  """ Associated cloud computing endpoint """
   endpoint: SiteCloudComputingEndpoint
+  """ Initializable cloud computing images using this template """
   images(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
 }
 
 input SiteCloudComputingTemplate_Filter {
   """ Local Information System identifier """
   id: FilterStringOperators
+  """ Entity name (GLUE2EntityName)"""
   entityName: FilterStringOperators
+  """ Timestamp describing when the entity instance was generated (GLUE2EntityCreationTime) """
   entityCreationTime: FilterStringOperators
+  """ The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant (GLUE2EntityValidity)"""
   entityValidity: FilterIntegerOperators
+  """ Placeholder to publish info that does not fit in any other attribute (GLUE2EntityOtherInfo) """
   entityOtherInfo: FilterStringArrayOperators
-  """ SiteEndpointPKey@gocdb """
+  """ Endpoint primary key (gocdb pkey) """
   endpointPKey: FilterStringOperators
-  """ GLUE2EndpointID """
+  """ Endpoint global unique ID """
   endpointID: FilterStringOperators
-  """ GLUE2ResourceID """
+  """ Resource global unique ID """
   resourceID: FilterStringOperators
-  """ GLUE2CloudComputingInstanceTypeTemplateID """
+  """ Template global unique ID """
   templateID: FilterStringOperators
-  """ GLUE2ResourceManagerForeignKey """
+  """ Resource manager key in the infrastructure"""
   resourceManagerForeignKey: FilterStringOperators
-  """ Reference to one or more marketplaces which stores the metadata of this resource template. Reference is the URL of the resource in the marketplace. """
+  """ Marketplace URL with metadata of this resource template"""
   marketplaceURL: FilterStringArrayOperators
-  """ Virtual RAM memory (MB) provided to the virtual machine (this is the total quantity of RAM the machine OS will see) """
+  """ Virtual RAM memory (MB) provided to the virtual machine """
   RAM: FilterIntegerOperators
-  """ Number of virtual cores provided to the virtual machine (this is the number of core the machine OS will see) """
+  """ Number of virtual cores provided to the virtual machine """
   CPU: FilterIntegerOperators
-  """ True if direct inbound network connectivity is available to the OS, even if limited, e.g. by firewall rules. """
+  """ Inbound network connectivity available to the OS"""
   networkIn: Boolean
-  """ True if direct outbound network connectivity is available to the OS, even if limited, e.g. by firewall rules. """
+  """ Outbound network connectivity available to the OS """
   networkOut: Boolean
-  """ The type of internal network connection available to the OS. """
+  """ Type of internal network connection available to the OS """
   networkInfo: FilterStringArrayOperators
-  """ Amount of Ephemeral storage associated to the VM. This is temporary storage which is deleted after the VM closure and is represented as a new resource. """
+  """ Amount of Ephemeral storage associated to the VM """
   ephemeralStorage: FilterIntegerOperators
-  """ Size of the disk associated to the OS image (GB). If this attribute is omitted, the OS disk size will be the one specified by the CloudComputingImage entity, otherwise the CloudComputingImage OS disk will be extended to this value. """
+  """ Size of the disk (GB) associated to the OS image """
   disk: FilterIntegerOperators
-  """ The platform architecture provided to the virtual machine (ex. i386, x86_64) """
+  """ Platform architecture provided to the virtual machine """
   platform: FilterStringOperators
-  """ The allowed inbound external connectivity ports (if not specified, all ports are allowed) """
+  """ Allowed inbound external connectivity ports """
   networkPortsIn: FilterStringArrayOperators
-  """ The allowed outbound external connectivity ports (if not specified, all ports are allowed) """
+  """ Allowed outbound external connectivity ports """
   networkPortsOut: FilterStringArrayOperators
-  """ The template's manager key """
+  """ Template manager key of infrastructure"""
   managerForeignKey: FilterStringOperators
-  """ The template's endpoint key """
+  """ Template endpoint key of infrastructure """
   endpointForeignKey: FilterStringOperators
-  """ The template's share key """
+  """ Template share key of infrastructure """
   shareForeignKey: FilterStringOperators
-  """ Cloud compunting service ID """
+  """ Cloud computing service ID """
   serviceID: FilterStringOperators
-  """ The manager hypervisor name (GLUE2CloudComputingManagerHypervisorName) """
+  """ The manager hypervisor name """
   managerName: FilterStringOperators
-  """ The VO name as defined by the user domain policy (GLUE2PolicyUserDomainForeignKey) """
+  """ The VO name as defined by the user domain policy """
   instanceTypeVO: FilterStringOperators
-  """ The VO as defined in the cloud computing share from the user domain policy (GLUE2PolicyUserDomainForeignKey) """
+  """ The VO as defined in the cloud computing share from the user domain policy """
   shareVO: FilterStringOperators
-  """ The VO name as defined by the user domain policy (GLUE2PolicyUserDomainForeignKey) """
+  """ The VO name as defined by the user domain policy """
   sharePolicy: FilterStringOperators
   """ Information system data hash value """
   hash: FilterStringOperators
+  """ Associated site """
   site: Site_Filter
+  """ Associated cloud computing service """
   service: SiteCloudComputingService_Filter
+  """ Associated cloud computing share """
   share: SiteCloudComputingShare_Filter
+  """ Associated cloud computing manager"""
   manager: SiteCloudComputingManager_Filter
+  """ Associated cloud computing endpoint"""
   endpoint: SiteCloudComputingEndpoint_Filter
+  """ Initializable cloud computing images """
   images: SiteCloudComputingImage_Filter
 }
 
@@ -137,16 +157,25 @@ enum SiteCloudComputingTemplate_Sort {
   id_desc
 }
 
+"""Response of cloud computing templates query"""
 type SiteCloudComputingTemplate_Collection {
+  """Total count of filtered cloud computing templates"""
   totalCount: Int
+  """ Retrieved count of filtered cloud computing templates"""
   count: Int
+  """Maximum number of filtered items to retrieve"""
   limit: Int
+  """Number of filtered items to skip before returning the results"""
   skip: Int
+  """ Sort filtered cloud computing templates"""
   sort: [SiteCloudComputingTemplate_Sort]
+  """List of retrieved filtered results"""
   items: [SiteCloudComputingTemplate]
 }
 
 extend type Query {
+  """Retrieve a cloud computing template by its ID in the information system"""
   siteCloudComputingTemplateById(id: ID!): SiteCloudComputingTemplate
+  """Retrieve cloud computing templates by the given filtering and paging criteria"""
   siteCloudComputingTemplates(filter: SiteCloudComputingTemplate_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingTemplate_Sort]): SiteCloudComputingTemplate_Collection
 }
