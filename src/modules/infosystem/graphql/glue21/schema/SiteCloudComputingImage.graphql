@@ -6,17 +6,17 @@ enum SiteCloudComputingImageContentType {
 type SiteCloudComputingImage {
   """ Local Information System identifier """
   id: ID
-  """ GLUE2EntityName """
+  """ Entity name (GLUE2EntityName)"""
   entityName: String
-  """ GLUE2EntityCreationTime """
+  """ Timestamp describing when the entity instance was generated (GLUE2EntityCreationTime) """
   entityCreationTime: String
-  """ GLUE2EntityValidity """
+  """ The duration after CreationTime that the information presented in the Entity SHOULD be considered relevant (GLUE2EntityValidity). After that period has elapsed, the information SHOULD NOT be considered relevant """
   entityValidity: Int
-  """ GLUE2EntityOtherInfo """
+  """ Placeholder to publish info that does not fit in any other attribute (GLUE2EntityOtherInfo). Free-form string, comma-separated tags, (name,value ) pair are all examples of valid syntax """
   entityOtherInfo: [String]
-  """ GLUE2EndpointID """
+  """ Image's endpoint global unique ID """
   endpointID: String
-  """ Image native ID """
+  """ Image global unique ID """
   imageID: String
   """ Description of the image. """
   description: String
@@ -50,102 +50,118 @@ type SiteCloudComputingImage {
   installedsoftware: [String]
   """ Reference to one or more marketplaces which stores the metadata of this instance. Reference is the URL of the resource in the marketplace. """
   marketPlaceURL: String
-  """ ImageBaseMpUri@appdb """
+  """ AppDB marketplace URI referring the VM Image regardless of any VO"""
   imageBaseMpUri: String
-  """ ImageContentType@appdb """
+  """ VM Image source type, indicating if it is directly downloaded to site or through a VO image list """
   imageContentType: SiteCloudComputingImageContentType
-  """ ImageVoVmiInstanceId@appdb """
+  """ VO image list reference ID of the VM Image in AppDB """
   imageVoVmiInstanceId: Int
-  """ ImageVmiInstanceId@appdb """
+  """ VM Image ID in AppDB """
   imageVmiInstanceId: Int
-  """ ImageVmiInstanceId@appdb """
+  """ VO that this VM image is referenced in its image list"""
   imageVoVmiInstanceVO: String
-  """ ImageAppDBVAppID@appdb """
+  """ Virtual appliance ID in AppDB """
   imageAppDBVAppID: Int
   managerForeignKey: String
   managerName: String
   endpointForeignKey: String
   shareForeignKey: String
+  """ VO that the VM Image related share is referencing """
   shareVO: String
+  """ Policy of the related share """
   sharePolicy: String
+  """ Information system data hash value """
   hash: String
+  """ Site that the image belongs to """
   site: Site
+  """ Cloud computing service that the image belongs to"""
   service: SiteCloudComputingService
+  """ Cloud computing endpoint that the image belongs to"""
   endpoint: SiteCloudComputingEndpoint
+  """ Cloud computing share that the image belongs to"""
   share: SiteCloudComputingShare
+  """ Collection of cloud computing templates applicable to this image"""
   templates(filter: SiteCloudComputingTemplate_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingTemplate_Sort]): SiteCloudComputingTemplate_Collection
 }
 
 input SiteCloudComputingImage_Filter {
   """ Local Information System identifier """
   id: FilterStringOperators
-  """ GLUE2EntityName """
+  """ Image entity name """
   entityName: FilterStringOperators
-  """ GLUE2EntityCreationTime """
+  """ Image entity creation timestamp """
   entityCreationTime: FilterStringOperators
-  """ GLUE2EntityValidity """
+  """ Validity of image entity after its creation """
   entityValidity: FilterIntegerOperators
-  """ GLUE2EntityOtherInfo """
+  """ Image entity generic information """
   entityOtherInfo: FilterStringArrayOperators
-  """ GLUE2EndpointID """
+  """ Image's endpoint's global unique ID """
   endpointID: FilterStringOperators
-  """ Image native ID """
+  """ Image global unique ID """
   imageID: FilterStringOperators
-  """ Description of the image. """
+  """ Description of the image """
   description: FilterStringOperators
-  """ Version of the image. """
+  """ Version of the image """
   version: FilterStringOperators
-  """ Reference to this particular template to be used during instantiation of a VM via the Endpoint. """
+  """ Template reference to be used during instantiation of a VM via the endpoint """
   templateID: FilterStringOperators
-  """ The platform architecture to which the OS belongs (ex. i386, x86_64) """
+  """ Image OS platform architecture """
   OSPlatform: FilterStringOperators
-  """ The general family to which the OS belongs. """
+  """ Image OS general family """
   OSFamily: FilterStringOperators
-  """ The specific name of the OS. """
+  """ Image OS name """
   OSName: FilterStringOperators
-  """ The version of the OS, as defined by the vendor. """
+  """ Image OS version """
   OSVersion: FilterStringOperators
-  """ Minimum number of virtual CPU cores required to run the image (the actual number of cores will depend on the selected CloudComputeInstanceType) """
+  """ Minimum number of virtual CPU cores"""
   minCPU: FilterIntegerOperators
-  """ Number of virtual CPU cores recommended to run the image (this is a recommended value, actual number of cores will depend on the selected CloudComputeInstanceType) """
+  """Recommended number of virtual CPU cores """
   recommendedCPU: FilterIntegerOperators
-  """ Minimum virtual RAM memory required to run the image (the actual RAM value will depend on the selected CloudComputeInstanceType) """
+  """ Minimum virtual RAM memory """
   minRAM: FilterIntegerOperators
-  """ Virtual RAM memory recommended to run the image (this is a recommended value, the actual RAM value will depend on the selected CloudComputeInstanceType) """
+  """ Recommended virtual RAM memory"""
   recommendedRAM: FilterIntegerOperators
-  """ Size of the OS disk image in GB. """
+  """ Disk size of the OS disk image (GB) """
   diskSize: FilterIntegerOperators
-  """ Information about user access to the VM. Can be: credentials injected during contextualization, pre-defined username/password, pre-defined RSA key """
+  """ Information about user access to the VM """
   accessInfo: FilterStringOperators
   """ Supported contextualization mechanism (if any) """
   contextualizationName: FilterStringOperators
-  """ Custom software installed on the instance. """
+  """ Custom software installed on the instance """
   installedsoftware: FilterStringArrayOperators
-  """ Reference to one or more marketplaces which stores the metadata of this instance. Reference is the URL of the resource in the marketplace. """
+  """ The URL of the image reference to one or more marketplaces """
   marketPlaceURL: FilterStringOperators
-  """ ImageBaseMpUri@appdb """
+  """ AppDB marketplace URI referencing the VM Image regardless of any VO """
   imageBaseMpUri: FilterStringOperators
-  """ ImageContentType@appdb """
+  """ VM Image source type """
   imageContentType: SiteCloudComputingImageContentType
-  """ ImageVoVmiInstanceId@appdb """
+  """ VO list VM Image ID in AppDB """
   imageVoVmiInstanceId: FilterIntegerOperators
-  """ ImageVmiInstanceId@appdb """
+  """ VM Image ID in AppDB """
   imageVmiInstanceId: FilterIntegerOperators
-  """ ImageVmiInstanceId@appdb """
+  """ VO referring this VM image """
   imageVoVmiInstanceVO: FilterStringOperators
-  """ ImageAppDBVAppID@appdb """
+  """ Virtual appliance ID in AppDB """
   imageAppDBVAppID: FilterIntegerOperators
   managerForeignKey: FilterStringOperators
   managerName: FilterStringOperators
   endpointForeignKey: FilterStringOperators
   shareForeignKey: FilterStringOperators
+  """ Related share VO """
   shareVO: FilterStringOperators
+  """ Policy of the related share """
   sharePolicy: FilterStringOperators
+  """ Information system data hash value """
   hash: FilterStringOperators
+  """ Site that the image belongs to """
   site: Site_Filter
+  """ Cloud computing service that the image belongs to"""
   service: SiteCloudComputingService_Filter
+  """ Cloud computing endpoint that the image belongs to"""
   endpoint: SiteCloudComputingEndpoint_Filter
+  """ Cloud computing share that the image belongs to"""
   share: SiteCloudComputingShare_Filter
+  """ Collection of cloud computing templates applicable to this image"""
   templates: SiteCloudComputingTemplate_Filter
   #or: [SiteServiceImage_Filter]
   #and: [SiteServiceImage_Filter]
@@ -170,6 +186,8 @@ type SiteCloudComputingImage_Collection {
 }
 
 extend type Query {
+  """ Get a cloud computing image based on the information system ID """
   siteCloudComputingImageById(id: ID!): SiteCloudComputingImage
+  """ Get the collection of all available cloud computing images in the information system """
   siteCloudComputingImages(filter: SiteCloudComputingImage_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingImage_Sort]): SiteCloudComputingImage_Collection
 }
