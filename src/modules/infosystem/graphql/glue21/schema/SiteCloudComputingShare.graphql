@@ -2,23 +2,23 @@
 type SiteCloudComputingShare {
   """ Local Information System identifier """
   id: ID
-  """ GLUE2EntityName """
+  """ Share entity name (GLUE2EntityName)"""
   entityName: String
-  """ GLUE2EntityCreationTime """
+  """ Timestamp describing when the share entity instance was generated (GLUE2EntityCreationTime) """
   entityCreationTime: String
-  """ GLUE2EntityValidity """
+  """ The duration after entityCreationTime that the information presented in the Entity SHOULD be considered relevant (GLUE2EntityValidity). After that period has elapsed, the information SHOULD NOT be considered relevant """
   entityValidity: Int
-  """ A global unique ID (GLUE2ShareID) """
+  """ Share global unique ID (GLUE2ShareID) """
   shareID: String
   """ Description of this share (GLUE2ShareDescription) """
   description: String
-  """ Related service (GLUE2ShareServiceForeignKey) """
+  """ Related cloud computing service global unique ID (GLUE2ShareServiceForeignKey) """
   serviceForeignKey: String
-  """ Related endpoint (GLUE2ShareEndpointForeignKey) """
+  """ Related cloud computing endpoint global unique ID (GLUE2ShareEndpointForeignKey) """
   endpointForeignKey: String
-  """ Related cloud computing service (GLUE2CloudComputingShareCloudComputingServiceForeignKey) """
+  """ Related cloud computing service global unique ID (GLUE2CloudComputingShareCloudComputingServiceForeignKey) """
   cloudComputingServiceForeignKey: String
-  """ Related cloud computing endpoint (GLUE2CloudComputingShareCloudComputingEndpointForeignKey) """
+  """ Related cloud computing endpoint global unique ID (GLUE2CloudComputingShareCloudComputingEndpointForeignKey) """
   cloudComputingendpointForeignKey: String
   """ The maximum number of Virtual CPU who can be assigned to a single VM for the VM in this share. With virtual CPU it is intended the CPU seen by the VM OS, not the physical host CPU assigned to the VM. (GLUE2CloudComputingShareInstanceMaxCPU) """
   instanceMaxCPU: Int
@@ -48,7 +48,7 @@ type SiteCloudComputingShare {
   projectID: String
   """ The VO this share reflects """
   VO: String
-  """ SharePolicy """
+  """ The policy applied in the cloud computing share"""
   policy: String
   """ Information system data hash value """
   hash: String
@@ -67,53 +67,53 @@ type SiteCloudComputingShare {
 input SiteCloudComputingShare_Filter {
   """ Local Information System identifier """
   id: FilterStringOperators
-  """ GLUE2EntityName """
+  """ Share entity name"""
   entityName: FilterStringOperators
-  """ GLUE2EntityCreationTime """
+  """ Share entity creation timestamp """
   entityCreationTime: FilterStringOperators
-  """ GLUE2EntityValidity """
+  """ Validity of share entity after its creation """
   entityValidity: FilterIntegerOperators
-  """ A global unique ID (GLUE2ShareID) """
+  """ Share global unique ID """
   shareID: FilterStringOperators
-  """ Description of this share (GLUE2ShareDescription) """
+  """ Description of this share """
   description: FilterStringOperators
-  """ Related service (GLUE2ShareServiceForeignKey) """
+  """ Related service global unique ID """
   serviceForeignKey: FilterStringOperators
-  """ Related endpoint (GLUE2ShareEndpointForeignKey) """
+  """ Related endpoint global unique ID """
   endpointForeignKey: FilterStringOperators
-  """ Related cloud computing service (GLUE2CloudComputingShareCloudComputingServiceForeignKey) """
+  """ Related cloud computing service global unique ID """
   cloudComputingServiceForeignKey: FilterStringOperators
-  """ Related cloud computing endpoint (GLUE2CloudComputingShareCloudComputingEndpointForeignKey) """
+  """ Related cloud computing endpoint global unique ID"""
   cloudComputingendpointForeignKey: FilterStringOperators
-  """ The maximum number of Virtual CPU who can be assigned to a single VM for the VM in this share. With virtual CPU it is intended the CPU seen by the VM OS, not the physical host CPU assigned to the VM. (GLUE2CloudComputingShareInstanceMaxCPU) """
+  """ Maximum number of Virtual CPU per VM"""
   instanceMaxCPU: FilterIntegerOperators
-  """ The maximum value (in MB) of virtual RAM memory who can be assigned to a single VM for the VM in this share. With virtual RAM memory it is intended the amount of RAM seen by the VM OS, not the physical RAM dedicated to the VM (GLUE2CloudComputingShareInstanceMaxRAM) """
+  """ Maximum value (in MB) of virtual RAM memory per VM"""
   instanceMaxRAM: FilterIntegerOperators
-  """ Service Level Agreement for the VMs under this share. This can be an URL to the SLA document or a keyword representing the SLA itself (eg. 99.99%availability, best effort, etc…) (GLUE2CloudComputingShareSLA) """
+  """ Service Level Agreement for the VMs"""
   SLA: FilterStringOperators
-  """ Total number of VM known to this computing share (the sum of RunningVM, PendingVM, SuspendedVM, HaltedVM) (GLUE2CloudComputingShareTotalVM) """
+  """ Total number of VM"""
   totalVM: FilterIntegerOperators
-  """ The number of VM running into this computing share (GLUE2CloudComputingShareRunningVM) """
+  """ Number of VM running """
   runningVM: FilterIntegerOperators
-  """ The number of VM in Pending state (VM in preparation to be running on the system) (GLUE2CloudComputingSharePendingVM) """
+  """ Number of VM in Pending state """
   pendingVM: FilterIntegerOperators
-  """ The number of VM in suspended state (VMs not running but with reserved resources on this computing share) (GLUE2CloudComputingShareSuspendedVM) """
+  """ Number of VM in suspended state """
   suspendedVM: FilterIntegerOperators
-  """ The number of VM in Halted state (VMs not running on the system with no resources reserved on this computing share) (GLUE2CloudComputingShareHaltedVM) """
+  """ Number of VM in Halted state """
   haltedVM: FilterIntegerOperators
-  """ The maximum number of VM instances that can run on this share (GLUE2CloudComputingShareMaxVM) """
+  """ Maximum number of VM instances that can run """
   maxVM: FilterIntegerOperators
-  """ The type of internal network connection available among the managed Hosts. If many values are published then the various types of network MAY be available only within subsets of the Hosts; the Hosts properties SHOULD publish this information (GLUE2CloudComputingShareNetworkInfo) """
+  """ Type of internal network connection available among the managed hosts"""
   networkInfo: FilterStringOperators
-  """ The default network type that will be setup for an instance (e.g. public, private, private_only…) (GLUE2CloudComputingShareDefaultNetworkType) """
+  """ Default network type that will be setup for an instance"""
   defaultNetworkType: FilterStringOperators
-  """ The name of the public network if any (GLUE2CloudComputingSharePublicNetworkName) """
+  """ Name of the public network (if any)"""
   publicNetworkName: FilterStringOperators
-  """ The native identifier of the corresponding local project to be used for this share (e.g. used by API users to know what is the project_id for OpenStack) (GLUE2CloudComputingShareProjectID) """
+  """ Native identifier of the corresponding local project to be used for this share"""
   projectID: FilterStringOperators
-  """ The VO this share reflects """
+  """ VO this share reflects """
   VO: FilterStringOperators
-  """ SharePolicy """
+  """ Policy applied in the cloud computing share """
   policy: FilterStringOperators
   """ Information system data hash value """
   hash: FilterStringOperators
@@ -147,6 +147,8 @@ type SiteCloudComputingShare_Collection {
 }
 
 extend type Query {
+  """ Get a cloud computing share based on the information system ID """
   siteCloudComputingShareById(id: ID): SiteCloudComputingShare
+  """ Get the collection of all available cloud computing shares in the information system """
   siteCloudComputingShares(filter: SiteCloudComputingShare_Filter, limit: Int, skip: Int, sort: [SiteCloudComputingShare_Sort]): SiteCloudComputingShare_Collection
 }
