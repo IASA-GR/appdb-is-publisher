@@ -16,6 +16,7 @@ endpointPKey
 isInProduction
 beta
 gocPortalUrl
+gocEndpointUrl
 endpointServiceType
 endpointURL
 endpointID
@@ -27,26 +28,32 @@ endpointCapabilities
 endpointServingState
 endpointHealthState
 endpointImplementor
+endpointImplementationName
 endpointImplementationVersion
+endpointDowntimeInfo
+endpointSemantics
+endpointAuthentication
 location {
   id
   longitude,
   latitude
   country
-  domainForeignKey
 }
-computingEndpointComputingServiceForeignKey
-endpointServiceForeignKey
-managerID
-managerProductName
-managerProductVersion
-computingManagerTotalLogicalCPUs
-computingManagerWorkingAreaTotal
-entityOtherInfo
+
+numberOfImages
+numberOfTemplates
+numberOfManagers
+numberOfShares
 `;
 
 export const TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS = () => `
 ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_ITEM_FIELDS()}
+entityName
+entityCreationTime
+entityValidity
+entityOtherInfo
+endpointIssuerCA
+endpointTrustedCA
 serviceStatus {
   id
   type
