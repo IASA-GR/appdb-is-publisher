@@ -13,13 +13,13 @@ input FilterStringOperators {
   eq: String
   """ Not equal to given text """
   ne: String
-  """ Contains given text. Can use '*' for any text. """
+  """ Contains given text (can use '*' for any text) """
   like: String
-  """ Contains given text (case insensitive). Can use '*' for any text. """
+  """ Contains given text (case insensitive, can use '*' for any text) """
   ilike: String
-  """ Does not contain given text. Can use '*' for any text. """
+  """ Does not contain given text (can use '*' for any text) """
   nlike: String
-  """ Does not contain given text (case insensitive). Can use '*' for any text. """
+  """ Does not contain given text (case insensitive, can use '*' for any text) """
   nilike: String
   """
   Must be equal to one of the values in the given array of text elements.
@@ -48,7 +48,7 @@ input FilterIntegerOperators {
   le: Int
   """ Must be equal to one of the values in the given array of integers """
   oneOf: [Int]
-  """ Value is between the two integers. If more than two integers are given the minimum and maximum values will be used. """
+  """ Value is between the two integers. If more than two integers are given the minimum and maximum values will be used """
   between: [Float]
   #Optional integer comparisons
   #or: [FilterIntegerOperators]
@@ -72,7 +72,7 @@ input FilterFloatOperators {
   le: Float
   """ Must be equal to one of the values in the given array of integers """
   oneOf: [Float]
-  """ Value is between the two floats. If more than two floats are given the minimum and maximum values will be used. """
+  """ Value is between the two floats. If more than two floats are given the minimum and maximum values will be used """
   between: [Float]
   #Optional float comparisons
   #or: [FilterFloatOperators]
@@ -108,7 +108,7 @@ input FilterIntegerArrayOperators {
   containsSome: [Int]
   """ Array must contain all of the given integer values """
   containsAll: [Int]
-  """ Array must contain values within the given integer range. If more than two integers are given the minimum and maximum values will be used. """
+  """ Array must contain values within the given integer range. If more than two integers are given the minimum and maximum values will be used """
   containsBetween: [Int]
   #Optional integer array comparison
   #or: [FilterIntegerArrayOperators]
@@ -124,7 +124,7 @@ input FilterFloatArrayOperators {
   containsSome: [Float]
   """ Array must contain all of the given integer values """
   containsAll: [Float]
-  """ Array must contain values within the given float range. If more than two floats are given the minimum and maximum values will be used. """
+  """ Array must contain values within the given float range. If more than two floats are given the minimum and maximum values will be used """
   containsBetween: [Float]
   #Optional float array comparison
   #or: [FilterFloatArrayOperators]
