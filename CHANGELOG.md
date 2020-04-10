@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleashed]
+## Added
+- GLUE2.1 schema support
+- New GraphQL schema to match GLUE2.1 schema
+- New Restful API to match GLUE2.1 schema
+- Swagger UI when accessing the rest API root endpoint from browser
+- GraphQL playground UI when accessing the GraphQL endpoint from browser
+- Documentation endpoint for inner modules to expose their documentation
+## Changed
+- Swagger UI to render links to filter inputs for documentation regarding the filter valid search terms
+- Enable by default the GLUE2.1 schema
+## Fixed
+- Entity shared fields optimization to reduce number of calls to the backend
+
 ## [1.3.3] - 2019-02-05
 ## Changed
 - Update third party dependencies to their current version
