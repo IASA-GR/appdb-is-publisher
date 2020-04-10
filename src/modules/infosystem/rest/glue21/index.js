@@ -105,7 +105,7 @@ export const expressRouter = function (router, config) {
       } else {
         fs.readFile('dist/infosys.swaggerui.json', {encoding: 'utf8'}, (error, jsondata) => {
           if (!error) {
-            data += '\nINFOSYS=' + jsondata;
+            data += '\nvar INFOSYS=' + jsondata;
           }
           res.send(data);
         });
