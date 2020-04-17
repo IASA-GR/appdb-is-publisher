@@ -32,7 +32,7 @@ function miscRoutes(router) {
   //#######################################
   //################ MISC #################
   //#######################################
-  let restServiceDescriptionData = restServiceDescription({schema: configuration.get('schema')});
+  let restServiceDescriptionData = restServiceDescription({schema: configuration.get('schema'), logger: conf.getLogger('rest')});
   router.get('/version', handleNoImlementation);
 
   router.get('/',  (req, res) => {
