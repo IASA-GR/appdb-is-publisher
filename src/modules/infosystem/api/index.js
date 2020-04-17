@@ -12,10 +12,12 @@ const DEFAULT_SCHEMA = 'glue20';
  */
 async function _initApi(config) {
   let _api = (name) => _api.entities.get(name);
-  _api.storage = await Storage.init(config.get('storage._default.options'));
+  _api.getLogger = () => config.getLogger('api');
+  _api.storage = await Storage.init(config.get('storage._default.options'), {logger: config.getLogger('storage')});
   _api.get = (name) => _api.entities.get(name);
   _api.getSchema = () => config.get('schema', DEFAULT_SCHEMA);
   _api.entities = await Entities(_api);
+
 
   return _api;
 }
