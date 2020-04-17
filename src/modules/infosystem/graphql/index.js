@@ -18,7 +18,8 @@ async function _init(config) {
   let resolvers = resolveDefs.reduce((sum, def) => merge(sum, def), {});
   let executableSchema = null;
   _typeDefs = typeDefs;
-  console.log('\x1b[32m[infosystem:GraphQL]\x1b[0m: Loaded schema ' + schemaName);
+
+  config.getLogger().info('Loaded IS Publisher GraphQL schema "' + schemaName + '"');
 
   return {
     getSchema: () => {
