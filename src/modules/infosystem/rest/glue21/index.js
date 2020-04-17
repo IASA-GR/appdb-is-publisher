@@ -24,6 +24,7 @@ import SiteCloudComputingImageRouter from './SiteCloudComputingImage.router';
 import SiteCloudComputingTemplateRouter from './SiteCloudComputingTemplate.router';
 import SiteServiceStatusRouter from './SiteServiceStatus.router';
 import SiteServiceDowntimeRouter from './SiteServiceDowntime.router';
+import {exportLogDataFromRequest} from '../../../../lib/isql/utils/exportLogData';
 
 const swaggerUi = require('swagger-ui-express');
 
@@ -53,10 +54,6 @@ const SWAGGER_DOCUMENT = {
 
 if (process.env.NODE_ENV === 'development') {
   SWAGGER_DOCUMENT.servers.unshift({
-    "url": "http://172.16.0.117:5050/rest",
-    "description": "Localhost development instance"
-  });
-  SWAGGER_DOCUMENT.servers.unshift({
     "url": "http://localhost:5050/rest",
     "description": "Localhost development instance"
   });
@@ -73,12 +70,58 @@ const updateSwaggerComponents = (components) => {
 const updateRouterDescription = (routerDescription) => {
   serviceDescription.routes = Object.assign({}, serviceDescription.routes, routerDescription);
 };
+
+const RestLoggerMiddleware = (conf) => (req, res, next) => {
+  let logData = exportLogDataFromRequest(req, {module: 'restapi'});
+  let logger = conf.logger.child({logData: logData});
+
+  req.statistics = {
+    startedAt: new Date(),
+    totalDBRequests: 0,
+    totalDBTime: 1,
+    totalDBTimeString: function() {
+      return '' + (this.totalDBTime / 1000) + ' seconds';
+    },
+    totalProcessTime: 1,
+    totalProcessTimeString: function() {
+      return '' + (this.totalProcessTime / 1000) + ' seconds';
+    },
+    totalRequestTime: function() {
+      return (this.startedAt.getTime() - (new Date()).getTime());
+    },
+    totalRequestTimeString: function() {
+      return '' + (this.totalRequestTime / 1000) + ' seconds';
+    }
+  };
+
+  req.logData = logData;
+
+  logger.debug('Request "' + _.toUpper(req.method) + ' ' + req.originalUrl + '"');
+
+  res.on('finish', function() {
+    let endedAt = new Date();
+    let diff =  (endedAt.getTime() - this.startedAt.getTime()) / 1000;
+
+    if (req.infosysError) {
+      logger.error('Response "' + _.toUpper(req.method) + ' ' + req.originalUrl + '" ' + res.statusCode + ' - (' + diff + ' secs) [REASON] ' + req.infosysError);
+    } else {
+      logger.info('Response "' + _.toUpper(req.method) + ' ' + req.originalUrl + '" ' + res.statusCode + ' - (' + diff + ' secs)' );
+    }
+
+    logger.trace(res);
+
+  }.bind({startedAt: new Date()}));
+
+  next();
+}
 export const expressRouter = function (router, config) {
 
   let openAPIDefinitions = new OpenAPIDefinitions();
   let swaggerUIOptions = {};
 
   OpenAPILoadComponentDefinitions({openAPIDefinitions});
+
+  router.use(RestLoggerMiddleware(config));
 
   SiteRouter.useRouter(router, {openAPIDefinitions});
   SiteCloudComputingEndpointRouter.useRouter(router, {openAPIDefinitions});
@@ -119,7 +162,7 @@ export const expressRouter = function (router, config) {
   router.use('/', swaggerUi.serve);
   router.get('/', swaggerUi.setup(SWAGGER_DOCUMENT, swaggerUIOptions));
 
-  console.log('[infosystem:Rest] Inited');
+  //console.log('[infosystem:Rest] Inited');
   return router;
 };
 
