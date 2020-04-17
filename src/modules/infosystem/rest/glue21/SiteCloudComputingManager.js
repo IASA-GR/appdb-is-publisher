@@ -44,14 +44,14 @@ export const GRAPHQL_COLLECTION_ENDPOINT = 'siteCloudComputingManagers';
 export const GRAPHQL_COLLECTION_DETAILS_FIELDS = () => TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_DETAILS_FIELDS();
 export const GRAPHQL_COLLECTION_ITEM_FIELDS = () => TEMPLATE_SITE_CLOUD_COMPUTING_MANAGER_ITEM_FIELDS();
 
-export const getFirst = (filter = '{}', fields = null) => {
+export const getFirst = (filter = '{}', fields = null, ctx) => {
   let usedFields = _.trim((_.isFunction(fields)) ? fields() : fields);
   usedFields = usedFields || GRAPHQL_COLLECTION_DETAILS_FIELDS();
 
-  return getFiltered({filter, fields: usedFields, includePaging: false, resolver: 'data.items.0 as data'});
+  return getFiltered({filter, fields: usedFields, includePaging: false, resolver: 'data.items.0 as data'}, ctx);
 };
 
-export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null, includePaging = true, resolver = null} = {filter:'{}', limit: 1, skip: 0, fields: null, includePaging: true, resolver: null}) => {
+export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null, includePaging = true, resolver = null} = {filter:'{}', limit: 1, skip: 0, fields: null, includePaging: true, resolver: null}, ctx) => {
   let usedLimit = (limit) ? `, limit: ${limit}` : '';
   let usedSkip = (skip) ? `, skip: ${skip}` : '';
   let usedFilter = (_.trim(filter)) ? `filter: ${filter}`: '';
@@ -66,7 +66,7 @@ export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null,
         ${usedFields}
       }
     }
-  `).then(resultHandlerByPath(resolver || 'data'))
+  `, {}, ctx).then(resultHandlerByPath(resolver || 'data'))
 }
 
 

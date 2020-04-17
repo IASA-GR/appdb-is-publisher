@@ -61,14 +61,14 @@ export const GRAPHQL_COLLECTION_ENDPOINT = 'siteCloudComputingImages';
 export const GRAPHQL_COLLECTION_DETAILS_FIELDS = () => TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_DETAILS_FIELDS();
 export const GRAPHQL_COLLECTION_ITEM_FIELDS = () => TEMPLATE_SITE_CLOUD_COMPUTING_IMAGE_ITEM_FIELDS();
 
-export const getFirst = (filter = '{}', fields = null) => {
+export const getFirst = (filter = '{}', fields = null, ctx) => {
   let usedFields = _.trim((_.isFunction(fields)) ? fields() : fields);
   usedFields = usedFields || GRAPHQL_COLLECTION_DETAILS_FIELDS();
 
-  return getFiltered({filter, fields: usedFields, includePaging: false, resolver: 'data.items.0 as data'});
+  return getFiltered({filter, fields: usedFields, includePaging: false, resolver: 'data.items.0 as data'}, ctx);
 };
 
-export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null, includePaging = true, resolver = null} = {filter:'{}', limit: 1, skip: 0, fields: null, includePaging: true, resolver: null}) => {
+export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null, includePaging = true, resolver = null} = {filter:'{}', limit: 1, skip: 0, fields: null, includePaging: true, resolver: null}, ctx) => {
   let usedLimit = (limit) ? `, limit: ${limit}` : '';
   let usedSkip = (skip) ? `, skip: ${skip}` : '';
   let usedFilter = (_.trim(filter)) ? `filter: ${filter}`: '';
@@ -83,10 +83,10 @@ export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null,
         ${usedFields}
       }
     }
-  `).then(resultHandlerByPath(resolver || 'data'))
+  `, {}, ctx).then(resultHandlerByPath(resolver || 'data'))
 }
 
-export const getByIdentifier = (id) => {
+export const getByIdentifier = (id, ctx) => {
   let caller = getCallerByIdentifier(id);
   return query(`{
     data: ${caller} {
@@ -103,7 +103,7 @@ export const getCallerByIdentifier = (id, onlyQuery = false) => {
   }
 };
 
-export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(flt => {
     return query(`
       {
@@ -114,11 +114,11 @@ export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0
           }
         }
       }
-    `).then(resultHandlerByPath('data'));
+    `, {}, ctx).then(resultHandlerByPath('data'));
   });
 };
 
-export const getSite = (imageId) => {
+export const getSite = (imageId, ctx) => {
   let caller = getCallerByIdentifier(imageId);
 
   return query(`{
@@ -128,10 +128,10 @@ export const getSite = (imageId) => {
         ${TEMPLATE_SITE_DETAILS_FIELDS()}
       }
     }
-  }`).then(resultHandlerByPath('data.site'));
+  }`, {}, ctx).then(resultHandlerByPath('data.site'));
 };
 
-export const getEndpoint = (imageId) => {
+export const getEndpoint = (imageId, ctx) => {
   let caller = getCallerByIdentifier(imageId);
 
   return query(`{
@@ -141,10 +141,10 @@ export const getEndpoint = (imageId) => {
         ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS()}
       }
     }
-  }`).then(resultHandlerByPath('data.endpoint'));
+  }`, {}, ctx).then(resultHandlerByPath('data.endpoint'));
 };
 
-export const getShare = (imageId) => {
+export const getShare = (imageId, ctx) => {
   let caller = getCallerByIdentifier(imageId);
 
   return query(`{
@@ -154,10 +154,10 @@ export const getShare = (imageId) => {
         ${TEMPLATE_SITE_CLOUD_COMPUTING_SHARE_DETAILS_FIELDS()}
       }
     }
-  }`).then(resultHandlerByPath('data.share'));
+  }`, {}, ctx).then(resultHandlerByPath('data.share'));
 };
 
-export const getAllTemplates = (imageId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllTemplates = (imageId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(templatesFlt => {
     let imageCaller = getCallerByIdentifier(imageId);
     let templatesQuery = `
@@ -174,11 +174,11 @@ export const getAllTemplates = (imageId, {filter = {}, limit = 0, skip = 0} = {f
         id
         ${templatesQuery}
       }
-    }`).then(resultHandlerByPath('data.templates'));
+    }`, {}, ctx).then(resultHandlerByPath('data.templates'));
   });
 };
 
-export const getTemplate = (imageId, templateId) => {
+export const getTemplate = (imageId, templateId, ctx) => {
   let imageCaller = getCallerByIdentifier(imageId);
   let templateFlt = SiteCloudComputingTemplate.getCallerByIdentifier(templateId, true);
 
@@ -195,7 +195,7 @@ export const getTemplate = (imageId, templateId) => {
       id
       ${templateQuery}
     }
-  }`).then(resultHandlerByPath('data.templates.items.0'));
+  }`, {}, ctx).then(resultHandlerByPath('data.templates.items.0'));
 };
 
 export default {

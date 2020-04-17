@@ -152,16 +152,16 @@ export const getCallerByIdentifier = (id, onlyQuery = false) => {
   }
 };
 
-export const getByIdentifier = (id) => {
+export const getByIdentifier = (id, ctx) => {
   let caller = getCallerByIdentifier(id);
   return query(`{
     data: ${caller} {
       ${TEMPLATE_SITE_DETAILS_FIELDS()}
     }
-  }`);
+  }`, {}, ctx);
 }
 
-export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(flt => {
     return query(`
       {
@@ -175,11 +175,11 @@ export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0
           }
         }
       }
-    `).then(resultHandlerByPath('data'));
+    `, {}, ctx).then(resultHandlerByPath('data'));
   });
 };
 
-export const getAllSiteCloudComputingEndpoints = (siteId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllSiteCloudComputingEndpoints = (siteId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(flt => {
     let siteCaller = getCallerByIdentifier(siteId);
     let endpointsQuery = `
@@ -194,13 +194,13 @@ export const getAllSiteCloudComputingEndpoints = (siteId, {filter = {}, limit = 
         id
         ${endpointsQuery}
       }
-    }`).then(doc => {
+    }`, {}, ctx).then(doc => {
       return Promise.resolve(_.get(doc, 'data.cloudComputingEndpoints', doc));
     });
   });
 };
 
-export const getSiteCloudComputingEndpoint = (siteId, endpointId) => {
+export const getSiteCloudComputingEndpoint = (siteId, endpointId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
   let endpointsQuery = `
@@ -214,10 +214,10 @@ export const getSiteCloudComputingEndpoint = (siteId, endpointId) => {
       id
       ${endpointsQuery}
     }
-  }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0'));
+  }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0'));
 };
 
-export const getAllSiteCloudComputingEndpointTemplates = (siteId, endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllSiteCloudComputingEndpointTemplates = (siteId, endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(templatesFlt => {
     let siteCaller = getCallerByIdentifier(siteId);
     let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
@@ -239,7 +239,7 @@ export const getAllSiteCloudComputingEndpointTemplates = (siteId, endpointId, {f
         id
         ${endpointsQuery}
       }
-    }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.templates'));
+    }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.templates'));
   });
 };
 
@@ -251,7 +251,7 @@ export const getSiteCloudComputingEndpointTemplate = (siteId, endpointId, templa
   return SiteCloudComputingTemplate.getFirst(`{site: {${siteFlt}}, endpoint: {${endpointFlt}}, ${templateFlt}}`);
 };
 
-export const getAllSiteCloudComputingEndpointImages = (siteId, endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllSiteCloudComputingEndpointImages = (siteId, endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(imagesFlt => {
     let siteCaller = getCallerByIdentifier(siteId);
     let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
@@ -273,11 +273,11 @@ export const getAllSiteCloudComputingEndpointImages = (siteId, endpointId, {filt
         id
         ${endpointsQuery}
       }
-    }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.images'));
+    }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.images'));
   });
 };
 
-export const getSiteCloudComputingEndpointImage = (siteId, endpointId, imageId) => {
+export const getSiteCloudComputingEndpointImage = (siteId, endpointId, imageId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
   let imageFlt = SiteCloudComputingImage.getCallerByIdentifier(imageId, true);
@@ -298,10 +298,10 @@ export const getSiteCloudComputingEndpointImage = (siteId, endpointId, imageId) 
       id
       ${imageQuery}
     }
-  }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.images.items.0'));
+  }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.images.items.0'));
 };
 
-export const getAllSiteCloudComputingEndpointManagers = (siteId, endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllSiteCloudComputingEndpointManagers = (siteId, endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(managersFlt => {
     let siteCaller = getCallerByIdentifier(siteId);
     let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
@@ -323,11 +323,11 @@ export const getAllSiteCloudComputingEndpointManagers = (siteId, endpointId, {fi
         id
         ${endpointsQuery}
       }
-    }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers'));
+    }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers'));
   });
 };
 
-export const getSiteCloudComputingEndpointManagerTemplate = (siteId, endpointId, managerId, templateId) => {
+export const getSiteCloudComputingEndpointManagerTemplate = (siteId, endpointId, managerId, templateId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
   let managerFlt = SiteCloudComputingManager.getCallerByIdentifier(managerId, true);
@@ -352,10 +352,10 @@ export const getSiteCloudComputingEndpointManagerTemplate = (siteId, endpointId,
       id
       ${managerQuery}
     }
-  }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers.items.0.templates.items.0'));
+  }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers.items.0.templates.items.0'));
 };
 
-export const getAllSiteCloudComputingEndpointManagerTemplates = (siteId, endpointId, managerId) => {
+export const getAllSiteCloudComputingEndpointManagerTemplates = (siteId, endpointId, managerId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
   let managerFlt = SiteCloudComputingManager.getCallerByIdentifier(managerId, true);
@@ -382,10 +382,10 @@ export const getAllSiteCloudComputingEndpointManagerTemplates = (siteId, endpoin
       id
       ${managerQuery}
     }
-  }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers.items.0.templates'));
+  }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers.items.0.templates'));
 };
 
-export const getSiteCloudComputingEndpointManager = (siteId, endpointId, managerId) => {
+export const getSiteCloudComputingEndpointManager = (siteId, endpointId, managerId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
   let managerFlt = SiteCloudComputingManager.getCallerByIdentifier(managerId, true);
@@ -406,10 +406,10 @@ export const getSiteCloudComputingEndpointManager = (siteId, endpointId, manager
       id
       ${managerQuery}
     }
-  }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers.items.0'));
+  }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.managers.items.0'));
 };
 
-export const getAllSiteCloudComputingEndpointShares = (siteId, endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllSiteCloudComputingEndpointShares = (siteId, endpointId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(sharesFlt => {
     let siteCaller = getCallerByIdentifier(siteId);
     let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
@@ -432,11 +432,11 @@ export const getAllSiteCloudComputingEndpointShares = (siteId, endpointId, {filt
         id
         ${endpointsQuery}
       }
-    }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares'));
+    }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares'));
   });
 };
 
-export const getSiteCloudComputingEndpointShare = (siteId, endpointId, shareId) => {
+export const getSiteCloudComputingEndpointShare = (siteId, endpointId, shareId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
   let shareFlt = SiteCloudComputingShare.getCallerByIdentifier(shareId, true);
@@ -456,10 +456,10 @@ export const getSiteCloudComputingEndpointShare = (siteId, endpointId, shareId) 
       id
       ${shareQuery}
     }
-  }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0'));
+  }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0'));
 };
 
-export const getAllSiteCloudComputingEndpointShareImages = (siteId, endpointId, shareId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllSiteCloudComputingEndpointShareImages = (siteId, endpointId, shareId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(imagesFlt => {
     let siteCaller = getCallerByIdentifier(siteId);
     let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
@@ -485,11 +485,11 @@ export const getAllSiteCloudComputingEndpointShareImages = (siteId, endpointId, 
         id
         ${imagesQuery}
       }
-    }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0.images'));
+    }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0.images'));
   });
 };
 
-export const getSiteCloudComputingEndpointShareImage = (siteId, endpointId, shareId, imageId) => {
+export const getSiteCloudComputingEndpointShareImage = (siteId, endpointId, shareId, imageId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
   let shareFlt = SiteCloudComputingShare.getCallerByIdentifier(shareId, true);
@@ -517,10 +517,10 @@ export const getSiteCloudComputingEndpointShareImage = (siteId, endpointId, shar
       id
       ${imageQuery}
     }
-  }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0.images.items.0'));
+  }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0.images.items.0'));
 };
 
-export const getAllSiteCloudComputingEndpointShareImageTemplates = (siteId, endpointId, shareId, imageId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllSiteCloudComputingEndpointShareImageTemplates = (siteId, endpointId, shareId, imageId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(templatesFlt => {
     let siteCaller = getCallerByIdentifier(siteId);
     let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
@@ -550,11 +550,11 @@ export const getAllSiteCloudComputingEndpointShareImageTemplates = (siteId, endp
         id
         ${templatesQuery}
       }
-    }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0.images.items.0.templates'));
+    }`, {}, ctx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0.images.items.0.templates'));
   });
 };
 
-export const getSiteCloudComputingEndpointShareImageTemplate = (siteId, endpointId, shareId, imageId, templateId) => {
+export const getSiteCloudComputingEndpointShareImageTemplate = (siteId, endpointId, shareId, imageId, templateId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let endpointFlt = SiteCloudComputingEndpoint.getCallerByIdentifier(endpointId, true);
   let shareFlt = SiteCloudComputingShare.getCallerByIdentifier(shareId, true);
@@ -585,11 +585,11 @@ export const getSiteCloudComputingEndpointShareImageTemplate = (siteId, endpoint
       id
       ${templateQuery}
     }
-  }`).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0.images.items.0.templates.items.0'));
+  }`, {}, cntx).then(resultHandlerByPath('data.cloudComputingEndpoints.items.0.shares.items.0.images.items.0.templates.items.0'));
 
 };
 
-export const getServiceStatuses = (siteId) => {
+export const getServiceStatuses = (siteId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let statusesQuery = `
     serviceStatuses {
@@ -601,10 +601,10 @@ export const getServiceStatuses = (siteId) => {
         id
         ${statusesQuery}
       }
-  }`).then(resultHandlerByPath('data.serviceStatuses as items'));
+  }`, {}, ctx).then(resultHandlerByPath('data.serviceStatuses as items'));
 };
 
-export const getServiceDowntimes = (siteId) => {
+export const getServiceDowntimes = (siteId, ctx) => {
   let siteCaller = getCallerByIdentifier(siteId);
   let statusesQuery = `
     serviceDowntimes {
@@ -616,7 +616,7 @@ export const getServiceDowntimes = (siteId) => {
         id
         ${statusesQuery}
       }
-  }`).then(resultHandlerByPath('data.serviceDowntimes as items'));
+  }`, {}, ctx).then(resultHandlerByPath('data.serviceDowntimes as items'));
 };
 
 

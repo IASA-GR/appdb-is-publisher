@@ -54,17 +54,17 @@ export const getCallerByIdentifier = (id, onlyQuery = false) => {
   }
 };
 
-export const getByIdentifier = (id) => {
+export const getByIdentifier = (id, ctx) => {
   let caller = getCallerByIdentifier(id);
 
   return query(`{
     data: ${caller} {
       ${TEMPLATE_SITE_SERVICE_STATUS_DETAILS_FIELDS()}
     }
-  }`);
+  }`, {}, ctx);
 };
 
-export const getSite = (id) => {
+export const getSite = (id, ctx) => {
   let caller = getCallerByIdentifier(id);
   return query(`{
     data: ${caller} {
@@ -73,10 +73,10 @@ export const getSite = (id) => {
         ${TEMPLATE_SITE_DETAILS_FIELDS()}
       }
     }
-  }`).then(resultHandlerByPath('data.site as data'));
+  }`, {}, ctx).then(resultHandlerByPath('data.site as data'));
 };
 
-export const getEndpoint = (id, imageId) => {
+export const getEndpoint = (id, ctx) => {
   let caller = getCallerByIdentifier(id);
 
   return query(`{
@@ -86,10 +86,10 @@ export const getEndpoint = (id, imageId) => {
         ${TEMPLATE_SITE_CLOUD_COMPUTING_ENDPOINT_DETAILS_FIELDS()}
       }
     }
-  }`).then(resultHandlerByPath('data.endpoint as data'));
+  }`, {}, ctx).then(resultHandlerByPath('data.endpoint as data'));
 };
 
-export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(flt => {
     return query(`
       {
@@ -100,7 +100,7 @@ export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0
           }
         }
       }
-    `).then(resultHandlerByPath('data'));
+    `, {}, ctx).then(resultHandlerByPath('data'));
   });
 };
 

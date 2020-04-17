@@ -33,7 +33,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let statusId = _.trim(req.params.statusId);
 
-      _handleRequest(SiteServiceStatus.getEndpoint(statusId), req, res);
+      _handleRequest(SiteServiceStatus.getEndpoint(statusId, req), req, res);
     }
   );
 
@@ -60,7 +60,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let statusId = _.trim(req.params.statusId);
 
-      _handleRequest(SiteServiceStatus.getSite(statusId), req, res);
+      _handleRequest(SiteServiceStatus.getSite(statusId, req), req, res);
     }
   );
 
@@ -87,7 +87,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let statusId = _.trim(req.params.statusId);
 
-      _handleRequest(SiteServiceStatus.getByIdentifier(statusId), req, res);
+      _handleRequest(SiteServiceStatus.getByIdentifier(statusId, req), req, res);
     }
   );
 
@@ -112,7 +112,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteServiceStatus.getAll(params), req, res);
+      _handleRequest(SiteServiceStatus.getAll(params, req), req, res);
     }
   );
 }

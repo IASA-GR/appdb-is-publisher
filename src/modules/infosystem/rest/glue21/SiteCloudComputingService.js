@@ -71,14 +71,14 @@ export const GRAPHQL_COLLECTION_ENDPOINT = 'siteCloudComputingServices';
 export const GRAPHQL_COLLECTION_DETAILS_FIELDS = () => TEMPLATE_SITE_CLOUD_COMPUTING_SERVICE_DETAILS_FIELDS();
 export const GRAPHQL_COLLECTION_ITEM_FIELDS = () => TEMPLATE_SITE_CLOUD_COMPUTING_SERVICE_ITEM_FIELDS();
 
-export const getFirst = (filter = '{}', fields = null) => {
+export const getFirst = (filter = '{}', fields = null, ctx) => {
   let usedFields = _.trim((_.isFunction(fields)) ? fields() : fields);
   usedFields = usedFields || GRAPHQL_COLLECTION_DETAILS_FIELDS();
 
-  return getFiltered({filter, fields: usedFields, includePaging: false, resolver: 'data.items.0 as data'});
+  return getFiltered({filter, fields: usedFields, includePaging: false, resolver: 'data.items.0 as data'}, ctx);
 };
 
-export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null, includePaging = true, resolver = null} = {filter:'{}', limit: 1, skip: 0, fields: null, includePaging: true, resolver: null}) => {
+export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null, includePaging = true, resolver = null} = {filter:'{}', limit: 1, skip: 0, fields: null, includePaging: true, resolver: null}, ctx) => {
   let usedLimit = (limit) ? `, limit: ${limit}` : '';
   let usedSkip = (skip) ? `, skip: ${skip}` : '';
   let usedFilter = (_.trim(filter)) ? `filter: ${filter}`: '';
@@ -93,7 +93,7 @@ export const getFiltered = ({filter = '{}', limit = -1, skip = 0, fields = null,
         ${usedFields}
       }
     }
-  `).then(resultHandlerByPath(resolver || 'data'))
+  `, {}, ctx).then(resultHandlerByPath(resolver || 'data'))
 }
 
 
@@ -115,16 +115,16 @@ export const getCallerByIdentifier = (id, onlyQuery = false) => {
   }
 };
 
-export const getByIdentifier = (id) => {
+export const getByIdentifier = (id, ctx) => {
   let caller = getCallerByIdentifier(id);
   return query(`{
     data: ${caller} {
       ${TEMPLATE_SITE_SERVICE_DETAILS_FIELDS}
     }
-  }`);
+  }`, {}, ctx);
 };
 
-export const getSite = (serviceId) => {
+export const getSite = (serviceId, ctx) => {
   let caller = getCallerByIdentifier(serviceId);
   return query(`{
     data: ${caller} {
@@ -133,10 +133,10 @@ export const getSite = (serviceId) => {
         ${TEMPLATE_SITE_DETAILS_FIELDS}
       }
     }
-  }`).then(resultHandlerByPath('data.site as data'));
+  }`, ctx).then(resultHandlerByPath('data.site as data'));
 };
 
-export const getAllImages = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllImages = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(imagesFlt => {
     let caller = getCallerByIdentifier(serviceId);
     let imagesQuery = `
@@ -152,11 +152,11 @@ export const getAllImages = (serviceId, {filter = {}, limit = 0, skip = 0} = {fi
         id
         ${imagesQuery}
       }
-    }`).then(resultHandlerByPath('data.images'));
+    }`, {}, ctx).then(resultHandlerByPath('data.images'));
   });
 };
 
-export const getImage = (serviceId, imageId) => {
+export const getImage = (serviceId, imageId, ctx) => {
   let caller = getCallerByIdentifier(serviceId);
   let imageQuery = SiteServiceImage.getCallerByIdentifier(imageId, true);
 
@@ -169,10 +169,10 @@ export const getImage = (serviceId, imageId) => {
         }
       }
     }
-  }`).then(resultHandlerByPath('data.images.items.0'));
+  }`, {}, ctx).then(resultHandlerByPath('data.images.items.0'));
 };
 
-export const getAllTemplates = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAllTemplates = (serviceId, {filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(templatesFlt => {
     let caller = getCallerByIdentifier(serviceId);
     let templatesQuery = `
@@ -188,11 +188,11 @@ export const getAllTemplates = (serviceId, {filter = {}, limit = 0, skip = 0} = 
         id
         ${templatesQuery}
       }
-    }`).then(resultHandlerByPath('data.templates'));
+    }`, {}, ctx).then(resultHandlerByPath('data.templates'));
   });
 };
 
-export const getTemplate = (serviceId, templateId) => {
+export const getTemplate = (serviceId, templateId, ctx) => {
   let caller = getCallerByIdentifier(serviceId);
   let templateQuery = SiteServiceTemplate.getCallerByIdentifier(templateId, true);
 
@@ -205,10 +205,10 @@ export const getTemplate = (serviceId, templateId) => {
         }
       }
     }
-  }`).then(resultHandlerByPath('data.templates.items.0'));
+  }`, {}, ctx).then(resultHandlerByPath('data.templates.items.0'));
 };
 
-export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}) => {
+export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0, skip: 0}, ctx) => {
   return asyncFilterToGraphQL(filter).then(flt => {
     return query(`
       {
@@ -217,7 +217,7 @@ export const getAll = ({filter = {}, limit = 0, skip = 0} = {filter:{}, limit: 0
           ${TEMPLATE_SITE_SERVICE_COLLECTION_FIELDS}
         }
       }
-    `);
+    `, {}, ctx);
   });
 };
 

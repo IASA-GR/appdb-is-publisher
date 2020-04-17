@@ -54,7 +54,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let imageId = _.trim(req.params.imageId);
       let templateId = _.trim(req.params.templateId);
 
-      _handleRequest(SiteCloudComputingImage.getTemplate(imageId, templateId), req, res);
+      _handleRequest(SiteCloudComputingImage.getTemplate(imageId, templateId, req), req, res);
     }
   );
 
@@ -86,7 +86,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let imageId = _.trim(req.params.imageId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingImage.getAllTemplates(imageId, params), req, res);
+      _handleRequest(SiteCloudComputingImage.getAllTemplates(imageId, params, req), req, res);
     }
   );
 
@@ -140,7 +140,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let imageId = _.trim(req.params.imageId);
 
-      _handleRequest(SiteCloudComputingImage.getShare(imageId), req, res);
+      _handleRequest(SiteCloudComputingImage.getShare(imageId, req), req, res);
     }
   );
 
@@ -167,7 +167,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let imageId = _.trim(req.params.imageId);
 
-      _handleRequest(SiteCloudComputingImage.getEndpoint(imageId), req, res);
+      _handleRequest(SiteCloudComputingImage.getEndpoint(imageId, req), req, res);
     }
   );
 
@@ -194,7 +194,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let imageId = _.trim(req.params.imageId);
 
-      _handleRequest(SiteCloudComputingImage.getSite(imageId), req, res);
+      _handleRequest(SiteCloudComputingImage.getSite(imageId, req), req, res);
     }
   );
 
@@ -221,7 +221,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let imageId = _.trim(req.params.imageId);
 
-      _handleRequest(SiteCloudComputingImage.getByIdentifier(imageId), req, res);
+      _handleRequest(SiteCloudComputingImage.getByIdentifier(imageId, req), req, res);
     }
   );
 
@@ -246,7 +246,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingImage.getAll(params), req, res);
+      _handleRequest(SiteCloudComputingImage.getAll(params, req), req, res);
     }
   );
 }

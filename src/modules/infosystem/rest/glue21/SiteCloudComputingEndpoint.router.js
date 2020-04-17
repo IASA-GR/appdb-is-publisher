@@ -70,7 +70,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let imageId = _.trim(req.params.imageId);
       let templateId = _.trim(req.params.templateId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getShareImageTemplate(endpointId, shareId, imageId, templateId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getShareImageTemplate(endpointId, shareId, imageId, templateId, req), req, res);
     }
   );
 
@@ -118,7 +118,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let imageId = _.trim(req.params.imageId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingEndpoint.getAllShareImageTemplates(endpointId, shareId, imageId, params), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getAllShareImageTemplates(endpointId, shareId, imageId, params, req), req, res);
     }
   );
 
@@ -161,7 +161,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let shareId = _.trim(req.params.shareId);
       let imageId = _.trim(req.params.imageId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getShareImage(endpointId, shareId, imageId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getShareImage(endpointId, shareId, imageId, req), req, res);
     }
   );
 
@@ -201,7 +201,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let shareId = _.trim(req.params.shareId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingEndpoint.getAllShareImages(endpointId, shareId, params), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getAllShareImages(endpointId, shareId, params, req), req, res);
     }
   );
 
@@ -236,7 +236,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let shareId = _.trim(req.params.shareId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getShare(endpointId, shareId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getShare(endpointId, shareId, req), req, res);
     }
   );
 
@@ -268,7 +268,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingEndpoint.getAllShares(endpointId, params), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getAllShares(endpointId, params, req), req, res);
     }
   );
 
@@ -311,7 +311,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let managerId = _.trim(req.params.managerId);
       let templateId = _.trim(req.params.templateId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getManagerTemplate(endpointId, managerId, templateId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getManagerTemplate(endpointId, managerId, templateId, req), req, res);
     }
   );
 
@@ -351,7 +351,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let managerId = _.trim(req.params.managerId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingEndpoint.getAllManagerTemplates(endpointId, managerId, params), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getAllManagerTemplates(endpointId, managerId, params, req), req, res);
     }
   );
 
@@ -386,7 +386,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let managerId = _.trim(req.params.managerId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getManager(endpointId, managerId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getManager(endpointId, managerId, req), req, res);
     }
   );
 
@@ -418,7 +418,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingEndpoint.getAllManagers(endpointId, params), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getAllManagers(endpointId, params, req), req, res);
     }
   );
 
@@ -453,7 +453,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let templateId = _.trim(req.params.templateId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getTemplate(endpointId, templateId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getTemplate(endpointId, templateId, req), req, res);
     }
   );
 
@@ -485,7 +485,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingEndpoint.getAllTemplates(endpointId, params), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getAllTemplates(endpointId, params, req), req, res);
     }
   );
 
@@ -528,7 +528,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let imageId = _.trim(req.params.imageId);
       let templateId = _.trim(req.params.templateId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getImageTemplate(endpointId, imageId, templateId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getImageTemplate(endpointId, imageId, templateId, req), req, res);
     }
   );
 
@@ -568,7 +568,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let imageId = _.trim(req.params.imageId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingEndpoint.getAllImageTemplates(endpointId, imageId, params), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getAllImageTemplates(endpointId, imageId, params, req), req, res);
     }
   );
 
@@ -604,7 +604,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let imageId = _.trim(req.params.imageId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getImage(endpointId, imageId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getImage(endpointId, imageId, req), req, res);
     }
   );
 
@@ -636,7 +636,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteCloudComputingEndpoint.getAllImages(endpointId, params), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getAllImages(endpointId, params, req), req, res);
     }
   );
 
@@ -663,7 +663,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let endpointId = _.trim(req.params.endpointId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getServiceDowntimes(endpointId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getServiceDowntimes(endpointId, req), req, res);
     }
   );
 
@@ -690,7 +690,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let endpointId = _.trim(req.params.endpointId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getServiceStatus(endpointId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getServiceStatus(endpointId, req), req, res);
     }
   );
 
@@ -717,7 +717,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let endpointId = _.trim(req.params.endpointId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getSite(endpointId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getSite(endpointId, req), req, res);
     }
   );
 
@@ -744,7 +744,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let endpointId = _.trim(req.params.endpointId);
 
-      _handleRequest(SiteCloudComputingEndpoint.getByIdentifier(endpointId), req, res);
+      _handleRequest(SiteCloudComputingEndpoint.getByIdentifier(endpointId, req), req, res);
     }
   );
 
@@ -768,8 +768,8 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     [CollectionMetaData({ entityType: 'SiteCloudComputingEndpoint' })],
     (req, res) => {
       let params = getCollectionRequestParams(req);
-
-      _handleRequest(SiteCloudComputingEndpoint.getAll(params), req, res);
+console.log('FOUN!!!!');
+      _handleRequest(SiteCloudComputingEndpoint.getAll(params, req), req, res);
     }
   );
 }

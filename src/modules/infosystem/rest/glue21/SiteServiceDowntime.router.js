@@ -33,7 +33,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let downtimeId = _.trim(req.params.downtimeId);
 
-      _handleRequest(SiteServiceDowntime.getEndpoint(downtimeId), req, res);
+      _handleRequest(SiteServiceDowntime.getEndpoint(downtimeId, req), req, res);
     }
   );
 
@@ -60,7 +60,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let downtimeId = _.trim(req.params.downtimeId);
 
-      _handleRequest(SiteServiceDowntime.getSite(downtimeId), req, res);
+      _handleRequest(SiteServiceDowntime.getSite(downtimeId, req), req, res);
     }
   );
 
@@ -87,7 +87,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let downtimeId = _.trim(req.params.downtimeId);
 
-      _handleRequest(SiteServiceDowntime.getByIdentifier(downtimeId), req, res);
+      _handleRequest(SiteServiceDowntime.getByIdentifier(downtimeId, req), req, res);
     }
   );
 
@@ -112,7 +112,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(SiteServiceDowntime.getAll(params), req, res);
+      _handleRequest(SiteServiceDowntime.getAll(params, req), req, res);
     }
   );
 }

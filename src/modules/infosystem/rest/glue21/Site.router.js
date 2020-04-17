@@ -78,7 +78,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let imageId = _.trim(req.params.imageId);
       let templateId = _.trim(req.params.templateId);
 
-      _handleRequest(Site.getSiteCloudComputingEndpointShareImageTemplate(siteId, endpointId, shareId, imageId, templateId), req, res);
+      _handleRequest(Site.getSiteCloudComputingEndpointShareImageTemplate(siteId, endpointId, shareId, imageId, templateId, req), req, res);
     }
   );
 
@@ -134,7 +134,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let imageId = _.trim(req.params.imageId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(Site.getAllSiteCloudComputingEndpointShareImageTemplates(siteId, endpointId, shareId, imageId, params), req, res);
+      _handleRequest(Site.getAllSiteCloudComputingEndpointShareImageTemplates(siteId, endpointId, shareId, imageId, params, req), req, res);
     }
   );
 
@@ -185,7 +185,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let shareId = _.trim(req.params.shareId);
       let imageId = _.trim(req.params.imageId);
 
-      _handleRequest(Site.getSiteCloudComputingEndpointShareImage(siteId, endpointId, shareId, imageId), req, res);
+      _handleRequest(Site.getSiteCloudComputingEndpointShareImage(siteId, endpointId, shareId, imageId, req), req, res);
     }
   );
 
@@ -233,7 +233,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let shareId = _.trim(req.params.shareId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(Site.getAllSiteCloudComputingEndpointShareImages(siteId, endpointId, shareId, params), req, res);
+      _handleRequest(Site.getAllSiteCloudComputingEndpointShareImages(siteId, endpointId, shareId, params, req), req, res);
     }
     );
 
@@ -276,7 +276,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let shareId = _.trim(req.params.shareId);
 
-      _handleRequest(Site.getSiteCloudComputingEndpointShare(siteId, endpointId, shareId), req, res);
+      _handleRequest(Site.getSiteCloudComputingEndpointShare(siteId, endpointId, shareId, req), req, res);
     }
   );
 
@@ -316,7 +316,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(Site.getAllSiteCloudComputingEndpointShares(siteId, endpointId, params), req, res);
+      _handleRequest(Site.getAllSiteCloudComputingEndpointShares(siteId, endpointId, params, req), req, res);
     }
   );
 
@@ -367,7 +367,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let managerId = _.trim(req.params.managerId);
       let templateId = _.trim(req.params.templateId);
 
-      _handleRequest(Site.getSiteCloudComputingEndpointManagerTemplate(siteId, endpointId, managerId, templateId), req, res);
+      _handleRequest(Site.getSiteCloudComputingEndpointManagerTemplate(siteId, endpointId, managerId, templateId, req), req, res);
     }
   );
 
@@ -416,7 +416,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let managerId = _.trim(req.params.managerId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(Site.getAllSiteCloudComputingEndpointManagerTemplates(siteId, endpointId, managerId, params), req, res);
+      _handleRequest(Site.getAllSiteCloudComputingEndpointManagerTemplates(siteId, endpointId, managerId, params, req), req, res);
     }
   );
 
@@ -460,7 +460,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let managerId = _.trim(req.params.managerId);
 
-      _handleRequest(Site.getSiteCloudComputingEndpointManager(siteId, endpointId, managerId), req, res);
+      _handleRequest(Site.getSiteCloudComputingEndpointManager(siteId, endpointId, managerId, req), req, res);
     }
   );
 
@@ -500,7 +500,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(Site.getAllSiteCloudComputingEndpointManagers(siteId, endpointId, params), req, res);
+      _handleRequest(Site.getAllSiteCloudComputingEndpointManagers(siteId, endpointId, params, req), req, res);
     }
   );
 
@@ -544,7 +544,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let imageId = _.trim(req.params.imageId);
 
-      _handleRequest(Site.getSiteCloudComputingEndpointImage(siteId, endpointId, imageId), req, res);
+      _handleRequest(Site.getSiteCloudComputingEndpointImage(siteId, endpointId, imageId, req), req, res);
     }
   );
 
@@ -584,7 +584,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(Site.getAllSiteCloudComputingEndpointImages(siteId, endpointId, params), req, res);
+      _handleRequest(Site.getAllSiteCloudComputingEndpointImages(siteId, endpointId, params, req), req, res);
     }
   );
 
@@ -627,7 +627,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let templateId = _.trim(req.params.templateId);
 
-      _handleRequest(Site.getSiteCloudComputingEndpointTemplate(siteId, endpointId, templateId), req, res);
+      _handleRequest(Site.getSiteCloudComputingEndpointTemplate(siteId, endpointId, templateId, req), req, res);
     }
   );
 
@@ -667,7 +667,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let endpointId = _.trim(req.params.endpointId);
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(Site.getAllSiteCloudComputingEndpointTemplates(siteId, endpointId, params), req, res);
+      _handleRequest(Site.getAllSiteCloudComputingEndpointTemplates(siteId, endpointId, params, req), req, res);
     }
   );
 
@@ -702,7 +702,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let siteId = _.trim(req.params.siteId);
       let endpointId = _.trim(req.params.endpointId);
 
-      _handleRequest(Site.getSiteCloudComputingEndpoint(siteId, endpointId), req, res);
+      _handleRequest(Site.getSiteCloudComputingEndpoint(siteId, endpointId, req), req, res);
     }
   );
 
@@ -734,7 +734,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let params = getCollectionRequestParams(req);
       let siteId = _.trim(req.params.siteId);
 
-      _handleRequest(Site.getAllSiteCloudComputingEndpoints(siteId, params), req, res);
+      _handleRequest(Site.getAllSiteCloudComputingEndpoints(siteId, params, req), req, res);
     }
   );
 
@@ -766,7 +766,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let params = getCollectionRequestParams(req);
       let siteId = _.trim(req.params.siteId);
 
-      _handleRequest(Site.getServiceStatuses(siteId, params), req, res);
+      _handleRequest(Site.getServiceStatuses(siteId, params, req), req, res);
     }
   );
 
@@ -798,7 +798,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
       let params = getCollectionRequestParams(req);
       let siteId = _.trim(req.params.siteId);
 
-      _handleRequest(Site.getServiceDowntimes(siteId, params), req, res);
+      _handleRequest(Site.getServiceDowntimes(siteId, params, req), req, res);
     }
   );
 
@@ -825,7 +825,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let siteId = _.trim(req.params.siteId);
 
-      _handleRequest(Site.getByIdentifier(siteId), req, res);
+      _handleRequest(Site.getByIdentifier(siteId, req), req, res);
     }
   );
 
@@ -851,7 +851,7 @@ export const useRouter = (router, {openAPIDefinitions}) => {
     (req, res) => {
       let params = getCollectionRequestParams(req);
 
-      _handleRequest(Site.getAll(params), req, res);
+      _handleRequest(Site.getAll(params, req), req, res);
     }
   );
 }

@@ -58,19 +58,22 @@ export const handleUnknown = (req, res) => {
   res.end();
 };
 
-export const expressRouter = function (router, config, {schema}) {
+export const expressRouter = function (router, config, {schema, logger}) {
   let _router = null;
 
   try {
-    _router = require('./' + schema).expressRouter(router, config);
-    console.log('\x1b[32m[ISPublisher:infosystem:RestAPI]\x1b[0m: Inited for schema ' + schema);
+    _router = require('./' + schema).expressRouter(router, Object.assign(config, {logger: logger}));
+    //console.log('\x1b[32m[ISPublisher:infosystem:RestAPI]\x1b[0m: Inited for schema ' + schema);
+    logger.info('Inited IS Publisher REST API for schema ' + schema);
   } catch(e) {
     if (e instanceof Error && e.code === "MODULE_NOT_FOUND") {
-      console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load rest api router. Reason: Module not found for schema "' + schema + '"');
+      logger.error('Could not load REST API router. Reason: Module not found for schema "' + schema + '"')
     } else {
-      console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load rest api router. Reason: ', e);
+      logger.error('Could not load rest api router. Reason: ' + e);
     }
-    _router = function(req, res, next) { next(); };
+    _router = function(req, res, next) {
+      next();
+    };
   }
 
   return _router;
@@ -79,14 +82,14 @@ export const expressRouter = function (router, config, {schema}) {
 /**
  * Rest API service description.
  */
-export const serviceDescription = function getServiceDescription({schema}) {
+export const serviceDescription = function getServiceDescription({schema, logger}) {
   try {
     return require('./' + schema).serviceDescription;
   } catch(e) {
     if (e instanceof Error && e.code === "MODULE_NOT_FOUND") {
-      console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load service description. Reason: Module not found for schema "' + schema + '"');
+      logger.error('Could not load service description. Reason: Module not found for schema "' + schema + '"');
     } else {
-      console.log('\x1b[31m[ISPublisher:infosystem:RestAPI][ERROR]\x1b[0m: Could not load service description. Reason: ' , e);
+      logger.error('Could not load service description. Reason: ' + e);
     }
 
     return {};
