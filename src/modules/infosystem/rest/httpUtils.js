@@ -75,6 +75,9 @@ export const _handleMissing = (req, res) => {
       details: 'The requested resource does not exist.'
     }
   };
+
+  req.infosysError = doc.error.type + ' - ' + doc.error.details;
+
   res.json(doc);
   res.end();
 };
@@ -118,8 +121,8 @@ export const handleInvalidFilterError = (req, res, e) => {
   if (!invalidFilter) {
     return false;
   }
-  res.status(400);
-  res.json({
+
+  let doc = {
     ...req.requestMetaData,
     httpStatus: 400,
     error: {
@@ -127,8 +130,12 @@ export const handleInvalidFilterError = (req, res, e) => {
       message: 'Use of unsupported filtering operator in the provided filter.',
       details: e.message
     }
-  }
-);
+  };
+
+  req.infosysError = doc.error.type + ' - ' + doc.error.details;
+
+  res.status(400);
+  res.json(doc);
 
   return true;
 };
@@ -148,8 +155,7 @@ export const handleUnknownFilter = (req, res, e) => {
   if (!invalidFilter) {
     return false;
   }
-  res.status(400);
-  res.json({
+  let doc = {
     ...req.requestMetaData,
     httpStatus: 400,
     error: {
@@ -157,8 +163,12 @@ export const handleUnknownFilter = (req, res, e) => {
       message: 'Use of unsupported filtering semantics.',
       details: e.message
     }
-  }
-);
+  };
+
+  req.infosysError = doc.error.type + ' - ' + doc.error.details;
+
+  res.status(400);
+  res.json(doc);
 
   return true;
 };
@@ -175,12 +185,12 @@ export const handleUnknownFilter = (req, res, e) => {
 export const handleInvalidGraphQLFilterError = (req, res, e) => {
   let errorMessage = (_.isString(e) ? e : e.message ) || '';
   let invalidFilter = getInvalidFilterFromError(errorMessage);
+
   if (!invalidFilter) {
     return false;
   }
 
-  res.status(400);
-  res.json({
+  let doc = {
     ...req.requestMetaData,
     httpStatus: 400,
     error: {
@@ -188,8 +198,12 @@ export const handleInvalidGraphQLFilterError = (req, res, e) => {
       message: "The provided filter is invalid for this entity type (" + invalidFilter + ").",
       details: getGraphqlErrors(e)
     }
-  }
-);
+  };
+
+  req.infosysError = doc.error.type + ' - ' + doc.error.details;
+
+  res.status(400);
+  res.json(doc);
 
   return true;
 };
@@ -205,12 +219,12 @@ export const handleInvalidGraphQLFilterError = (req, res, e) => {
  */
 export const handleGenericGraphQLError = (req, res, e) => {
   let isGraphQLError = (_.has(e, 'message') && _.has(e, 'stack') && _.has(e, 'response.errors') && _.has(e, 'request'));
+
   if (!isGraphQLError) {
     return false;
   }
 
-  res.status(400);
-  res.json({
+  let doc = {
     ...req.requestMetaData,
     httpStatus: 400,
     error: {
@@ -218,8 +232,12 @@ export const handleGenericGraphQLError = (req, res, e) => {
       message: "A backend service error occured while processing the request.",
       details: getGraphqlErrors(e)
     }
-  }
-);
+  };
+
+  req.infosysError = doc.error.type + ' - ' + doc.error.details;
+
+  res.status(400);
+  res.json(doc);
 
   return true;
 };
@@ -247,6 +265,15 @@ export const _handleRequest = (pr, req, res) => {
       doc = Object.assign({}, doc, data || {});
       doc.data = items;
     }
+
+    if (doc.httpStatus >= 400) {
+      if (doc.error) {
+        req.infosysError = doc.error.details || doc.error.message || doc.error.type || 'Unknown Error';
+      } else {
+        req.infosysError = 'Unknown Error';
+      }
+    }
+
     res.setHeader('Content-Type', 'application/json');
     res.json(doc);
     res.end();
@@ -259,6 +286,8 @@ export const _handleRequest = (pr, req, res) => {
       !handleInvalidGraphQLFilterError(req, res, e) &&
       !handleGenericGraphQLError(req, res, e)
     ) {
+      req.infosysError = e.message + ' STACK : '+ e.stack;
+
       res.status(500);
       res.json({...req.requestMetaData, httpStatus: 500, error: e});
     }
