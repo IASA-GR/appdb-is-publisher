@@ -9,6 +9,7 @@ import {
   DEFAULT_ARRAY_OPERATOR_MAP,
   DEFAULT_OPERATOR_MAP
 } from './EntityDefaults';
+import {exportLogDataFromLogData} from '../../../../../lib/isql/utils/exportLogData';
 
 const _errorMandatoryField = (msg) => {
   return () => {
@@ -56,9 +57,24 @@ const _createModel = (
     postProcessOperations = {},
     //The DB connection instance
     dbConnection      = _errorMandatoryField('[InfoSystem:api:entities:createModel] Must give DB connection object'),
+    getLogger = () => null
   } = {}
 ) => {
 
+  const _rawLogger = getLogger('api');
+
+  const getContextLogger = (context) => {
+    context = context || {};
+    let req = {};
+    if (context.getRequest) {
+      req = context.getRequest() || {};
+    }
+
+    let logData = exportLogDataFromLogData(req.logData, {module: 'entity'})
+
+    return _rawLogger.child({logData: logData});
+
+  }
   //Initializa Entity Model Mapper instance for this model.
   const _mapper = EntityMapper.create(name, {baseFilter, baseFields, propertyMap, operatorMap, arrayOperatorMap, relationMap});
 
@@ -165,8 +181,14 @@ const _createModel = (
    */
   const findOne = ({filter = {}, fields = DEFAULT_DB_FIELDS, translateProperties = true} = DEFAULT_MODEL_FINDONE_ARGUMENTS, context) => {
     let query = _mapper.getQuery({filter, limit: 1, skip: 0, fields});
+    let logger = getContextLogger(context);
 
-    return _db().findOne(query, context).then(doc => ((translateProperties) ? _exportDocument(doc) : doc));
+    logger.trace('DB Fetch single document request: ' + JSON.stringify(query));
+
+    return _db().findOne(query, context).then(doc => ((translateProperties) ? _exportDocument(doc) : doc)).then(doc => {
+      logger.trace('DB Fetch single document response "' + (doc._id || doc.id) + '"');
+      return Promise.resolve(doc);
+    });
   }
 
   /**
@@ -190,6 +212,10 @@ const _createModel = (
    * @returns {Promise}                                 Resolves the model object collection.
    */
   const findMany = ({filter = {}, skip, limit, sort = [], fields = [], includeTotalCount = false, translateProperties = true, wrapItemsToCollection = true, nestedLevel = 0} = DEFAULT_MODEL_FINDMANY_ARGUMENTS, context) => {
+    let logger = getContextLogger(context);
+
+    logger.trace('Find many query request: ' + JSON.stringify({filter, skip, limit, sort, fields, includeTotalCount}));
+
     return _execEngine.executeQuery({filter, skip, limit, sort, fields, includeTotalCount, translateProperties, wrapItemsToCollection, nestedLevel}, context);
   }
 
@@ -202,7 +228,14 @@ const _createModel = (
    * @returns {Promise}           Resolves model object.
    */
   const getById = (id, context) => {
-    return _db().getById(id, context).then(doc => Promise.resolve(_exportDocument(doc)));
+    let logger = getContextLogger(context);
+
+    logger.trace('DB Fetch document by ID request "' + id + '"');
+
+    return _db().getById(id, context).then(doc => Promise.resolve(_exportDocument(doc))).then(doc => {
+      logger.trace('DB Fetch document by ID repsonse: "' + (doc._id || doc.id) + '"');
+      return Promise.resolve(doc);
+    });
   };
 
   /**
@@ -216,8 +249,14 @@ const _createModel = (
    */
   const getCount = ({filter = {}} = DEFAULT_MODEL_FINDONE_ARGUMENTS, context) => {
     let query = _mapper.getQuery({filter, fields: ['id']});
+    let logger = getContextLogger(context);
 
-    return _db().findCount(query, context);
+    logger.trace('DB Fetch count of documents request: ' + JSON.stringify(query));
+
+    return _db().findCount(query, context).then(res => {
+      logger.trace('DB Fetch count of documents response:' + JSON.stringify(res));
+      return Promise.resolve(res);
+    });
   }
 
   /**
@@ -231,6 +270,7 @@ const _createModel = (
    */
   const hasOneEntry = ({filter = {}} = DEFAULT_MODEL_FINDONE_ARGUMENTS, context) => {
     let query = _mapper.getQuery({filter, limit: 2, skip: 0, fields: ['id']});
+
     return _db().findCount(query, context).then(count => (count === 1));
   };
 

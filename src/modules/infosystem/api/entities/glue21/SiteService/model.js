@@ -39,7 +39,8 @@ function SiteServiceModel(context) {
       'templates'       : {name: 'SiteServiceTemplate', relationType: 'hasMany', relationOn: {key: 'info.GLUE2ServiceID',foreignKey: 'info.GLUE2ServiceID'}}
       //'serviceStatuses' : {name: 'SiteServiceStatus', relationType: 'hasOne', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}},
       //'serviceDowntimes': {name: 'SiteServiceDowntime', relationType: 'hasMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}}
-    }
+    },
+    getLogger: context.getLogger
   });
 }
 

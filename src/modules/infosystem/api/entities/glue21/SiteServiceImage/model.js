@@ -56,7 +56,8 @@ function SiteServiceImageModel(context) {
       'endpoint'        : { name: 'SiteServiceEndpoint', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}},
       'share'           : { name: 'SiteServiceShare', relationOn: 'belongsTo', relationOn: {key: 'info.GLUE2ShareID', foreignKey: 'info.GLUE2CloudComputingImageCloudComputingShareForeignKey'}},
       'templates'       : { name: 'SiteServiceTemplate', relationType: 'manyToMany', relationOn: {key: 'info.SiteEndpointPKey', foreignKey: 'info.SiteEndpointPKey'}}
-    }
+    },
+    getLogger: context.getLogger
   });
 }
 

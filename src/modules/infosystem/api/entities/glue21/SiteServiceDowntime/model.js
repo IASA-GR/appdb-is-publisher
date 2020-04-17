@@ -32,7 +32,8 @@ function SiteServiceDowntimeModel(context) {
     relationMap         : {
       'site'            : {name: 'Site', relationType: 'belongsTo', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey' },  sharedFields: {'name': 'site.name', 'pkey': 'site.pkey', 'countryCode': 'site.countryCode', 'country': 'site.country', 'roc': 'site.roc', 'prodInfrastructure': 'site.prodInfrastructure'}},
       'endpoint'        : {name: 'SiteServiceEndpoint', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey:  'info.SiteEndpointPKey'}, sharedFields: {'endpointPKey': 'endpointPKey', 'isInProduction': 'isInProduction'}}
-    }
+    },
+    getLogger: context.getLogger
   });
 }
 

@@ -112,7 +112,8 @@ function SiteServiceEndpointModel(context) {
       'info.templates'  : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.templates.' + d.hash, info: Object.assign({}, d)})),
       'info.shares'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.shares.' + d.hash, info: Object.assign({}, d)})),
       'info.managers'   : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.managers.' + d.hash, info: Object.assign({}, d)}))
-    }
+    },
+    getLogger: context.getLogger
   });
 }
 

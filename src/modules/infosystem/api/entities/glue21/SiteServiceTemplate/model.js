@@ -49,7 +49,8 @@ function SiteServiceTemplateModel(context) {
       'manager'         : { name: 'SiteServiceManager', relationType: 'belongsTo', relationOn: {key: 'info.GLUE2ManagerID', foreignKey: 'info.GLUE2CloudComputingInstanceTypeCloudComputingManagerForeignKey'}},
       'share'           : { name: 'SiteServiceShare', relationType: 'belongsTo', relationOn: {key: 'info.GLUE2ShareID', foreignKey: 'info.GLUE2CloudComputingInstanceTypeCloudComputingShareForeignKey'}},
       'images'          : { name: 'SiteServiceImage', relationType: 'manyToMany', relationOn: {key: 'info.GLUE2CloudComputingImageCloudComputingShareForeignKey', foreignKey:  'info.GLUE2CloudComputingInstanceTypeCloudComputingShareForeignKey'}}
-    }
+    },
+    getLogger: context.getLogger
   });
 }
 

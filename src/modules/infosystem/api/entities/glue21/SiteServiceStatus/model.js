@@ -27,7 +27,8 @@ function SiteServiceStatus(context) {
     relationMap         : {
       'endpoint'     : { name: 'SiteServiceEndpoint', relationType: 'belongsTo', relationOn: {key: 'info.SiteEndpointPKey', foreignKey:  'info.SiteEndpointPKey'}},
       'site'         : { name: 'Site', relationType: 'belongsTo', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}}
-    }
+    },
+    getLogger: context.getLogger
   });
 }
 

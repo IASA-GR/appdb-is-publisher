@@ -40,7 +40,8 @@ function SiteModel(context) {
       'cloudComputingTemplates' : {name: 'SiteServiceTemplate', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
       'serviceStatuses'  : {name: 'SiteServiceStatus', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}},
       'serviceDowntimes' : {name: 'SiteServiceDowntime', relationType: 'hasMany', relationOn: {key: 'info.SitePKey', foreignKey: 'info.SitePKey'}}
-    }
+    },
+    getLogger: context.getLogger
   });
 }
 

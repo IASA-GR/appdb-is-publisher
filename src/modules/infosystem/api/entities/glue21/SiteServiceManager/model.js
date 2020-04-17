@@ -81,7 +81,8 @@ function SiteServiceManagerModel(context) {
     postProcessFields : {
       'info.images'     : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.images.' + d.hash, info: d})),
       'info.templates'  : (doc) => doc.map(d => ({_id: 'egi.top.vaproviders.templates.' + d.hash, info: d}))
-    }
+    },
+    getLogger: context.getLogger
   });
 }
 
