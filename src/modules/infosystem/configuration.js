@@ -30,7 +30,7 @@ const _get = (path = null, defaultValue = null) => {
  * @param   {string} submodule  Sub module name.
  * @returns {object}            Logger object.
  */
-const _getLogger = (submodule = null) => {
+const _getLogger = (submodule = 'app') => {
   if (_.trim(submodule) && _logger.isRegistered('infosystem/' + submodule) === false) {
     return _logger.register('infosystem/' + submodule, _get(submodule + '.logger' || {}));
   }
