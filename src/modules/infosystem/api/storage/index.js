@@ -24,13 +24,13 @@ const _connections = {};
  *
  * @returns {CouchDBAccess}             CouchDBAccess instance.
  */
-function _initStorage({name, url = mandatoryFunctionParameter('url', 'CouchDBAccess::constructor'), username = '', password = '', collection = mandatoryFunctionParameter('collection', 'CouchDBAccess::constructor') }) {
+function _initStorage({name, url = mandatoryFunctionParameter('url', 'CouchDBAccess::constructor'), username = '', password = '', collection = mandatoryFunctionParameter('collection', 'CouchDBAccess::constructor') }, {logger}) {
   name = name  || md5(url, username, password, collection);
 
   let nanoConnection = nano({url, "requestDefaults" : { "agent" : false }});
   let nanoCollection = nanoConnection.use(collection);
   let connection = Promise.promisifyAll(nanoCollection);
-  let db = new CouchDBAccess(connection, name);
+  let db = new CouchDBAccess(connection, name, {logger});
 
   return Promise.resolve(db).then((db) => {
     if (name in _connections) {

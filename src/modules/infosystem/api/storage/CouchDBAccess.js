@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import DataLoader from 'dataloader';
 import UniqueTaskRegistry from './../../../../lib/isql/utils/UniqueTaskRegistry';
+import {exportLogDataFromLogData} from '../../../../lib/isql/utils/exportLogData';
 
 const _DEFAULT_LIMIT_VALUE = 1000;
 
@@ -119,10 +120,11 @@ class CouchDBAccess {
    * @param {object} db     A couchdb connection. Most likely a promisified instance from "nano" package.
    * @param {string} name   Connection name. Usually the name of the accessed couchdb collection.
    */
-  constructor(db, name) {
+  constructor(db, name, {logger}) {
     this._db  = db;
     this._name = name;
     this._taskRegistry = new UniqueTaskRegistry(this._name, {cacheResponseTime: 10000});
+    this._logger = logger;
   }
 
   /**
@@ -140,6 +142,17 @@ class CouchDBAccess {
     return this._taskRegistry.register(id, function __queryTaskCaller__() { return func(query); });
   }
 
+  getContextLogger(context) {
+    context = context || {};
+    let req = {};
+    if (context.getRequest) {
+      req = context.getRequest() || {};
+    }
+
+    let logData = exportLogDataFromLogData(req.logData, {module: 'storage'})
+
+    return this._logger.child({logData: logData});
+  }
   /**
    * Returns a cached DB api for a given context to decrease resource consumption and improve performance.
    *
@@ -181,6 +194,9 @@ class CouchDBAccess {
   _findOne(args, context) {
     let query = normalizeListArgs(args);
     let queryTask = null;
+    let logger = this.getContextLogger(context);
+
+    logger.trace('findOne request: ' + JSON.stringify(args));
 
     //Optimization: Do not perform query if 'id' field is given
     //Instead just retrieve document by ID.
@@ -193,7 +209,7 @@ class CouchDBAccess {
     return queryTask.then(result => {
       let docs = result.docs || [];
       docs = Array.isArray(docs) ? docs : [docs];
-      logger('findOne', JSON.stringify(args), context, (docs.length > 0));
+      logger.trace('findOne response: ', JSON.stringify(args), context, (docs.length > 0));
       _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
       return _.first(docs) || null;
     }).catch(err => {
@@ -208,7 +224,7 @@ class CouchDBAccess {
           }, _WAIT_RETRY || 500)
         });
       } else {
-        errorLogger('findOne', Object.toString(err), context);
+        logger.error('findOne failed: ' + Object.toString(err));
         _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
         return Promise.reject(err);
       }
@@ -242,10 +258,14 @@ class CouchDBAccess {
     query.skip = 0;
     query.fields = ['_id'];
 
+    let logger = this.getContextLogger(context);
+
+    logger.trace('findCount request: ' + JSON.stringify(args));
+
     return this.queryTask('findAsync',query).then(result => {
       let docs = result.docs || [];
       docs = Array.isArray(docs) ? docs : [docs];
-      logger('findCount', JSON.stringify(args), context, docs.length);
+      logger.trace('findCount response: [' + docs.length +  '] - ' + JSON.stringify(args));
       _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
       return docs.length;
     }).catch(err => {
@@ -260,7 +280,7 @@ class CouchDBAccess {
           }, _WAIT_RETRY || 500)
         });
       } else {
-        errorLogger('findCount', Object.toString(err));
+        logger.error('findCount failed: ' + Object.toString(err));
         _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
         return Promise.reject(err);
       }
@@ -289,9 +309,12 @@ class CouchDBAccess {
    */
   _findMany(args, context, retries) {
     let query = normalizeListArgs(args);
+    let logger = this.getContextLogger(context);
+
+    logger.trace('findMany request: ' + JSON.stringify(args));
 
     return this.queryTask('findAsync', query).then(result => {
-      logger('findMany', JSON.stringify(args), context, _.trim(result.docs.length));
+      logger.trace('findMany response: [' + result.docs.length + '] - '  + JSON.stringify(args), context, _.trim(result.docs.length));
       let docs = result.docs || [];
       docs = Array.isArray(docs) ? docs : [docs];
       _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
@@ -308,7 +331,7 @@ class CouchDBAccess {
           }, _WAIT_RETRY || 500)
         });
       } else {
-        errorLogger('findMany', Object.toString(err), context);
+        logger.error('findMany failed: ' +  Object.toString(err));
         _.set(context, 'request.statistics.totalDBRequests', _.get(context, 'request.statistics.totalDBRequests', 0) + 1);
         return Promise.reject(err);
       }
@@ -368,13 +391,20 @@ class CouchDBAccess {
    * @returns {Promise}             Resolves a document object.
    */
   _getById(id, context) {
+    let logger = this.getContextLogger(context);
+
+    logger.trace('getById(' + id + ') request');
     return this.queryTask('getAsync', id).catch(err => {
         switch(err.message) {
           case 'missing':
             return Promise.resolve({data: null});
         }
+        logger.error('getById(' + id + ') failed: ' + err);
         return Promise.reject(err);
-    });
+    }).then(doc => {
+      logger.trace('getById(' + id + ') response ok');
+      return Promise.resolve(doc);
+    })
   }
 
   /**
