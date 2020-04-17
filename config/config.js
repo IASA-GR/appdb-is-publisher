@@ -19,6 +19,35 @@ var config = {
   "modules": {
     "infosystem": {
       "schema" : "glue20",
+      "app": {
+        "logger": {
+          "info": {
+            "file": "/var/log/is-publisher/info.log",
+            "rotate": {
+              "filename": "%DATE%.info.log",
+              "datePattern": "YYYYMMDD",
+              "zippedArchive": true,
+              "maxSize": "10m",
+              "maxFiles": "1d",
+              "dirname": "/var/log/is-publisher/"
+            }
+          },
+          "debug": {
+            "file": "/var/log/is-publisher/debug.log",
+            "rotate": {
+              "filename": "%DATE%.debug.log",
+              "datePattern": "YYYYMMDD",
+              "zippedArchive": true,
+              "maxSize": "10m",
+              "maxFiles": "1d",
+              "dirname": "/var/log/is-publisher/"
+            }
+          },
+          "trace": {
+            "file": "/var/log/is-publisher/trace.log"
+          }
+        }
+      },
       "storage": {
         "_default": {
           "dialect": "couchdb",
@@ -26,24 +55,55 @@ var config = {
             "name": "_default",
             "url": "https://nouser:nouser@localhost:6984",
             "collection": "isappdb"
+          }
+        },
+        "logger": {
+          "info": {
+            "file": "/var/log/is-publisher/info.log"
           },
-          "logger": {
-            "info": "/var/log/is-publisher/dbaccess/info.log",
-            "debug": "/var/log/is-publisher/dbaccess/debug.log"
+          "debug": {
+            "file": "/var/log/is-publisher/debug.log"
+          },
+          "trace": {
+            "file": "/var/log/is-publisher/trace.log"
+          }
+        }
+      },
+      "api": {
+        "logger": {
+          "info": {
+            "file": "/var/log/is-publisher/info.log"
+          },
+          "trace": {
+            "file": "/var/log/is-publisher/trace.log"
           }
         }
       },
       "graphql": {
         "logger": {
-          "info": "/var/log/is-publisher/graphql/info.log",
-          "debug": "/var/log/is-publisher/graphql/debug.log"
+          "info": {
+            "file": "/var/log/is-publisher/info.log"
+          },
+          "debug": {
+            "file": "/var/log/is-publisher/debug.log"
+          },
+          "trace": {
+            "file": "/var/log/is-publisher/trace.log"
+          }
         }
       },
       "rest": {
         "graphQLUrl": "local",
         "logger": {
-          "info": "/var/log/is-publisher/rest/info.log",
-          "debug": "/var/log/is-publisher/rest/debug.log"
+          "info": {
+            "file": "/var/log/is-publisher/info.log"
+          },
+          "debug": {
+            "file": "/var/log/is-publisher/debug.log"
+          },
+          "trace": {
+            "file": "/var/log/is-publisher/trace.log"
+          }
         }
       }
     },
