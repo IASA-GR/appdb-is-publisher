@@ -12,6 +12,7 @@ import {expressRouter as proxyRouter} from './modules/couchDBProxy';
 import http from 'http';
 import https from 'https';
 import configuration from './modules/infosystem/configuration';
+import {exportLogDataFromRequest} from './lib/isql/utils/exportLogData.js'
 
 http.globalAgent.maxSockets = 2000;
 https.globalAgent.maxSockets = 2000;
@@ -70,13 +71,13 @@ const graphqlMiddleware_Headers = function(conf) {
 
 const graphqlMiddleware_Metrics = function(conf) {
   return function(req, res, next) {
-    let logger = conf.getLogger('graphql');
     let md5 = require('crypto')
       .createHash('md5')
       .update(JSON.stringify(req.body) + (new Date()).getTime())
       .digest("hex");
+    let logger = conf.getLogger('graphql');
+    let logData = exportLogDataFromRequest(req, {module: 'graphql', md5Hash: md5});
 
-    req.md5Hash = md5;
     req.statistics = {
       startedAt: new Date(),
       totalDBRequests: 0,
@@ -95,11 +96,19 @@ const graphqlMiddleware_Metrics = function(conf) {
         return '' + (this.totalRequestTime / 1000) + ' seconds';
       }
     };
-    console.log('\x1b[32m[GraphQL::' + md5 + ']\x1b[0m: Started request');
+
+    req.logData = logData;
+    logger = logger.child({logData: logData});
+
+    logger.debug('Query request');
+    logger.trace('Query request: ' + req.body.query);
+    logger.trace('Query request variables: ' + JSON.stringify(req.body.variables, null, 2));
+
     res.on('finish', function() {
       let endedAt = new Date();
       let diff =  (endedAt.getTime() - this.startedAt.getTime()) / 1000;
-      console.log('\x1b[32m[GraphQL::' + md5 + ']\x1b[0m: Ended request. Took \x1b[35m' + diff + '\x1b[0m seconds');
+
+      logger.info('Query response - (' + diff + ' secs)');
     }.bind({startedAt: new Date()}));
     next();
   };
@@ -111,7 +120,7 @@ const graphqlMiddleware_Metrics = function(conf) {
  */
 function _initServer(conf) {
   const GRAPHQL_ENTPOINT_PATH = '/graphql';
-
+  const _logger = conf.getLogger();
   const app = express();
 
   const graphQLConfig = conf.getGraphQL();
@@ -121,8 +130,9 @@ function _initServer(conf) {
     uploads: false,
     context: ({ req }) => ({
       api: conf.getApi,
-      request: req,
-      loaders: createDataLoaders(conf.getApi)
+      getRequest: () => req,
+      loaders: createDataLoaders(conf.getApi),
+      logger: conf.getLogger('graphql'),
     }),
     introspection: true,//(process.env.NODE_ENV !== 'production'),
     playground: (process.env.NODE_ENV === 'production') ? false : {
@@ -164,12 +174,14 @@ function _initServer(conf) {
   ));
 
   // Setup a REST api interface on top of graphql
-  app.use('/rest', restRouter(express.Router(), Configuration.getModuleConfiguration('infosystem.rest'), {schema: configuration.get('schema')}));
+  app.use('/rest', restRouter(express.Router(), Configuration.getModuleConfiguration('infosystem.rest'), {schema: configuration.get('schema'), logger: conf.getLogger('rest')}));
 
   // Setup a proxy to the CouchDB backend instance
-  console.log('\x1b[32m[ISPublisher:CouchDBProxy]\x1b[0m: Initializing couchdb proxy' );
+  _logger.info('Initializing CouchDB proxy service');
+  //console.log('\x1b[32m[ISPublisher:CouchDBProxy]\x1b[0m: Initializing couchdb proxy' );
   app.use('/couchdb', proxyRouter(express.Router(), Configuration.getModuleConfiguration('couchDBProxy'), 'couchdb'));
-  console.log('\x1b[32m[ISPublisher:CouchDBProxy]\x1b[0m: Couchdb proxy served in path "/couchdb"' );
+  //console.log('\x1b[32m[ISPublisher:CouchDBProxy]\x1b[0m: Couchdb proxy served in path "/couchdb"' );
+  _logger.info('CouchDB proxy served in path "/couchdb"');
 
   app.use('/docs', restDocumentationRouter(express.Router()));
   // Handle any other route
@@ -178,6 +190,7 @@ function _initServer(conf) {
   //Start server. Listening to configured port.
   return new Promise((resolve, reject) => {
     app.listen(PORT, function() {
+      _logger.info('HTTP server listening to port: ' + PORT);
       console.log('\x1b[32m[ISPublisher:HTTP]\x1b[0m: HTTP server listening to port: ' + PORT);
       resolve(app);
     });
