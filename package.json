@@ -19,7 +19,7 @@
     "babel-register": "^6.26.0"
   },
   "dependencies": {
-    "apollo-server-express": "2.3.3",
+    "apollo-server-express": "2.14.2",
     "app-module-path": "2.2.0",
     "dataloader": "1.4.0",
     "express": "4.16.4",
