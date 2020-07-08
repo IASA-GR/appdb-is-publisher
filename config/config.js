@@ -22,29 +22,29 @@ var config = {
       "app": {
         "logger": {
           "info": {
-            "file": "/var/log/is-publisher/info.log",
+            "file": "/var/log/is/publisher/info.log",
             "rotate": {
               "filename": "%DATE%.info.log",
               "datePattern": "YYYYMMDD",
               "zippedArchive": true,
               "maxSize": "10m",
               "maxFiles": "1d",
-              "dirname": "/var/log/is-publisher/"
+              "dirname": "/var/log/is/publisher/"
             }
           },
           "debug": {
-            "file": "/var/log/is-publisher/debug.log",
+            "file": "/var/log/is/publisher/debug.log",
             "rotate": {
               "filename": "%DATE%.debug.log",
               "datePattern": "YYYYMMDD",
               "zippedArchive": true,
               "maxSize": "10m",
               "maxFiles": "1d",
-              "dirname": "/var/log/is-publisher/"
+              "dirname": "/var/log/is/publisher/"
             }
           },
           "trace": {
-            "file": "/var/log/is-publisher/trace.log"
+            "file": "/var/log/is/publisher/trace.log"
           }
         }
       },
@@ -59,36 +59,36 @@ var config = {
         },
         "logger": {
           "info": {
-            "file": "/var/log/is-publisher/info.log"
+            "file": "/var/log/is/publisher/info.log"
           },
           "debug": {
-            "file": "/var/log/is-publisher/debug.log"
+            "file": "/var/log/is/publisher/debug.log"
           },
           "trace": {
-            "file": "/var/log/is-publisher/trace.log"
+            "file": "/var/log/is/publisher/trace.log"
           }
         }
       },
       "api": {
         "logger": {
           "info": {
-            "file": "/var/log/is-publisher/info.log"
+            "file": "/var/log/is/publisher/info.log"
           },
           "trace": {
-            "file": "/var/log/is-publisher/trace.log"
+            "file": "/var/log/is/publisher/trace.log"
           }
         }
       },
       "graphql": {
         "logger": {
           "info": {
-            "file": "/var/log/is-publisher/info.log"
+            "file": "/var/log/is/publisher/info.log"
           },
           "debug": {
-            "file": "/var/log/is-publisher/debug.log"
+            "file": "/var/log/is/publisher/debug.log"
           },
           "trace": {
-            "file": "/var/log/is-publisher/trace.log"
+            "file": "/var/log/is/publisher/trace.log"
           }
         }
       },
@@ -96,13 +96,13 @@ var config = {
         "graphQLUrl": "local",
         "logger": {
           "info": {
-            "file": "/var/log/is-publisher/info.log"
+            "file": "/var/log/is/publisher/info.log"
           },
           "debug": {
-            "file": "/var/log/is-publisher/debug.log"
+            "file": "/var/log/is/publisher/debug.log"
           },
           "trace": {
-            "file": "/var/log/is-publisher/trace.log"
+            "file": "/var/log/is/publisher/trace.log"
           }
         }
       }
@@ -115,7 +115,7 @@ var config = {
         "username"  : "",
         "password"  : ""
       },
-      "logpath"     : "/var/log/is-publisher/proxy"
+      "logpath"     : "/var/log/is/publisher/proxy"
     }
   }
 };
